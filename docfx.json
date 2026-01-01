@@ -2,14 +2,15 @@
 {
   "build": {
     "content": [
-      { "files": ["docs/**/*.md"], "exclude": ["README.md"] }
+      { "files": [ "docs/*.md" ] },
+      { "files": [ "docs/toc.yml" ] }
     ],
     "resource": [
-      { "files": ["docs/images/**"] }
+      { "files": [ "docs/images/**" ], "dest": "images" }
     ],
     "globalMetadata": {
       "name": "Windows Server Talks",
-      "description": "DFS, AD, Hyper-V & PowerShell Guides by Mohit Maurya"
+      "description": "DFS, Active Directory, Hyper-V, and PowerShell Guides by Mohit Maurya"
     },
     "template": [
       "default",
