@@ -1,3 +1,16 @@
+
+---
+layout: page
+title: Recover Deleted DFS‑N Links
+permalink: /recover-deleted-dfs-n-links/
+description: Find and restore deleted DFS-N links (msDFS-Linkv2) from AD tombstones; export reports to TXT/CSV; bulk restore from CSV.
+date: 2026-01-01
+author: Mohit
+tags: [DFS, DFS-N, Active Directory, Recovery, PowerShell]
+---
+
+
+
 Recover accidently removed namespace folder and targets 
 
 **Summary**:
