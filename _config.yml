@@ -5,6 +5,7 @@ description: "DFS, Active Directory, Hyper-V, and PowerShell Guides by Mohit Mau
 theme: jekyll-theme-cayman
 
 # Mandatory for GitHub Pages
+permalink: pretty
 url: "https://mauryamohit07.github.io"
 baseurl: "/WindowsServerTalks"
 
