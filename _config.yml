@@ -1,19 +1,27 @@
 
 title: "Windows Server Talks"
 description: "DFS, Active Directory, Hyper-V, and PowerShell Guides by Mohit Maurya"
+
+# Theme
 theme: jekyll-theme-cayman
+
+# Mandatory for GitHub Pages (FIXES 404)
+url: "https://mauryamohit07.github.io"
+baseurl: "/WindowsServerTalks"
 
 markdown: GFM
 
-# This makes your .md files become full pages
+# This makes .md pages publish correctly
 collections:
   docs:
     output: true
 
-# Navigation (optional)
+# Optional navbar links
 navbar:
   - name: "Home"
-    link: "/"
+    link: "/WindowsServerTalks/"
   - name: "DFS Backup"
-    link: "/dfs-backup-domain-namespace/"
+    link: "/WindowsServerTalks/Domain%20Based%20DFS-N%20Auto%20Backup/"
   - name: "DFS Link Recovery"
+    link: "/WindowsServerTalks/Recover%20Deleted%20DFS-N%20links/"
+
