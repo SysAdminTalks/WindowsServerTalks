@@ -2,10 +2,9 @@
 title: "Windows Server Talks"
 description: "DFS, Active Directory, Hyper-V, and PowerShell Guides by Mohit Maurya"
 
-# Theme
 theme: jekyll-theme-cayman
 
-# Mandatory for GitHub Pages (FIXES 404)
+# Mandatory for GitHub Pages
 url: "https://mauryamohit07.github.io"
 baseurl: "/WindowsServerTalks"
 
@@ -14,23 +13,20 @@ markdown: GFM
 plugins:
   - jekyll-relative-links
 
-
-# This makes .md pages publish correctly
-
 relative_links:
   enabled: true
   collections: true
 
+# This is important for GitHub Pages
 collections:
   docs:
     output: true
 
-# Optional navbar links
+# Navbar links FIXED — must point to .html pages Jekyll generates
 navbar:
   - name: "Home"
     link: "/WindowsServerTalks/"
   - name: "DFS Backup"
-    link: "/WindowsServerTalks/Domain%20Based%20DFS-N%20Auto%20Backup/"
+    link: "/WindowsServerTalks/domain-based-dfs-n-auto-backup.html"
   - name: "DFS Link Recovery"
-    link: "/WindowsServerTalks/Recover%20Deleted%20DFS-N%20links/"
-
+    link: "/WindowsServerTalks/recover-deleted-dfs-n-links.html"
