@@ -2,12 +2,18 @@
 {
   "build": {
     "content": [
-      { "files": [ "docs/*.md" ] },
-      { "files": [ "docs/toc.yml" ] }
+      {
+        "files": [ "docs/*.md" ]
+      }
     ],
     "resource": [
-      { "files": [ "docs/images/**" ], "dest": "images" }
+      {
+        "files": [ "docs/images/**" ],
+        "dest": "images"
+      }
     ],
+    "toc": "docs/toc.yml",
+    "dest": "_site",
     "globalMetadata": {
       "name": "Windows Server Talks",
       "description": "DFS, Active Directory, Hyper-V, and PowerShell Guides by Mohit Maurya"
