@@ -1,0 +1,76 @@
+
+/* ---------- Global MS Docs + Cayman Hybrid Styling ---------- */
+body {
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background: #f3f3f3;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+}
+
+.sidebar a {
+    display: block;
+    padding: 6px 0;
+    font-weight: 500;
+    text-decoration: none;
+    color: #004578;
+}
+
+.sidebar a:hover {
+    text-decoration: underline;
+}
+
+/* Main content shifted right */
+.content {
+    margin-left: 270px;
+    padding: 30px;
+}
+
+/* Hero Banner */
+.hero {
+    background: linear-gradient(90deg, #0067b8, #0a59a8);
+    padding: 40px;
+    border-radius: 6px;
+    color: white;
+    margin-bottom: 30px;
+}
+
+.hero h1 {
+    margin: 0 0 10px 0;
+    font-size: 42px;
+}
+
+/* Headings MS Docs style */
+h2 {
+    background: #f2f2f2;
+    padding: 10px;
+    border-radius: 6px;
+    border-left: 4px solid #0067b8;
+}
+
+/* Code Blocks */
+pre, code {
+    background: #f2f2f2;
+    border-radius: 6px;
+    padding: 10px;
+}
+
+/* Tables */
+table {
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+table th, table td {
+    border: 1px solid #d1d1d1;
+    padding: 8px 10px;
+}
