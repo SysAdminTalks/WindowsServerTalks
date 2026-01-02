@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title>Define log folder </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content="Define log folder ">
+    
+    
+      <link rel="shortcut icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../styles/docfx.css">
+      <link rel="stylesheet" href="../styles/main.css">
+      <meta property="docfx:navrel" content="">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<hr>
+<h2 id="layout-pagetitle-recover-deleted-dfsn-linksnav-exclude-falsepermalink-recover-deleted-dfs-n-linksdescription-find-and-restore-deleted-dfs-n-links-msdfs-linkv2-from-ad-tombstones-export-reports-to-txtcsv-bulk-restore-from-csvdate-2026-01-01author-mohittags-dfs-dfs-n-active-directory-recovery-powershell">layout: page
+title: Recover Deleted DFS‑N Links
+nav-exclude: false
+permalink: /recover-deleted-dfs-n-links/
+description: Find and restore deleted DFS-N links (msDFS-Linkv2) from AD tombstones; export reports to TXT/CSV; bulk restore from CSV.
+date: 2026-01-01
+author: Mohit
+tags: [DFS, DFS-N, Active Directory, Recovery, PowerShell]</h2>
+<p>Recover accidently removed namespace folder and targets</p>
+<p><strong>Summary</strong>:
+This article provides a detailed guide on <strong>recovering accidentally deleted DFS namespace links and their targets</strong> using <strong>Active Directory Recycle Bin</strong>. It covers prerequisites, discovery of deleted DFS objects, and explains how to identify the correct <strong>ObjectGUID</strong> for restoration. The guide includes PowerShell scripts to <strong>list deleted links</strong>, export reports to <strong>CSV/TXT</strong>, and perform <strong>bulk restores</strong> with automated logging for auditability. Validation steps and troubleshooting tips ensure successful recovery, while emphasising that full namespace restoration requires prior <strong>DFS configuration backups</strong>.</p>
+<p><strong>Scope:</strong> Domain-based DFS Namespaces (DFS-N) running on Windows Server systems joined to Active Directory, where <strong>Active Directory Recycle Bin</strong> is enabled for object recovery.</p>
+<p><strong>Does not cover:</strong> DFS Replication (DFS-R) data content recovery or full namespace root restoration—only <strong>DFS link objects and their target metadata</strong> within the namespace configuration.</p>
+<p>Note : Only subfolders and targets can be retrieved using below not the accidently deleted complete namespace
+For complete namespace rely on the backups</p>
+<p>Step1: Check if something is deleted</p>
+<hr>
+<p>Import-Module ActiveDirectory</p>
+<h1 id="define-log-folder">Define log folder</h1>
+<p>$LogFolder = &quot;C:\DFSlogs&quot;
+if (!(Test-Path -Path $LogFolder)) {
+New-Item -Path $LogFolder -ItemType Directory | Out-Null
+Write-Host &quot;Created folder: $LogFolder&quot;
+}</p>
+<h1 id="current-date-for-age-calculation">Current date for age calculation</h1>
+<p>$CurrentDate = Get-Date</p>
+<h1 id="search-deleted-objects-for-dfs-links">Search Deleted Objects for DFS links</h1>
+<p>$DeletedDFSObjects = Get-ADObject <code>-Filter 'ObjectClass -eq &quot;msDFS-Linkv2&quot; -and isDeleted -eq $true'</code>
+-IncludeDeletedObjects `
+-Properties DistinguishedName, Name, ObjectClass, whenChanged, ObjectGUID</p>
+<h1 id="prepare-data-with-deletedon-and-age">Prepare data with DeletedOn and Age</h1>
+<p>$Result = $DeletedDFSObjects | Select-Object `
+Name,
+ObjectClass,
+DistinguishedName,
+@{Name=&quot;ObjectGUID&quot;; Expression={$<em>.ObjectGUID}},
+@{Name=&quot;DeletedOn&quot;; Expression={($</em>.whenChanged).ToString(&quot;dd-MMM-yyyy HH:mm&quot;)}},
+@{Name=&quot;Age&quot;; Expression={
+if ($<em>.whenChanged) {
+$diff = $CurrentDate - $</em>.whenChanged
+if ($diff.Days -ge 1) {
+&quot;$($diff.Days) days ago&quot;
+} else {
+&quot;$([math]::Round($diff.TotalHours,1)) hours ago&quot;
+}
+} else {
+&quot;N/A&quot;
+}
+}}</p>
+<h1 id="show-interactive-grid-view">Show interactive grid view</h1>
+<p>$Result | Out-GridView -Title &quot;Deleted DFS Links Report&quot;</p>
+<h1 id="export-to-txt">Export to TXT</h1>
+<p>$TxtFile = Join-Path <span class="math">\(LogFolder &quot;DFS_DeletedLinks_\)</span>(Get-Date -Format 'ddMMyyyy_HHmm').txt&quot;
+$Result | Format-Table -AutoSize | Out-String | Set-Content $TxtFile</p>
+<h1 id="export-to-csv">Export to CSV</h1>
+<p>$CsvFile = Join-Path <span class="math">\(LogFolder &quot;DFS_DeletedLinks_\)</span>(Get-Date -Format 'ddMMyyyy_HHmm').csv&quot;
+$Result | Export-Csv $CsvFile -NoTypeInformation</p>
+<p>Write-Host &quot;Reports saved to:<code>nTXT: $TxtFile</code>nCSV: $CsvFile&quot;</p>
+<p>++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++</p>
+<p>Output be like :</p>
+<p>Also create a file in CSV format for the same</p>
+<p>To restore at bulk. Admin can delete the rows as per date or age which is not required</p>
+<hr>
+<p>Import-Module ActiveDirectory</p>
+<h1 id="path-to-the-csv-file-containing-objectguids">Path to the CSV file containing ObjectGUIDs</h1>
+<p>$CsvFile = &quot;C:\DFSlogs\DFS_DeletedLinks_29102025_0331.csv&quot;       # file created from above</p>
+<h1 id="path-to-the-restore-log">Path to the restore log</h1>
+<p><span class="math">\(LogFile = &quot;C:\DFSlogs\RestoreLog_\)</span>(Get-Date -Format 'ddMMyyyy_HHmm').txt&quot;</p>
+<h1 id="start-log">Start log</h1>
+<p>Set-Content -Path $LogFile -Value &quot;DFS Restore Log - $(Get-Date)<code>r</code>n&quot;</p>
+<h1 id="import-csv-and-read-objectguid-column">Import CSV and read ObjectGUID column</h1>
+<p>$Entries = Import-Csv -Path $CsvFile</p>
+<p>foreach ($entry in $Entries) {
+$guid = $entry.ObjectGUID
+Write-Host &quot;Restoring ObjectGUID: $guid&quot;
+Add-Content -Path $LogFile -Value &quot;Processing ObjectGUID: $guid&quot;</p>
+<pre><code>try {
+    # Attempt restore
+    Restore-ADObject -Identity $guid
+
+    # Validate restore
+    Start-Sleep -Seconds 2
+    $restoredObj = Get-ADObject -Filter { ObjectGUID -eq $guid } -ErrorAction SilentlyContinue
+    if ($restoredObj) {
+        $succMsg = &quot;Successfully restored: $guid&quot;
+        Write-Host $succMsg -ForegroundColor Green
+        Add-Content -Path $LogFile -Value $succMsg
+    } else {
+        $failMsg = &quot;Restore attempted but object not found after restore: $guid&quot;
+        Write-Host $failMsg -ForegroundColor Red
+        Add-Content -Path $LogFile -Value $failMsg
+    }
+}
+catch {
+    $errMsg = &quot;Failed to restore: $guid - Error: $_&quot;
+    Write-Host $errMsg -ForegroundColor Red
+    Add-Content -Path $LogFile -Value $errMsg
+}
+</code></pre>
+<p>}</p>
+<p>Write-Host &quot;Restore process completed. Log saved to: $LogFile&quot;</p>
+<hr>
+<p>Above will restore and give output like</p>
+<p>Restore logs will also get created</p>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/mauryamohit07/WindowsServerTalks/blob/main/docs/recover-deleted-dfs-n-links.md/#L1" class="contribution-link">Edit this page</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

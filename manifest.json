@@ -1,0 +1,154 @@
+{
+  "source_base_path": "/home/runner/work/WindowsServerTalks/WindowsServerTalks",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/domain-based-dfs-n-auto-backup.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/domain-based-dfs-n-auto-backup.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "docs/images/Image1.png",
+      "output": {
+        "resource": {
+          "relative_path": "docs/images/Image1.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "docs/images/Image2.png",
+      "output": {
+        "resource": {
+          "relative_path": "docs/images/Image2.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "docs/images/Image3.png",
+      "output": {
+        "resource": {
+          "relative_path": "docs/images/Image3.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "docs/images/Image4.png",
+      "output": {
+        "resource": {
+          "relative_path": "docs/images/Image4.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "docs/images/Image5.png",
+      "output": {
+        "resource": {
+          "relative_path": "docs/images/Image5.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "docs/images/Image6.png",
+      "output": {
+        "resource": {
+          "relative_path": "docs/images/Image6.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "docs/images/files.md",
+      "output": {
+        "resource": {
+          "relative_path": "docs/images/files.md"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/images/files.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/images/files.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "docs/images/image7.png",
+      "output": {
+        "resource": {
+          "relative_path": "docs/images/image7.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "docs/images/logo.png",
+      "output": {
+        "resource": {
+          "relative_path": "docs/images/logo.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/recover-deleted-dfs-n-links.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/recover-deleted-dfs-n-links.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "docs/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/toc.html"
+        },
+        ".json": {
+          "relative_path": "docs/toc.json"
+        }
+      },
+      "version": ""
+    }
+  ],
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

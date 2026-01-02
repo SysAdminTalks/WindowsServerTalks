@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+      <title> </title>
+      <meta name="viewport" content="width=device-width">
+      <meta name="title" content=" ">
+    
+    
+      <link rel="shortcut icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../styles/docfx.vendor.min.css">
+      <link rel="stylesheet" href="../styles/docfx.css">
+      <link rel="stylesheet" href="../styles/main.css">
+      <meta property="docfx:navrel" content="">
+      <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p>domain-based-dfs-n-auto-backup.md</p>
+<hr>
+<h2 id="layout-pagetitle-domainbased-dfsn-auto-backupnav-exclude-falsepermalink-domain-based-dfs-n-auto-backupdescription-step-by-step-guide-to-export-domain-based-dfs-namespace-configuration-to-xml-with-logs-and-validation-using-dfsutil-and-powershelldate-2026-01-01author-mohittags-dfs-dfs-n-active-directory-windows-server-backup-powershell">layout: page
+title: Domain‑Based DFS‑N Auto Backup
+nav-exclude: false
+permalink: /domain-based-dfs-n-auto-backup/
+description: Step-by-step guide to export domain-based DFS Namespace configuration to XML with logs and validation using dfsutil and PowerShell.
+date: 2026-01-01
+author: Mohit
+tags: [DFS, DFS-N, Active Directory, Windows Server, Backup, PowerShell]</h2>
+<p>=</p>
+<br>
+<hr>
+<p>=</p>
+<h2 id="summary">Summary</h2>
+<p>This article provides a detailed guide on <strong>backing up domain-based Distributed File System (DFS) Namespaces</strong> to XML, including <strong>execution logs</strong> and <strong>export logs</strong> for auditability and repeatability. It covers prerequisites, the end-to-end backup process using <code>dfsutil</code>, sample log outputs, and validation steps to confirm backup completeness.</p>
+<p>The included <strong>PowerShell script</strong> automates discovery of DFS namespace roots, exports each namespace to an XML file named with a timestamp tag, and records both an <strong>execution summary</strong> and <strong>detailed export results</strong>.</p>
+<p><strong>Scope:</strong> Domain-based DFS Namespaces (DFS-N), Windows Server systems joined to Active Directory.<br>
+<strong>Does not cover:</strong> DFS Replication (DFS-R) data content backup—only <strong>namespace configuration</strong> export.</p>
+<hr>
+<h2 id="create-a-dfs-namespace-backup-domain-based-dfs">Create a DFS Namespace Backup (Domain-based DFS)</h2>
+<p>For <strong>domain-based DFS</strong>, any change in the namespace configuration is stored in <strong>Active Directory</strong> and read by all root servers. Creating a regular backup of the <strong>DFS namespace configuration</strong> allows quick restoration in case of accidental deletion or misconfiguration. This method uses <code>dfsutil</code> to export the <strong>namespace metadata</strong> into XML files.</p>
+<p><strong>Key points:</strong></p>
+<ul>
+<li><code>dfsutil</code> exports the <strong>namespace configuration</strong> (links, targets, referrals) to XML.</li>
+<li>The script logs:
+<ul>
+<li><strong>Export logs</strong>: per-namespace export status.</li>
+<li><strong>Execution logs</strong>: run summary including domain, timestamp, and namespaces discovered.</li>
+</ul>
+</li>
+<li>Backups are stored under a defined folder (default: <code>C:\DFSBackup</code>).</li>
+</ul>
+<hr>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>The server running the backup must be <strong>domain-joined</strong> with <strong>read access</strong> to AD.</li>
+<li><strong>DFS Management tools</strong> installed (or <code>dfsutil</code> available).
+<ul>
+<li><code>dfsutil</code> typically ships with Windows Server DFS role or RSAT.</li>
+</ul>
+</li>
+<li><strong>PowerShell 5.1+</strong> recommended.</li>
+<li>Sufficient disk space at backup location (default <code>C:\DFSBackup</code>).</li>
+<li>Run PowerShell <strong>as Administrator</strong>.</li>
+</ul>
+<blockquote>
+<p><strong>Note:</strong> This process does <strong>not</strong> back up actual file data. It backs up <strong>namespace configuration</strong> only.</p>
+</blockquote>
+<hr>
+<h2 id="backup-process-automated-script">Backup Process (Automated Script)</h2>
+<h3 id="dfs-manual-backup-script--creates-backup-xml-execution-logs-and-export-logs">DFS manual backup script — creates backup XML, execution logs, and export logs</h3>
+<pre><code class="lang-powershell"># ================================
+# DFS Namespace Export Script
+# ================================
+
+# Backup folder
+$backupFolder = &quot;C:\DFSBackup&quot;
+if (-not (Test-Path $backupFolder)) {
+    New-Item -Path $backupFolder -ItemType Directory | Out-Null
+}
+
+# Log files
+$logFile = Join-Path $backupFolder &quot;DFSExportLog.txt&quot;
+$executionLog = Join-Path $backupFolder &quot;ExecutionLog.txt&quot;
+
+# Read previous namespaces if ExecutionLog exists
+$previousNamespaces = @()
+if (Test-Path $executionLog) {
+    $previousNamespaces = Get-Content $executionLog |
+        Where-Object { $_ -match &quot;^Namespace:&quot; } |
+        ForEach-Object { ($_ -split &quot;:&quot;)[1].Trim() }
+}
+
+Add-Content $logFile &quot;`n--- DFS Export Started ---&quot;
+
+try {
+    # Detect domain name
+    $domain = ([System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()).Name
+    Write-Host &quot;Detected Domain: $domain&quot;
+    Add-Content $logFile &quot;Detected Domain: $domain&quot;
+
+    # Get raw output from dfsutil
+    $rawOutput = &amp; dfsutil /Domain:$domain /View
+
+    # Extract root names (skip header/footer lines)
+    $rootNames = $rawOutput | ForEach-Object { $_.Trim() } | Where-Object {
+        ($_ -ne &quot;&quot;) -and
+        ($_ -notmatch &quot;Roots on Domain&quot;) -and
+        ($_ -notmatch &quot;Done&quot;) -and
+        ($_ -notmatch &quot;processing&quot;)
+    }
+
+    $totalNamespaces = $rootNames.Count
+    $timestamp = (Get-Date).ToString(&quot;yyyy-MM-dd HH:mm:ss&quot;)
+    $dateTag = (Get-Date).ToString(&quot;ddMMMMyyyy&quot;)  # e.g., 25October2025
+
+    if ($totalNamespaces -eq 0) {
+        Write-Host &quot;No DFS namespaces found in domain $domain&quot;
+        Add-Content $logFile &quot;No DFS namespaces found in domain $domain&quot;
+    }
+    else {
+        Write-Host &quot;Found namespace roots:&quot;
+        $rootNames | ForEach-Object { Write-Host $_ }
+
+        # Build full UNC paths
+        $namespaces = $rootNames | ForEach-Object { &quot;\\$domain\$_&quot; }
+
+        # Compare with previous run
+        $newNamespaces = $namespaces | Where-Object { $previousNamespaces -notcontains $_ }
+        $removedNamespaces = $previousNamespaces | Where-Object { $namespaces -notcontains $_ }
+
+        if ($newNamespaces.Count -gt 0) {
+            Add-Content $logFile &quot;New namespaces detected: $($newNamespaces -join ', ')&quot;
+        }
+        if ($removedNamespaces.Count -gt 0) {
+            Add-Content $logFile &quot;Removed namespaces detected: $($removedNamespaces -join ', ')&quot;
+        }
+
+        # Export each namespace
+        foreach ($ns in $namespaces) {
+            try {
+                $namespaceName = ($ns -split &quot;\\&quot;)[-1]
+                $outputFile = Join-Path $backupFolder &quot;$namespaceName($dateTag).xml&quot;
+
+                Write-Host &quot;Exporting namespace: $ns to $outputFile&quot;
+                Add-Content $logFile &quot;Exporting namespace: ${ns} to ${outputFile}&quot;
+
+                &amp; dfsutil /Root:$ns /Export:$outputFile
+
+                Add-Content $logFile &quot;SUCCESS: Exported ${ns} to ${outputFile}&quot;
+            }
+            catch {
+                Write-Host &quot;ERROR exporting ${ns}: $($_.Exception.Message)&quot;
+                Add-Content $logFile &quot;ERROR exporting ${ns}: $($_.Exception.Message)&quot;
+            }
+        }
+    }
+
+    # Write execution summary header
+    $summaryHeader = @&quot;
+Execution Date: $timestamp
+Domain: $domain
+Total Namespaces Found: $totalNamespaces
+Backup Location: $backupFolder
+&quot;@
+    Add-Content $executionLog $summaryHeader
+
+    # Write each namespace on a new line
+    foreach ($ns in $namespaces) {
+        Add-Content $executionLog &quot;Namespace: $ns&quot;
+    }
+
+    # Add separator
+    Add-Content $executionLog &quot;----------------------------------------&quot;
+    Write-Host &quot;Execution log updated at $executionLog&quot;
+}
+catch {
+    Write-Host &quot;Script failed: $($_.Exception.Message)&quot;
+    Add-Content $logFile &quot;Script failed: $($_.Exception.Message)&quot;
+}
+
+</code></pre>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/mauryamohit07/WindowsServerTalks/blob/main/docs/domain-based-dfs-n-auto-backup.md/#L1" class="contribution-link">Edit this page</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      
+      <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
