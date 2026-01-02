@@ -1,0 +1,3 @@
+theme: minima  # Default Jekyll, no sidebar/tree
+title: Windows Server Talks
+description: DFS, AD, Hyper-V guides by Mohit Maurya
