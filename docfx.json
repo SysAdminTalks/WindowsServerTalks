@@ -1,35 +1,22 @@
 {
-  "metadata": [
-    {
-      "src": [{"files": ["docs/**/*.md"], "exclude": ["README.md"]}],
-      "dest": "api"
-    }
-  ],
   "build": {
     "content": [
       {
-        "files": ["docs/**/*.md", "docs/toc.yml"]
+        "files": [
+          "docs/**/*.md",
+          "docs/toc.yml"
+        ]
       }
     ],
     "resource": [
       {
-        "files": ["docs/images/**/*"],
-        "dest": "images"
+        "files": ["docs/images/**/*"]
       }
     ],
     "globalMetadata": {
-      "_appTitle": "Windows Server Talks",
-      "name": "Windows Server Talks",
-      "description": "DFS, AD, Hyper-V, PowerShell Guides",
-      "_gitContribute": {
-        "repo": "https://github.com/mauryamohit07/WindowsServerTalks",
-        "branch": "main"
-      },
-      "_disableContribution": false,
-      "_enableSearch": true,
-      "author": "Mohit Maurya"
+      "name": "Windows Server Talks"
     },
-    "template": ["default"],  // <-- FIXED: default only (sidebar/search work)
+    "template": ["default"],
     "dest": "_site"
   }
 }
