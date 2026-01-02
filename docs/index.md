@@ -1,11 +1,14 @@
+---
+nav-exclude: false
+title: Home
+---
 
-layout: page
-title: Windows Server Talks
-permalink: /
+# Windows Server Talks
 
-Welcome to Windows Server Talks documentation.
+DFS, Active Directory, Hyper-V, and PowerShell guides by Mohit Maurya.
 
-- [Domain Based DFS-N Auto Backup](/WindowsServerTalks/domain-based-dfs-n-auto-backup/)
-- [Recover Deleted DFS-N Links](/WindowsServerTalks/recover-deleted-dfs-n-links/)
+Use the sidebar for navigation and search above.
 
-DFS, Active Directory, Hyper-V, and PowerShell Guides by Mohit Maurya.
+## Quick Links
+- [DFS-N Auto Backup](./domain-based-dfs-n-auto-backup.md)
+- [Recover Deleted DFS-N Links](./recover-deleted-dfs-n-links.md)
