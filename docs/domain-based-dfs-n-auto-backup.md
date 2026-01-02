@@ -7,7 +7,7 @@ domain-based-dfs-n-auto-backup.md
 
 
 title: "Recover Deleted DFS‑N Links"
-permalink: /WindowsServerTalks/recover-deleted-dfs-n-links/
+permalink: /recover-deleted-dfs-n-links/
 layout: default
 
 
