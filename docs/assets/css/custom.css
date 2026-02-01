@@ -56,10 +56,26 @@ a:hover {
 
 /* ===== Sidebar ===== */
 .sidebar {
-  width: 260px;
+  
+position: sticky;
+top: 20px;
+width: 260px;
   flex-shrink: 0;
   padding-top: 6px;          /* ✅ aligns with content header */
 }
+
+
+.sidebar a {
+  display: block;
+  padding: 6px 8px;
+  border-radius: 4px;
+}
+
+.sidebar a:hover {
+  background: #eef4fb;
+}
+
+
 
 .sidebar h3 {
   margin-top: 0;
@@ -130,3 +146,50 @@ a:hover {
     width: 100%;
   }
 }
+
+
+pre {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 16px;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 13px;
+}
+
+code {
+  font-family: Consolas, "Courier New", monospace;
+}
+
+
+.card {
+  background: #f7f7f7;
+  padding: 16px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+
+<div class="card">
+  <h3>DFS‑N Auto Backup</h3>
+  <p>Automated backup of domain‑based DFS namespaces.</p>
+</div>
+.sidebar a.active {
+  font-weight: 600;
+  color: #004578;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #1f1f1f;
+    color: #eaeaea;
+  }
+
+  .content p,
+  .content ul {
+    background: #2b2b2b;
+  }
+}
+
+
+
+
