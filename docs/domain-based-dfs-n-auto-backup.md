@@ -1,21 +1,12 @@
 domain-based-dfs-n-auto-backup.md
 
 
+
 ---
-
-
-
-
-title: "Recover Deleted DFS‑N Links"
-permalink: /domain-based-dfs-n-auto-backup/
 layout: default
-
-
-
-description: Step-by-step guide to export domain-based DFS Namespace configuration to XML with logs and validation using dfsutil and PowerShell.
-date: 2026-01-01
-author: Mohit
-tags: [DFS, DFS-N, Active Directory, Windows Server, Backup, PowerShell]
+title: "Domain‑Based DFS‑N Auto Backup"
+permalink: /domain-based-dfs-n-auto-backup/
+description: Automated DFS Namespace backup using dfsutil and PowerShell
 ---
 
 
