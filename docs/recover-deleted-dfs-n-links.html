@@ -83,31 +83,56 @@
       </p>
 
       <pre><code class="language-powershell">
-Import-Module ActiveDirectory
-$LogFolder = "C:\DFSlogs"
-if (!(Test-Path -Path $LogFolder)) {
-  New-Item -Path $LogFolder -ItemType Directory | Out-Null
-}
-$CurrentDate = Get-Date
-$DeletedDFSObjects = Get-ADObject `
-  -Filter 'ObjectClass -eq "msDFS-Linkv2" -and isDeleted -eq $true' `
-  -IncludeDeletedObjects `
-  -Properties DistinguishedName, Name, ObjectClass, whenChanged, ObjectGUID
-
-$Result = $DeletedDFSObjects |
-  Select-Object `
-    Name, ObjectClass, DistinguishedName,
-    @{Name="ObjectGUID"; Expression={$_.ObjectGUID}},
-    @{Name="DeletedOn";  Expression={($_.whenChanged).ToString("dd-MMM-yyyy HH:mm")}},
-    @{Name="Age";        Expression={
-      if ($_.whenChanged) {
-        $diff = $CurrentDate - $_.whenChanged
-        if ($diff.Days -ge 1) { "$($diff.Days) days ago" }
-        else { "$([math]::Round($diff.TotalHours,1)) hours ago" }
-      } else { "N/A" }
-    }}
-
-$Result | Out-GridView -Title "Deleted DFS Links Report"
+ Import-Module ActiveDirectory
+   
+    # Define log folder
+    $LogFolder = "C:\DFSlogs"
+    if (!(Test-Path -Path $LogFolder)) {
+        New-Item -Path $LogFolder -ItemType Directory | Out-Null
+        Write-Host "Created folder: $LogFolder"
+    }
+   
+    # Current date for age calculation
+    $CurrentDate = Get-Date
+   
+    # Search Deleted Objects for DFS links (msDFS-Linkv2)
+    $DeletedDFSObjects = Get-ADObject `
+        -Filter 'ObjectClass -eq "msDFS-Linkv2" -and isDeleted -eq $true' `
+        -IncludeDeletedObjects `
+        -Properties DistinguishedName, Name, ObjectClass, whenChanged, ObjectGUID
+   
+    # Prepare data with DeletedOn and Age
+    $Result = $DeletedDFSObjects | Select-Object `
+        Name,
+        ObjectClass,
+        DistinguishedName,
+        @{Name="ObjectGUID"; Expression={$_.ObjectGUID}},
+        @{Name="DeletedOn"; Expression={($_.whenChanged).ToString("dd-MMM-yyyy HH:mm")}},
+        @{Name="Age"; Expression={
+            if ($_.whenChanged) {
+                $diff = $CurrentDate - $_.whenChanged
+                if ($diff.Days -ge 1) {
+                    "$($diff.Days) days ago"
+                } else {
+                    "$([math]::Round($diff.TotalHours,1)) hours ago"
+                }
+            } else {
+                "N/A"
+            }
+        }}
+   
+    # Show interactive grid view
+    $Result | Out-GridView -Title "Deleted DFS Links Report"
+   
+    # Export to TXT
+    $TxtFile = Join-Path $LogFolder "DFS_DeletedLinks_$(Get-Date -Format 'ddMMyyyy_HHmm').txt"
+    $Result | Format-Table -AutoSize | Out-String | Set-Content $TxtFile
+   
+    # Export to CSV
+    $CsvFile = Join-Path $LogFolder "DFS_DeletedLinks_$(Get-Date -Format 'ddMMyyyy_HHmm').csv"
+    $Result | Export-Csv $CsvFile -NoTypeInformation
+   
+    Write-Host "Reports saved to:`nTXT: $TxtFile`nCSV: $CsvFile"
       </code></pre>
 
       <h2>Sample Output</h2>
