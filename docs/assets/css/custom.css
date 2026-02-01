@@ -552,4 +552,17 @@ button:focus,
 .spacer {
   height: 32px; /* adjust as needed */
 }
+/* Make the main layout row full-width, without changing header/footer containers */
+.layout.container {
+  max-width: none;     /* remove the 1200px cap */
+  width: 100%;
+  padding-left: 24px;  /* keep your side padding */
+  padding-right: 24px;
+}
+
+/* Ensure the content flexes to fill remaining space next to the sidebar */
+.content {
+  flex: 1 1 auto;
+  min-width: 0;        /* prevents overflow issues with code blocks */
+}
 
