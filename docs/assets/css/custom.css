@@ -602,3 +602,38 @@ button:focus,
 @media (max-width: 600px) {
   .brand-logo img { height: 40px; }
 }
+
+
+/* Clickable home cards */
+.card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.card-link:hover {
+  text-decoration: none;
+}
+
+/* Horizontal layout */
+.card-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Icon */
+.card-icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+/* Text spacing */
+.card-text h3 {
+  margin: 0 0 4px 0;
+}
+
+.card-text p {
+  margin: 0;
+}
