@@ -637,3 +637,18 @@ button:focus,
 .card-text p {
   margin: 0;
 }
+/* Put card title and description on the same line */
+.card-inline {
+  display: flex;
+  align-items: baseline;   /* aligns text nicely */
+  gap: 10px;
+}
+
+.card-inline h3 {
+  margin: 0;
+  white-space: nowrap;     /* keeps title on one line */
+}
+
+.card-inline p {
+  margin: 0;
+}
