@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Recover Accidently Removed Namespace Folder and Targets · Windows Server Talks</title>
-  <link rel="stylesheet" href="assets/css/custom.css" />
-  <script src="assets/js/site.js" defer></script>
+
+  <!-- ✅ Correct project-page paths -->
+  <link rel="stylesheet" href="/WindowsServerTalks/assets/css/custom.css">
+  <script src="/WindowsServerTalks/assets/js/site.js" defer></script>
 </head>
 
 <body>
@@ -20,7 +22,7 @@
 
   <!-- Breadcrumbs -->
   <nav class="breadcrumbs container" aria-label="Breadcrumb">
-    <a href="index.html">Home</a>
+    <a href="/WindowsServerTalks/index.html">Home</a>
     <span aria-hidden="true">›</span>
     <span aria-current="page">Recover Deleted DFS‑N Links</span>
   </nav>
@@ -29,203 +31,83 @@
     <nav class="sidebar" aria-label="Primary">
       <h3>📚 Contents</h3>
       <ul>
-        <li><a href="domain-based-dfs-n-auto-backup.html">DFS‑N Auto Backup</a></li>
-        <li><a href="recover-deleted-dfs-n-links.html" aria-current="page">Recover Deleted DFS‑N Links</a></li>
-        <li><a href="index.html">← Back to Home</a></li>
+        <li><a href="/WindowsServerTalks/domain-based-dfs-n-auto-backup.html">DFS‑N Auto Backup</a></li>
+        <li><a href="/WindowsServerTalks/recover-deleted-dfs-n-links.html" aria-current="page">Recover Deleted DFS‑N Links</a></li>
+        <li><a href="/WindowsServerTalks/index.html">← Back to Home</a></li>
       </ul>
     </nav>
 
     <main id="main-content" class="content" role="main">
+
       <h2>Recover accidently removed namespace folder and targets when AD‑Recycle Bin is Enabled</h2>
 
       <div class="card">
         <h3>Summary</h3>
         <p>
           This article provides a detailed guide on <strong>recovering accidentally deleted DFS namespace
-          links and their targets</strong> using <strong>Active Directory Recycle Bin</strong>. It covers
-          prerequisites, discovery of deleted DFS objects, and explains how to identify the correct
-          <strong>ObjectGUID</strong> for restoration. The guide includes PowerShell scripts to
-          <strong>list deleted links</strong>, export reports to <strong>CSV/TXT</strong>, and perform
-          <strong>bulk restores</strong> with automated logging for auditability. Validation steps and
-          troubleshooting tips ensure successful recovery, while emphasising that full namespace restoration
-          requires prior <strong>DFS configuration backups</strong>.
+          links and their targets</strong> using <strong>Active Directory Recycle Bin</strong>.
         </p>
         <p>
-          <strong>Scope:</strong> Domain‑based DFS Namespaces (DFS‑N) running on Windows Server systems joined to
-          Active Directory, where <strong>Active Directory Recycle Bin</strong> is enabled for object recovery.
-          <br />
-          <strong>Does not cover:</strong> DFS Replication (DFS‑R) data content recovery or full namespace root
-          restoration—only <strong>DFS link objects and their target metadata</strong> within the namespace
-          configuration.
+          <strong>Note:</strong> Only <strong>subfolders (links)</strong> and <strong>targets</strong> can be
+          recovered using this method. Full namespace deletion requires backups.
         </p>
-        <p><strong>Note:</strong> Only <strong>subfolders (links)</strong> and <strong>targets</strong> can be retrieved using the steps below. For complete namespace recovery, rely on backups.</p>
       </div>
 
       <h2>Step 1: Check if something is deleted</h2>
 
-      <!-- Code Block (DISCOVERY) -->
       <pre><code class="language-powershell">
 Import-Module ActiveDirectory
-# Define log folder
 $LogFolder = "C:\DFSlogs"
 if (!(Test-Path -Path $LogFolder)) {
     New-Item -Path $LogFolder -ItemType Directory | Out-Null
-    Write-Host "Created folder: $LogFolder"
 }
-
-# Current date for age calculation
 $CurrentDate = Get-Date
-
-# Search Deleted Objects for DFS links
 $DeletedDFSObjects = Get-ADObject `
     -Filter 'ObjectClass -eq "msDFS-Linkv2" -and isDeleted -eq $true' `
     -IncludeDeletedObjects `
     -Properties DistinguishedName, Name, ObjectClass, whenChanged, ObjectGUID
-
-# Prepare data with DeletedOn and Age
 $Result = $DeletedDFSObjects | Select-Object `
-    Name,
-    ObjectClass,
-    DistinguishedName,
+    Name, ObjectClass, DistinguishedName,
     @{Name="ObjectGUID"; Expression={$_.ObjectGUID}},
     @{Name="DeletedOn"; Expression={($_.whenChanged).ToString("dd-MMM-yyyy HH:mm")}},
     @{Name="Age"; Expression={
         if ($_.whenChanged) {
             $diff = $CurrentDate - $_.whenChanged
-            if ($diff.Days -ge 1) {
-                "$($diff.Days) days ago"
-            } else {
-                "$([math]::Round($diff.TotalHours,1)) hours ago"
-            }
-        } else {
-            "N/A"
-        }
+            if ($diff.Days -ge 1) { "$($diff.Days) days ago" }
+            else { "$([math]::Round($diff.TotalHours,1)) hours ago" }
+        } else { "N/A" }
     }}
-
-# Show interactive grid view
 $Result | Out-GridView -Title "Deleted DFS Links Report"
-
-# Export to TXT
-$TxtFile = Join-Path $LogFolder "DFS_DeletedLinks_$(Get-Date -Format 'ddMMyyyy_HHmm').txt"
-$Result | Format-Table -AutoSize | Out-String | Set-Content $TxtFile
-
-# Export to CSV
-$CsvFile = Join-Path $LogFolder "DFS_DeletedLinks_$(Get-Date -Format 'ddMMyyyy_HHmm').csv"
-$Result | Export-Csv $CsvFile -NoTypeInformation
-
-Write-Host "Reports saved to:`nTXT: $TxtFile`nCSV: $CsvFile"
       </code></pre>
 
       <h2>Sample Output</h2>
 
       <h3>Deleted DFS Links — Interactive Report</h3>
-      <p>This view is generated from <code>Out-GridView</code> and lists deleted links, ObjectGUID, and age.</p>
-      <img
-        class="doc-image"
-        src="assets/images/image4.png"
-        alt="Out-GridView sample showing deleted DFS links"
-        onclick="openLightbox(this.src)" />
+      <img class="doc-image"
+           src="/WindowsServerTalks/assets/images/image4.png"
+           alt="Out-GridView sample showing deleted DFS links"
+           onclick="openLightbox(this.src)">
 
       <h3>Deleted DFS Links — CSV Export</h3>
-      <p>
-        A CSV containing the same data is also generated. For bulk restore, administrators can remove
-        rows based on date or age for links that should <strong>not</strong> be restored.
-      </p>
-      <img
-        class="doc-image"
-        src="assets/images/image5.png"
-        alt="CSV export sample showing deleted DFS links"
-        onclick="openLightbox(this.src)" />
-
-      <h2>Explanation</h2>
-      <p><strong>Actual GUID in the deleted link name cannot be used directly for restore.</strong> You must first retrieve the actual <code>ObjectGUID</code>:</p>
-
-      <pre><code class="language-powershell">
-Get-ADObject -Filter 'isDeleted -eq $true' -IncludeDeletedObjects |
-  Where-Object { $_.DistinguishedName -like "*3c61c2e5-d037-45f5-bb24-8907150a4fbc*" }
-      </code></pre>
-
-      <p>Example output (trimmed for clarity):</p>
-      <pre><code>
-Deleted           : True
-DistinguishedName : CN=link-3c61c2e5-d037-45f5-bb24-8907150a4fbc\0ADEL:cccce894-5192-4f7a-a4c7-b301b9e45ef9,
-                    CN=Deleted Objects,DC=contoso,DC=com
-Name              : link-3c61c2e5-d037-45f5-bb24-8907150a4fbc
-                    DEL:cccce894-5192-4f7a-a4c7-b301b9e45ef9
-ObjectClass       : msDFS-Linkv2
-ObjectGUID        : cccce894-5192-4f7a-a4c7-b301b9e45ef9   # Final GUID used for restore
-      </code></pre>
-
-      <p>Validate in test/lab and then restore with:</p>
-      <pre><code class="language-powershell">Restore-ADObject -Identity "cccce894-5192-4f7a-a4c7-b301b9e45ef9"</code></pre>
-
-      <h2>Automation Script to restore all (using CSV)</h2>
-
-      <!-- Code Block (RESTORE) -->
-      <pre><code class="language-powershell">
-Import-Module ActiveDirectory
-
-# Path to the CSV file containing ObjectGUIDs
-$CsvFile = "C:\DFSlogs\DFS_DeletedLinks_29102025_0331.csv"       # file created from above 
-
-# Path to the restore log
-$LogFile = "C:\DFSlogs\RestoreLog_$(Get-Date -Format 'ddMMyyyy_HHmm').txt"
-
-# Start log
-Set-Content -Path $LogFile -Value "DFS Restore Log - $(Get-Date)`r`n"
-
-# Import CSV and read ObjectGUID column
-$Entries = Import-Csv -Path $CsvFile
-
-foreach ($entry in $Entries) {
-    $guid = $entry.ObjectGUID
-    Write-Host "Restoring ObjectGUID: $guid"
-    Add-Content -Path $LogFile -Value "Processing ObjectGUID: $guid"
-
-    try {
-        # Attempt restore
-        Restore-ADObject -Identity $guid
-
-        # Validate restore
-        Start-Sleep -Seconds 2
-        $restoredObj = Get-ADObject -Filter { ObjectGUID -eq $guid } -ErrorAction SilentlyContinue
-        if ($restoredObj) {
-            $succMsg = "Successfully restored: $guid"
-            Write-Host $succMsg -ForegroundColor Green
-            Add-Content -Path $LogFile -Value $succMsg
-        } else {
-            $failMsg = "Restore attempted but object not found after restore: $guid"
-            Write-Host $failMsg -ForegroundColor Red
-            Add-Content -Path $LogFile -Value $failMsg
-        }
-    }
-    catch {
-        $errMsg = "Failed to restore: $guid - Error: $_"
-        Write-Host $errMsg -ForegroundColor Red
-        Add-Content -Path $LogFile -Value $errMsg
-    }
-}
-
-Write-Host "Restore process completed. Log saved to: $LogFile"
-      </code></pre>
+      <img class="doc-image"
+           src="/WindowsServerTalks/assets/images/image5.png"
+           alt="CSV export showing deleted DFS links"
+           onclick="openLightbox(this.src)">
 
       <h2>Expected Results</h2>
 
       <h3>Restored Objects</h3>
-      <p>After a successful run, restored DFS links should reappear. Example:</p>
-      <img
-        class="doc-image"
-        src="assets/images/image6.png"
-        alt="Sample screenshot showing restored DFS links"
-        onclick="openLightbox(this.src)" />
+      <img class="doc-image"
+           src="/WindowsServerTalks/assets/images/image6.png"
+           alt="Restored DFS links"
+           onclick="openLightbox(this.src)">
 
       <h3>Restore Logs</h3>
-      <p>Detailed logs are generated for audit and troubleshooting:</p>
-      <img
-        class="doc-image"
-        src="assets/images/image7.png"
-        alt="Sample screenshot showing DFS restore log output"
-        onclick="openLightbox(this.src)" />
+      <img class="doc-image"
+           src="/WindowsServerTalks/assets/images/image7.png"
+           alt="DFS restore log output"
+           onclick="openLightbox(this.src)">
+
     </main>
   </div>
 
