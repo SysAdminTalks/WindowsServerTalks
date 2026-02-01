@@ -13,31 +13,31 @@
   <link rel="stylesheet"
         href="https://mauryamohit07.github.io/WindowsServerTalks/assets/css/custom.css" />
 
-  <!-- Site JS (loads shared header + sidebar, copy buttons, etc.) -->
+  <!-- Site JS -->
   <script
     src="https://mauryamohit07.github.io/WindowsServerTalks/assets/js/site.js"
     defer></script>
 </head>
 
 <body>
-  <!-- Skip link for keyboard users -->
+  <!-- Skip link -->
   <a class="skip-link" href="#main-content">Skip to content</a>
 
-  <!-- ===== Shared Header (logo on the LEFT of title) ===== -->
+  <!-- Shared Header -->
   <div id="header-container"></div>
 
-  <!-- ===== Breadcrumbs ===== -->
+  <!-- Breadcrumbs -->
   <nav class="breadcrumbs container" aria-label="Breadcrumb">
     <span aria-current="page">Home</span>
   </nav>
 
-  <!-- ===== Layout ===== -->
+  <!-- Layout -->
   <div class="layout container">
 
-    <!-- Shared Sidebar -->
+    <!-- Sidebar -->
     <div id="sidebar-container"></div>
 
-    <!-- ===== Main Content ===== -->
+    <!-- Main Content -->
     <main id="main-content" class="content" role="main">
 
       <h2>Welcome</h2>
@@ -47,42 +47,44 @@
         Windows Server administrators.
       </p>
 
-      <!-- Docs landing cards -->
+      <!-- =========================
+           Docs landing cards
+           ========================= -->
 
-     <!-- Card 1 (no icon) -->
-<div class="card">
-  <a href="domain-based-dfs-n-auto-backup.html" class="card-link">
-    <div class="card-row">
-      <!-- removed: <img class="card-icon" src="assets/images/dfs-backup.png" alt="DFS-N Auto Backup"> -->
-
-      <div class=""card-text card-inline"">
-        <h3>DFS‑N Auto Backup</h3>
-        <p>Automated backup of domain‑based DFS namespaces with logging,
-           validation, and recovery readiness.</p>
+      <!-- Card 1 -->
+      <div class="card">
+        <a href="domain-based-dfs-n-auto-backup.html" class="card-link">
+          <div class="card-row">
+            <div class="card-text card-inline">
+              <h3>DFS‑N Auto Backup</h3>
+              <span>
+                — Automated backup of domain‑based DFS namespaces with logging,
+                validation, and recovery readiness.
+              </span>
+            </div>
+          </div>
+        </a>
       </div>
-    </div>
-  </a>
-</div>
 
-<!-- Card 2 (no icon) -->
-<div class="card">
-  <a href="recover-deleted-dfs-n-links.html" class="card-link">
-    <div class="card-row">
-      <!-- removed: <img class="card-icon" src="assets/images/dfs-restore.png" alt="Recover Deleted DFS-N Links"> -->
-
-      <div class=""card-text card-inline"">
-        <h3>Recover Deleted DFS‑N Links</h3>
-        <h4>Step‑by‑step recovery of deleted DFS namespace links using
-           Active Directory metadata and PowerShell.</h4>
+      <!-- Card 2 -->
+      <div class="card">
+        <a href="recover-deleted-dfs-n-links.html" class="card-link">
+          <div class="card-row">
+            <div class="card-text card-inline">
+              <h3>Recover Deleted DFS‑N Links</h3>
+              <span>
+                — Step‑by‑step recovery of deleted DFS namespace links using
+                Active Directory metadata and PowerShell.
+              </span>
+            </div>
+          </div>
+        </a>
       </div>
-    </div>
-  </a>
-</div>
 
     </main>
-  </div> <!-- /.layout -->
+  </div>
 
-  <!-- ===== Footer ===== -->
+  <!-- Footer -->
   <footer class="site-footer">
     <div class="container">
       <p>© 2026 Mohit Maurya · Windows Server Talks</p>
