@@ -1,23 +1,21 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>{{ page.title }} – Windows Server Talks</title>
-    <link rel="stylesheet" href="/assets/css/custom.css">
+  <meta charset="UTF-8">
+  <title>{{ page.title }} – {{ site.title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Correct CSS path for Project Pages -->
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/custom.css">
 </head>
 
 <body>
+  <div class="sidebar">
+    {% include sidebar.html %}
+  </div>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-        {% include sidebar.html %}
-    </div>
-
-    <!-- Main Content -->
-    <div class="content">
-        {{ content }}
-    </div>
-
+  <div class="content">
+    {{ content }}
+  </div>
 </body>
 </html>
