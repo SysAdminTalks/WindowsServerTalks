@@ -1,6 +1,6 @@
 
 ---
-layout: page
+layout: default
 
 title: "Recover Deleted DFS‑N Links"
 permalink: /recover-deleted-dfs-n-links/
