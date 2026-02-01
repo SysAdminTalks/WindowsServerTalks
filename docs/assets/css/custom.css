@@ -379,3 +379,37 @@ figcaption {
   color: #666;
   margin-top: 6px;
 }
+
+
+/* ===== Force clean white documentation background ===== */
+.content {
+  background-color: #ffffff;
+  padding: 24px 28px;
+  border-radius: 6px;
+}
+
+/* Remove excessive boxed look */
+.content p,
+.content ul {
+  background: transparent;
+  padding: 0;
+}
+
+/* Summary and warning boxes stay visually separated */
+.card,
+.summary-box,
+.callout {
+  background: #f7f7f7;
+}
+
+/* Dark mode still respected */
+@media (prefers-color-scheme: dark) {
+  .content {
+    background-color: #1f1f1f;
+  }
+  .card,
+  .summary-box,
+  .callout {
+    background: #2b2b2b;
+  }
+}
