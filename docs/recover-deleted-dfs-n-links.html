@@ -3,9 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Recover Accidently Removed Namespace Folder and Targets · Windows Server Talks</title>
+  <title>Recover Accidentally Removed DFS Namespace Folders and Targets · Windows Server Talks</title>
 
-  <!-- ✅ Correct project-page paths -->
   <link rel="stylesheet" href="https://mauryamohit07.github.io/WindowsServerTalks/assets/css/custom.css">
   <script src="https://mauryamohit07.github.io/WindowsServerTalks/assets/js/site.js" defer></script>
 </head>
@@ -17,11 +16,7 @@
     <div class="container">
       <h1>Windows Server Talks</h1>
       <p class="tagline">DFS, Active Directory, Hyper‑V, and PowerShell guides by Mohit Maurya</p>
-    </div>
-  </header>
-
-  <!-- Breadcrumbs -->
-  <nav class="breadcrumbs container" aria-label="Breadcrumb">
+   breadcrumbs container" aria-label="Breadcrumb">
     <a href="https://mauryamohit07.github.io/WindowsServerTalks/index.html">Home</a>
     <span aria-hidden="true">›</span>
     <span aria-current="page">Recover Deleted DFS‑N Links</span>
@@ -39,21 +34,34 @@
 
     <main id="main-content" class="content" role="main">
 
-      <h2>Recover accidently removed namespace folder and targets when AD‑Recycle Bin is Enabled</h2>
+      <h2 class="page-title">
+        Recover Accidentally Removed Namespace Folders and Targets
+      </h2>
+      <p class="page-subtitle">
+        Using Active Directory Recycle Bin (DFS‑N)
+      </p>
 
-      <div class="card">
+      <section class="summary-box">
         <h3>Summary</h3>
         <p>
-          This article provides a detailed guide on <strong>recovering accidentally deleted DFS namespace
+          This guide explains how to <strong>recover accidentally deleted DFS namespace
           links and their targets</strong> using <strong>Active Directory Recycle Bin</strong>.
         </p>
-        <p>
-          <strong>Note:</strong> Only <strong>subfolders (links)</strong> and <strong>targets</strong> can be
-          recovered using this method. Full namespace deletion requires backups.
-        </p>
+      </section>
+
+      <div class="callout warning">
+        <strong>Important:</strong>
+        Only <strong>subfolders (DFS links)</strong> and their
+        <strong>targets</strong> can be recovered using this method.
+        <br>
+        <strong>Entire namespace deletion</strong> requires DFS namespace backups.
       </div>
 
-      <h2>Step 1: Check if something is deleted</h2>
+      <h2 class="step-title">Step 1 — Discover Deleted DFS Namespace Links</h2>
+      <p class="step-desc">
+        This step queries Active Directory for deleted <code>msDFS-Linkv2</code> objects,
+        calculates deletion age, and displays the results for review.
+      </p>
 
       <pre><code class="language-powershell">
 Import-Module ActiveDirectory
@@ -82,31 +90,47 @@ $Result | Out-GridView -Title "Deleted DFS Links Report"
 
       <h2>Sample Output</h2>
 
-      <h3>Deleted DFS Links — Interactive Report</h3>
-      <img class="doc-image"
-           src="https://mauryamohit07.github.io/WindowsServerTalks/assets/images/image4.png"
-           alt="Out-GridView sample showing deleted DFS links"
-           onclick="openLightbox(this.src)">
+      <figure>
+        <img class="doc-image"
+             src="https://mauryamohit07.github.io/WindowsServerTalks/assets/images/image4.png"
+             alt="Out-GridView sample showing deleted DFS links"
+             onclick="openLightbox(this.src)">
+        <figcaption>
+          Out‑GridView output showing deleted DFS links with ObjectGUID and age.
+        </figcaption>
+      </figure>
 
-      <h3>Deleted DFS Links — CSV Export</h3>
-      <img class="doc-image"
-           src="https://mauryamohit07.github.io/WindowsServerTalks/assets/images/image5.png"
-           alt="CSV export showing deleted DFS links"
-           onclick="openLightbox(this.src)">
+      <figure>
+        <img class="doc-image"
+             src="https://mauryamohit07.github.io/WindowsServerTalks/assets/images/image5.png"
+             alt="CSV export showing deleted DFS links"
+             onclick="openLightbox(this.src)">
+        <figcaption>
+          CSV export used to filter links before bulk restore.
+        </figcaption>
+      </figure>
 
       <h2>Expected Results</h2>
 
-      <h3>Restored Objects</h3>
-      <img class="doc-image"
-           src="https://mauryamohit07.github.io/WindowsServerTalks/assets/images/image6.png"
-           alt="Restored DFS links"
-           onclick="openLightbox(this.src)">
+      <figure>
+        <img class="doc-image"
+             src="https://mauryamohit07.github.io/WindowsServerTalks/assets/images/image6.png"
+             alt="Restored DFS links"
+             onclick="openLightbox(this.src)">
+        <figcaption>
+          Restored DFS links visible after successful recovery.
+        </figcaption>
+      </figure>
 
-      <h3>Restore Logs</h3>
-      <img class="doc-image"
-           src="https://mauryamohit07.github.io/WindowsServerTalks/assets/images/image7.png"
-           alt="DFS restore log output"
-           onclick="openLightbox(this.src)">
+      <figure>
+        <img class="doc-image"
+             src="https://mauryamohit07.github.io/WindowsServerTalks/assets/images/image7.png"
+             alt="DFS restore log output"
+             onclick="openLightbox(this.src)">
+        <figcaption>
+          Restore log confirming successful object recovery.
+        </figcaption>
+      </figure>
 
     </main>
   </div>
