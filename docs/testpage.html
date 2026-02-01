@@ -2,119 +2,319 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Recover Accidently Removed Namespace Folder and Targets · Windows Server Talks</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1">
 
-  <!-- ✅ Correct project-page paths -->
-  <link rel="stylesheet" href="https://mauryamohit07.github.io/WindowsServerTalks/assets/css/custom.css">
-  <script src="https://mauryamohit07.github.io/WindowsServerTalks/assets/js/site.js" defer></script>
+  <title>
+    How to Create a DFS Backup for Domain‑Based Namespace · Windows Server Talks
+  </title>
+
+  <!-- Theme color -->
+  <meta name="theme-color" content="#0F6CBD">
+
+  <!-- Site CSS -->
+  <link rel="stylesheet"
+        href="https://mauryamohit07.github.io/WindowsServerTalks/assets/css/custom.css">
+
+  <!-- Site JS (loads shared header + sidebar, copy buttons, lightbox) -->
+  <script
+    src="https://mauryamohit07.github.io/WindowsServerTalks/assets/js/site.js"
+    defer>
+  </script>
 </head>
 
 <body>
+  <!-- Skip link for keyboard users -->
   <a class="skip-link" href="#main-content">Skip to content</a>
 
-  <header class="site-header">
-    <div class="container">
-      <h1>Windows Server Talks</h1>
-      <p class="tagline">DFS, Active Directory, Hyper‑V, and PowerShell guides by Mohit Maurya</p>
-    </div>
-  </header>
+  <!-- ===== Shared Header placeholder (loaded from /assets/includes/header.html) ===== -->
+  <div id="header-container"></div>
 
-  <!-- Breadcrumbs -->
+  <!-- ===== Breadcrumbs (page-specific; keep here unless you template it) ===== -->
   <nav class="breadcrumbs container" aria-label="Breadcrumb">
-    <a href="https://mauryamohit07.github.io/WindowsServerTalks/index.html">Home</a>
+    <a href="index.html">Home</a>
     <span aria-hidden="true">›</span>
-    <span aria-current="page">Recover Deleted DFS‑N Links</span>
+    <span aria-current="page">DFS‑N Auto Backup</span>
   </nav>
 
+  <!-- ===== Layout ===== -->
   <div class="layout container">
-    <nav class="sidebar" aria-label="Primary">
-      <h3>📚 Contents</h3>
-      <ul>
-        <li><a href="https://mauryamohit07.github.io/WindowsServerTalks/domain-based-dfs-n-auto-backup.html">DFS‑N Auto Backup</a></li>
-        <li><a href="https://mauryamohit07.github.io/WindowsServerTalks/recover-deleted-dfs-n-links.html" aria-current="page">Recover Deleted DFS‑N Links</a></li>
-        <li><a href="https://mauryamohit07.github.io/WindowsServerTalks/index.html">← Back to Home</a></li>
-      </ul>
-    </nav>
 
+    <!-- Sidebar (shared; loaded from /assets/includes/sidebar.html) -->
+    <div id="sidebar-container"></div>
+
+    <!-- ===== Main Content ===== -->
     <main id="main-content" class="content" role="main">
 
-      <h2>Recover accidently removed namespace folder and targets when AD‑Recycle Bin is Enabled</h2>
+      <!-- Page Title -->
+      <h2 class="page-title">
+        How to Create a DFS Backup for Domain‑Based Namespace
+      </h2>
+      <p class="page-subtitle">
+        Automated XML backup using dfsutil (DFS‑N)
+      </p>
 
-      <div class="card">
+      <!-- Summary -->
+      <section class="summary-box">
         <h3>Summary</h3>
         <p>
-          This article provides a detailed guide on <strong>recovering accidentally deleted DFS namespace
-          links and their targets</strong> using <strong>Active Directory Recycle Bin</strong>.
+          This article provides a detailed guide on <strong>backing up domain‑based
+          Distributed File System (DFS) Namespaces</strong> to XML, including
+          <strong>execution logs</strong> and <strong>export logs</strong> for
+          auditability and repeatability.
         </p>
         <p>
-          <strong>Note:</strong> Only <strong>subfolders (links)</strong> and <strong>targets</strong> can be
-          recovered using this method. Full namespace deletion requires backups.
+          It covers prerequisites, the end‑to‑end backup process using
+          <code>dfsutil</code>, sample log outputs, and validation steps to confirm
+          backup completeness.
         </p>
+      </section>
+
+      <!-- Scope -->
+      <div class="callout info">
+        <strong>Scope:</strong> Domain‑based DFS Namespaces (DFS‑N) on Windows Server
+        systems joined to Active Directory.<br>
+        <strong>Not covered:</strong> DFS Replication (DFS‑R) data content backup —
+        only <strong>namespace configuration</strong>.
       </div>
 
-      <h2>Step 1: Check if something is deleted</h2>
+      <div class="spacer"></div>
+      <!-- Why Backup -->
+      <h2 class="step-title">Why Backup Domain‑Based DFS Namespaces</h2>
+      <p class="step-desc">
+        For <strong>domain‑based DFS</strong>, all namespace configuration is stored
+        in <strong>Active Directory</strong>. A regular backup of this configuration
+        allows quick restoration after accidental deletion or misconfiguration.
+      </p>
 
+      <ul>
+        <li><code>dfsutil</code> exports namespace configuration (links, targets, referrals).</li>
+        <li>Each namespace is exported to a timestamped XML file.</li>
+        <li>Execution and export logs provide full auditability.</li>
+        <li>Default backup location: <code>C:\DFSBackup</code>.</li>
+      </ul>
+
+      <!-- Prerequisites -->
+      <h2 class="step-title">Prerequisites</h2>
+      <ul>
+        <li>Server must be <strong>domain‑joined</strong> with read access to Active Directory.</li>
+        <li><strong>DFS Management tools</strong> installed (or <code>dfsutil</code> available).</li>
+        <li><strong>PowerShell 5.1+</strong> recommended.</li>
+        <li>Sufficient disk space at the backup location.</li>
+        <li>Run PowerShell <strong>as Administrator</strong>.</li>
+      </ul>
+
+      <div class="callout warning">
+        <strong>Note:</strong> This process does <strong>not</strong> back up actual
+        file data. It backs up <strong>DFS namespace configuration only</strong>.
+      </div>
+<div class="spacer"></div>
+          <div class="callout warning">
+        <strong>DFS manual backup script which creates backup XML, execution logs, and Export logs.</strong> 
+      </div>
+
+      <figure>
+        <img class="doc-image"
+             src="https://mauryamohit07.github.io/WindowsServerTalks/assets/images/dfsbackup.png"
+             alt="Restored DFS links">
+        <figcaption>
+          Restored DFS links visible after successful recovery.
+        </figcaption>
+      </figure>
+
+       <p class="step-desc">
+         Export logs will show like below 
+      </p>
+<figure>
+        <img class="doc-image"
+             src="https://mauryamohit07.github.io/WindowsServerTalks/assets/images/exportedlogs.png"
+             alt="Restored DFS links">
+        <figcaption>
+          Restored DFS links visible after successful recovery.
+        </figcaption>
+      </figure>
+      
+      <div class="spacer"></div>
+   <p class="step-desc">
+         Execution logs will show like : 
+<figure>
+        <img class="doc-image"
+             src="https://mauryamohit07.github.io/WindowsServerTalks/assets/images/executionlogs.png"
+             alt="Restored DFS links">
+        <figcaption>
+          Restored DFS links visible after successful recovery.
+        </figcaption>
+      </figure>
+   <div class="spacer"></div>  
+      </p>
+      <!-- Step 1 -->
+      <h2 class="step-title">
+        Step 1 — Automated DFS Namespace Backup Script
+      </h2>
+      <p class="step-desc">
+        This script automatically discovers all domain‑based DFS namespaces,
+        exports each to an XML file, and records both execution and export logs.
+      </p>
+<p class="step-desc" style="color:#d13438;">
+  **** Disclaimer *****
+  **** Tested in single domain environment****
+</p>
       <pre><code class="language-powershell">
-Import-Module ActiveDirectory
-$LogFolder = "C:\DFSlogs"
-if (!(Test-Path -Path $LogFolder)) {
-    New-Item -Path $LogFolder -ItemType Directory | Out-Null
-}
-$CurrentDate = Get-Date
-$DeletedDFSObjects = Get-ADObject `
-    -Filter 'ObjectClass -eq "msDFS-Linkv2" -and isDeleted -eq $true' `
-    -IncludeDeletedObjects `
-    -Properties DistinguishedName, Name, ObjectClass, whenChanged, ObjectGUID
-$Result = $DeletedDFSObjects | Select-Object `
-    Name, ObjectClass, DistinguishedName,
-    @{Name="ObjectGUID"; Expression={$_.ObjectGUID}},
-    @{Name="DeletedOn"; Expression={($_.whenChanged).ToString("dd-MMM-yyyy HH:mm")}},
-    @{Name="Age"; Expression={
-        if ($_.whenChanged) {
-            $diff = $CurrentDate - $_.whenChanged
-            if ($diff.Days -ge 1) { "$($diff.Days) days ago" }
-            else { "$([math]::Round($diff.TotalHours,1)) hours ago" }
-        } else { "N/A" }
-    }}
-$Result | Out-GridView -Title "Deleted DFS Links Report"
+   # ================================
+    # DFS Namespace Export Script
+    # ================================
+   
+    # Backup folder
+    $backupFolder = "C:\DFSBackup"
+    if (-not (Test-Path $backupFolder)) {
+        New-Item -Path $backupFolder -ItemType Directory | Out-Null
+    }
+   
+    # Log files
+    $logFile = Join-Path $backupFolder "DFSExportLog.txt"
+    $executionLog = Join-Path $backupFolder "ExecutionLog.txt"
+   
+    # Read previous namespaces if ExecutionLog exists
+    $previousNamespaces = @()
+    if (Test-Path $executionLog) {
+        $previousNamespaces = Get-Content $executionLog | Where-Object { $_ -match "^Namespace:" } | ForEach-Object { ($_ -split ":")[1].Trim() }
+    }
+   
+    Add-Content $logFile "`n--- DFS Export Started ---"
+   
+    try {
+        # Detect domain name
+        $domain = ([System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()).Name
+        Write-Host "Detected Domain: $domain"
+        Add-Content $logFile "Detected Domain: $domain"
+   
+        # Get raw output from dfsutil
+        $rawOutput = & dfsutil /Domain:$domain /View
+   
+        # Extract root names (skip header/footer lines)
+        $rootNames = $rawOutput | ForEach-Object { $_.Trim() } | Where-Object {
+            ($_ -ne "") -and ($_ -notmatch "Roots on Domain") -and ($_ -notmatch "Done") -and ($_ -notmatch "processing")
+        }
+   
+        $totalNamespaces = $rootNames.Count
+        $timestamp = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
+        $dateTag = (Get-Date).ToString("ddMMMMyyyy")  # e.g., 25October2025
+   
+        if ($totalNamespaces -eq 0) {
+            Write-Host "No DFS namespaces found in domain $domain"
+            Add-Content $logFile "No DFS namespaces found in domain $domain"
+        }
+        else {
+            Write-Host "Found namespace roots:"
+            $rootNames | ForEach-Object { Write-Host $_ }
+   
+            # Build full UNC paths
+            $namespaces = $rootNames | ForEach-Object { "\\$domain\$_" }
+   
+            # Compare with previous run
+            $newNamespaces = $namespaces | Where-Object { $previousNamespaces -notcontains $_ }
+            $removedNamespaces = $previousNamespaces | Where-Object { $namespaces -notcontains $_ }
+   
+            if ($newNamespaces.Count -gt 0) {
+                Add-Content $logFile "New namespaces detected: $($newNamespaces -join ', ')"
+            }
+            if ($removedNamespaces.Count -gt 0) {
+                Add-Content $logFile "Removed namespaces detected: $($removedNamespaces -join ', ')"
+            }
+   
+            # Export each namespace
+            foreach ($ns in $namespaces) {
+                try {
+                    $namespaceName = ($ns -split "\\")[-1]
+                    $outputFile = Join-Path $backupFolder "$namespaceName($dateTag).xml"
+   
+                    Write-Host "Exporting namespace: $ns to $outputFile"
+                    Add-Content $logFile "Exporting namespace: ${ns} to ${outputFile}"
+   
+                    & dfsutil /Root:$ns /Export:$outputFile
+   
+                    Add-Content $logFile "SUCCESS: Exported ${ns} to ${outputFile}"
+                }
+                catch {
+                    Write-Host "ERROR exporting ${ns}: $($_.Exception.Message)"
+                    Add-Content $logFile "ERROR exporting ${ns}: $($_.Exception.Message)"
+                }
+            }
+        }
+   
+        # Write execution summary header
+        $summaryHeader = @"
+    Execution Date: $timestamp
+    Domain: $domain
+    Total Namespaces Found: $totalNamespaces
+    Backup Location: $backupFolder
+    "@
+        Add-Content $executionLog $summaryHeader
+   
+        # Write each namespace on a new line
+        foreach ($ns in $namespaces) {
+            Add-Content $executionLog "Namespace: $ns"
+        }
+   
+        # Add separator
+        Add-Content $executionLog "----------------------------------------"
+        Write-Host "Execution log updated at $executionLog"
+    }
+    catch {
+        Write-Host "Script failed: $($_.Exception.Message)"
+        Add-Content $logFile "Script failed: $($_.Exception.Message)"
+    }
       </code></pre>
 
-      <h2>Sample Output</h2>
+      <!-- Logs -->
+      <h2 class="step-title">Sample Export Log Output</h2>
+      <pre><code>
+DFS Export Started
+Detected Domain: contoso.com
+Exporting namespace: \\contoso.com\Data
+SUCCESS: Exported \\contoso.com\Data
+ERROR exporting \\contoso.com\Projects: Access is denied
+      </code></pre>
 
-      <h3>Deleted DFS Links — Interactive Report</h3>
-      <img class="doc-image"
-           src="https://mauryamohit07.github.io/WindowsServerTalks/assets/images/image4.png"
-           alt="Out-GridView sample showing deleted DFS links"
-           onclick="openLightbox(this.src)">
+      <h2 class="step-title">Execution Log Output</h2>
+      <pre><code>
+Execution Date: 2025-10-25 13:41:22
+Domain: contoso.com
+Total Namespaces Found: 3
+Backup Location: C:\DFSBackup
+Namespace: \\contoso.com\Data
+Namespace: \\contoso.com\Projects
+Namespace: \\contoso.com\Reports
+----------------------------------------
+      </code></pre>
 
-      <h3>Deleted DFS Links — CSV Export</h3>
-      <img class="doc-image"
-           src="https://mauryamohit07.github.io/WindowsServerTalks/assets/images/image5.png"
-           alt="CSV export showing deleted DFS links"
-           onclick="openLightbox(this.src)">
+      <!-- Validation -->
+      <h2 class="step-title">Validation — Confirm Backup Completeness</h2>
+      <ol>
+        <li>Verify XML files exist in <code>C:\DFSBackup</code>.</li>
+        <li>Open XML files and confirm roots, links, and targets.</li>
+        <li>Review <code>DFSExportLog.txt</code> and <code>ExecutionLog.txt</code>.</li>
+        <li>Optionally validate XML structure using PowerShell.</li>
+      </ol>
 
-      <h2>Expected Results</h2>
+      
 
-      <h3>Restored Objects</h3>
-      <img class="doc-image"
-           src="https://mauryamohit07.github.io/WindowsServerTalks/assets/images/image6.png"
-           alt="Restored DFS links"
-           onclick="openLightbox(this.src)">
-
-      <h3>Restore Logs</h3>
-      <img class="doc-image"
-           src="https://mauryamohit07.github.io/WindowsServerTalks/assets/images/image7.png"
-           alt="DFS restore log output"
-           onclick="openLightbox(this.src)">
+      <div class="callout info">
+        <strong>Disclaimer:</strong>
+        Test in a staging environment before production and ensure compliance
+        with your organisation’s backup and restore policies.
+      </div>
 
     </main>
   </div>
 
+  <!-- ===== Footer ===== -->
   <footer class="site-footer">
     <div class="container">
       <p>© 2026 Mohit Maurya · Windows Server Talks</p>
     </div>
   </footer>
+
 </body>
 </html>
