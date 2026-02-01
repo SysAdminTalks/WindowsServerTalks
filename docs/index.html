@@ -8,6 +8,9 @@
 </head>
 
 <body>
+  <!-- Skip link for keyboard users -->
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
   <header class="site-header">
     <div class="container">
       <h1>Windows Server Talks</h1>
@@ -18,35 +21,45 @@
   </header>
 
   <div class="layout container">
-    <aside class="sidebar">
+    <nav class="sidebar" aria-label="Primary">
       <h3>📚 Contents</h3>
       <ul>
         <li>
-          <a href="domain-based-dfs-n-auto-backup.html">
-            DFS‑N Auto Backup
-          </a>
+          <a href="domain-based-dfs-n-auto-backup.html">DFS‑N Auto Backup</a>
         </li>
         <li>
-          <a href="recover-deleted-dfs-n-links.html">
-            Recover Deleted DFS‑N Links
-          </a>
+          <a href="recover-deleted-dfs-n-links.html">Recover Deleted DFS‑N Links</a>
         </li>
       </ul>
-    </aside>
+    </nav>
 
-    <main class="content">
+    <main id="main-content" class="content" role="main">
       <h2>Welcome</h2>
+
       <p>
-        This site contains practical, field‑tested notes and guides for
-        Windows Server administrators.
+        This site contains practical, field‑tested notes and guides for Windows Server administrators.
       </p>
 
-      <ul>
-        <li>DFS‑N backup and recovery</li>
-        <li>Active Directory internals</li>
-        <li>Hyper‑V networking and troubleshooting</li>
-        <li>PowerShell automation</li>
-      </ul>
+      <!-- Docs landing cards -->
+      <div class="card">
+        <h3>DFS‑N Auto Backup</h3>
+        <p>
+          Automated backup of domain‑based DFS namespaces with logging, validation, and recovery readiness.
+        </p>
+        <p>
+          <a href="domain-based-dfs-n-auto-backup.html">Read guide →</a>
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Recover Deleted DFS‑N Links</h3>
+        <p>
+          Step‑by‑step recovery of deleted DFS namespace links using Active Directory metadata and PowerShell.
+        </p>
+        <p>
+          <a href="recover-deleted-dfs-n-links.html">Read guide →</a>
+        </p>
+      </div>
     </main>
   </div>
 
