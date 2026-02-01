@@ -1,200 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Recover Accidentally Removed DFS Namespace Links · Windows Server Talks</title>
-  <link rel="stylesheet" href="assets/css/custom.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DFS‑N Auto Backup · Windows Server Talks</title>
+  <link rel="stylesheet" href="assets/css/custom.css" />
   <script src="assets/js/site.js" defer></script>
 </head>
 
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
-<a class="skip-link" href="#main-content">Skip to content</a>
-
-<header class="site-header">
-  <div class="container">
-    <h1>Windows Server Talks</h1>
-    <p class="tagline">DFS, Active Directory, Hyper‑V, and PowerShell guides by Mohit Maurya</p>
-  </div>
-</header>
-
-<nav class="breadcrumbs container" aria-label="Breadcrumb">
-  <a href="index.html">Home</a>
-  <span aria-hidden="true">›</span>
-  <span aria-current="page">Recover Deleted DFS‑N Links</span>
-</nav>
-
-<div class="layout container">
-
-  <!-- Sidebar -->
-  <aside class="sidebar" aria-label="Primary">
-    <h3>📚 Contents</h3>
-    <ul>
-      <li><a href="domain-based-dfs-n-auto-backup.html">DFS‑N Auto Backup</a></li>
-      <li><a href="recover-deleted-dfs-n-links.html" class="active" aria-current="page">Recover Deleted DFS‑N Links</a></li>
-      <li><a href="index.html">← Back to Home</a></li>
-    </ul>
-  </aside>
-
-  <!-- Main Content -->
-  <main id="main-content" class="content" role="main">
-
-    <h2>Recover Accidentally Removed Namespace Folder and Targets (AD Recycle Bin Enabled)</h2>
-
-    <div class="card">
-      <h3>Summary</h3>
-      <p>
-        This article provides a detailed guide on <strong>recovering accidentally deleted DFS namespace links
-        and their targets</strong> using the <strong>Active Directory Recycle Bin</strong>.
-        It covers discovery of deleted DFS objects, identification of the correct
-        <strong>ObjectGUID</strong>, and restoration using PowerShell.
-      </p>
-      <p>
-        The guide includes scripts to <strong>list deleted links</strong>, export results to
-        <strong>CSV/TXT</strong>, and perform <strong>bulk restores</strong> with full logging
-        for audit and validation purposes.
-      </p>
+  <header class="site-header">
+    <div class="container">
+      <h1>Windows Server Talks</h1>
+      <p class="tagline">DFS, Active Directory, Hyper‑V, and PowerShell guides by Mohit Maurya</p>
     </div>
+  </header>
 
-    <div class="card">
-      <p><strong>Scope:</strong> Domain‑based DFS Namespaces (DFS‑N) on Windows Server,
-      where <strong>Active Directory Recycle Bin</strong> is enabled.</p>
+  <!-- Breadcrumbs -->
+  <nav class="breadcrumbs container" aria-label="Breadcrumb">
+    <a href="index.html">Home</a>
+    <span aria-hidden="true">›</span>
+    <span aria-current="page">DFS‑N Auto Backup</span>
+  </nav>
 
-      <p><strong>Does not cover:</strong> DFS Replication (DFS‑R) data recovery
-      or full namespace root restoration — only DFS link objects and their target metadata.</p>
-    </div>
+  <div class="layout container">
+    <nav class="sidebar" aria-label="Primary">
+      <h3>📚 Contents</h3>
+      <ul>
+        <li><a href="domain-based-dfs-n-auto-backup.html">DFS‑N Auto Backup</a></li>
+        <li><a href="recover-deleted-dfs-n-links.html">Recover Deleted DFS‑N Links</a></li>
+        <li><a href="index.html">← Back to Home</a></li>
+      </ul>
+    </nav>
 
-    <h2>Step 1: Check if DFS Links Were Deleted</h2>
+    <main id="main-content" class="content" role="main">
+      <h2>Domain‑Based DFS‑N Auto Backup</h2>
 
-    <p>
-      The following script searches for deleted <code>msDFS-Linkv2</code> objects,
-      calculates deletion age, and exports results for review.
-    </p>
+      <!-- Summary -->
+      <div class="card">
+        <h3>Summary</h3>
+        <p>
+          Back up <strong>domain‑based DFS Namespaces (DFS‑N)</strong> by exporting namespace configuration
+          to XML using <code>dfsutil</code>. The process captures links, targets, and referrals, and generates
+          execution and export logs for validation and auditability.
+        </p>
+        <p>
+          <strong>Scope:</strong> DFS‑N configuration data only. <strong>Not covered:</strong> DFS‑R file data.
+        </p>
+      </div>
 
-    <div class="code-wrap">
-      <button class="copy-btn">Copy</button>
-      <pre><code>
-Import-Module ActiveDirectory
+      <!-- Example Image (click to zoom) -->
+      <div class="card">
+        <h3>Sample Output / Architecture</h3>
+        <img
+          class="doc-image"
+          src="https://raw.githubusercontent.com/mauryamohit07/WindowsServerTalks/main/docs/images/Image1.png"
+          alt="Sample DFS‑N export output screenshot" />
+        <p>
+          Example output generated during DFS‑N namespace export. Replace with more screenshots as needed—duplicate
+          this card and update the <code>src</code> to other images under <code>docs/images/</code>.
+        </p>
+      </div>
 
-# Define log folder
-$LogFolder = "C:\DFSlogs"
-if (!(Test-Path -Path $LogFolder)) {
-    New-Item -Path $LogFolder -ItemType Directory | Out-Null
+      <!-- Prerequisites -->
+      <div class="card">
+        <h3>Prerequisites</h3>
+        <ul>
+          <li>Domain‑joined Windows Server</li>
+          <li>DFS Management tools or <code>dfsutil</code> available</li>
+          <li>PowerShell 5.1 or later</li>
+          <li>Read access to Active Directory</li>
+          <li>Sufficient disk space (e.g., <code>C:\DFSBackup</code>)</li>
+          <li>Run PowerShell as Administrator</li>
+        </ul>
+      </div>
+
+      <!-- Backup Process -->
+      <div class="card">
+        <h3>Automated Backup Process</h3>
+        <p>
+          The script below discovers DFS namespace roots in the domain, exports each to an XML file,
+          and records execution details and export results.
+        </p>
+      </div>
+
+      <!-- Code Block -->
+      <pre><code class="language-powershell">
+# ================================
+# DFS Namespace Export Script
+# ================================
+
+$backupFolder = "C:\DFSBackup"
+if (-not (Test-Path $backupFolder)) {
+  New-Item -Path $backupFolder -ItemType Directory | Out-Null
 }
 
-# Current date
-$CurrentDate = Get-Date
+$logFile = Join-Path $backupFolder "DFSExportLog.txt"
+$executionLog = Join-Path $backupFolder "ExecutionLog.txt"
 
-# Query deleted DFS links
-$DeletedDFSObjects = Get-ADObject `
-  -Filter 'ObjectClass -eq "msDFS-Linkv2" -and isDeleted -eq $true' `
-  -IncludeDeletedObjects `
-  -Properties DistinguishedName, Name, ObjectClass, whenChanged, ObjectGUID
+$previousNamespaces = @()
+if (Test-Path $executionLog) {
+  $previousNamespaces = Get-Content $executionLog |
+    Where-Object { $_ -match "^Namespace:" } |
+    ForEach-Object { ($_ -split ":")[1].Trim() }
+}
 
-$Result = $DeletedDFSObjects | Select-Object `
-  Name,
-  ObjectClass,
-  DistinguishedName,
-  @{Name="ObjectGUID";Expression={$_.ObjectGUID}},
-  @{Name="DeletedOn";Expression={($_.whenChanged).ToString("dd-MMM-yyyy HH:mm")}},
-  @{Name="Age";Expression={
-    if ($_.whenChanged) {
-      $diff = $CurrentDate - $_.whenChanged
-      if ($diff.Days -ge 1) { "$($diff.Days) days ago" }
-      else { "$([math]::Round($diff.TotalHours,1)) hours ago" }
-    } else { "N/A" }
-  }}
+Add-Content $logFile "`n--- DFS Export Started ---"
 
-# Export reports
-$TxtFile = Join-Path $LogFolder "DFS_DeletedLinks_$(Get-Date -Format 'ddMMyyyy_HHmm').txt"
-$Result | Format-Table -AutoSize | Out-String | Set-Content $TxtFile
+try {
+  $domain = ([System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()).Name
+  Add-Content $logFile "Detected Domain: $domain"
 
-$CsvFile = Join-Path $LogFolder "DFS_DeletedLinks_$(Get-Date -Format 'ddMMyyyy_HHmm').csv"
-$Result | Export-Csv $CsvFile -NoTypeInformation
-      </code></pre>
-    </div>
+  $rawOutput = & dfsutil /Domain:$domain /View
 
-    <p>
-      Review the CSV file and remove rows you do not wish to restore
-      (based on age or deletion date).
-    </p>
-
-    <h2>Understanding the Correct ObjectGUID</h2>
-
-    <p>
-      The GUID shown in the deleted DFS link name cannot be directly used for restore.
-      You must retrieve the <strong>actual ObjectGUID</strong> from Active Directory.
-    </p>
-
-    <div class="code-wrap">
-      <button class="copy-btn">Copy</button>
-      <pre><code>
-Get-ADObject -Filter 'isDeleted -eq $true' -IncludeDeletedObjects |
-  Where-Object {
-    $_.DistinguishedName -like "*3c61c2e5-d037-45f5-bb24-8907150a4fbc*"
-  }
-      </code></pre>
-    </div>
-
-    <p>
-      The output will show the restored object with its true <code>ObjectGUID</code>,
-      which is required for recovery.
-    </p>
-
-    <h2>Restore DFS Links (Bulk Automation)</h2>
-
-    <div class="code-wrap">
-      <button class="copy-btn">Copy</button>
-      <pre><code>
-Import-Module ActiveDirectory
-
-$CsvFile = "C:\DFSlogs\DFS_DeletedLinks_29102025_0331.csv"
-$LogFile = "C:\DFSlogs\RestoreLog_$(Get-Date -Format 'ddMMyyyy_HHmm').txt"
-
-Set-Content -Path $LogFile -Value "DFS Restore Log - $(Get-Date)`r`n"
-
-$Entries = Import-Csv -Path $CsvFile
-
-foreach ($entry in $Entries) {
-  $guid = $entry.ObjectGUID
-  Add-Content -Path $LogFile -Value "Processing ObjectGUID: $guid"
-
-  try {
-    Restore-ADObject -Identity $guid
-    Start-Sleep -Seconds 2
-
-    $restoredObj = Get-ADObject -Filter { ObjectGUID -eq $guid } -ErrorAction SilentlyContinue
-    if ($restoredObj) {
-      Add-Content -Path $LogFile -Value "SUCCESS: Restored $guid"
-    } else {
-      Add-Content -Path $LogFile -Value "WARN: Object not found after restore: $guid"
+  $rootNames = $rawOutput |
+    ForEach-Object { $_.Trim() } |
+    Where-Object {
+      ($_ -ne "") -and
+      ($_ -notmatch "Roots on Domain") -and
+      ($_ -notmatch "Done") -and
+      ($_ -notmatch "processing")
     }
-  }
-  catch {
-    Add-Content -Path $LogFile -Value "ERROR: Failed to restore $guid - $_"
+
+  foreach ($root in $rootNames) {
+    $namespace = "\\$domain\$root"
+    $outputFile = Join-Path $backupFolder "$root.xml"
+    & dfsutil /Root:$namespace /Export:$outputFile
+    Add-Content $logFile "Exported $namespace to $outputFile"
   }
 }
-
-Write-Host "Restore process completed. Log saved to: $LogFile"
+catch {
+  Add-Content $logFile "ERROR: $($_.Exception.Message)"
+}
       </code></pre>
-    </div>
-
-    <div class="card">
-      <p>
-        ✅ Successfully restored DFS links become immediately visible in DFS Management.<br>
-        ✅ Detailed restore logs are generated for auditing and troubleshooting.
-      </p>
-    </div>
-
-  </main>
-</div>
-
-<footer class="site-footer">
-  <div class="container">
-    <p>© 2026 Mohit Maurya · Windows Server Talks</p>
+    </main>
   </div>
-</footer>
 
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Mohit Maurya · Windows Server Talks</p>
+    </div>
+  </footer>
 </body>
 </html>
