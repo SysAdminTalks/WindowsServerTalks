@@ -5,33 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>DFS‑N Auto Backup · Windows Server Talks</title>
   <link rel="stylesheet" href="assets/css/custom.css" />
+  <script src="assets/js/site.js" defer></script>
 </head>
 
 <body>
-  <!-- Skip link -->
   <a class="skip-link" href="#main-content">Skip to content</a>
 
   <header class="site-header">
     <div class="container">
       <h1>Windows Server Talks</h1>
-      <p class="tagline">
-        DFS, Active Directory, Hyper‑V, and PowerShell guides by Mohit Maurya
-      </p>
+      <p class="tagline">DFS, Active Directory, Hyper‑V, and PowerShell guides by Mohit Maurya</p>
     </div>
   </header>
 
+  <!-- Breadcrumbs -->
+  <nav class="breadcrumbs container" aria-label="Breadcrumb">
+    <a href="index.html">Home</a>
+    <span aria-hidden="true">›</span>
+    <span aria-current="page">DFS‑N Auto Backup</span>
+  </nav>
+
   <div class="layout container">
-    <!-- Sidebar -->
     <nav class="sidebar" aria-label="Primary">
       <h3>📚 Contents</h3>
       <ul>
-        <li><a class="active" href="domain-based-dfs-n-auto-backup.html">DFS‑N Auto Backup</a></li>
+        <li><a href="domain-based-dfs-n-auto-backup.html">DFS‑N Auto Backup</a></li>
         <li><a href="recover-deleted-dfs-n-links.html">Recover Deleted DFS‑N Links</a></li>
         <li><a href="index.html">← Back to Home</a></li>
       </ul>
     </nav>
 
-    <!-- Main content -->
     <main id="main-content" class="content" role="main">
       <h2>Domain‑Based DFS‑N Auto Backup</h2>
 
@@ -39,32 +42,25 @@
       <div class="card">
         <h3>Summary</h3>
         <p>
-          This guide explains how to back up <strong>domain‑based DFS Namespaces (DFS‑N)</strong>
-          by exporting namespace configuration metadata to XML using <code>dfsutil</code>.
+          Back up <strong>domain‑based DFS Namespaces (DFS‑N)</strong> by exporting namespace configuration
+          to XML using <code>dfsutil</code>. The process captures links, targets, and referrals, and generates
+          execution and export logs for validation and auditability.
         </p>
         <p>
-          The process captures links, targets, and referrals, and generates execution and export logs
-          for validation and auditability.
-        </p>
-        <p>
-          <strong>Scope:</strong> Domain‑based DFS‑N only (configuration data).<br />
-          <strong>Not covered:</strong> DFS‑R data content backup.
+          <strong>Scope:</strong> DFS‑N configuration data only. <strong>Not covered:</strong> DFS‑R file data.
         </p>
       </div>
 
-      <!-- Example Image -->
+      <!-- Example Image (click to zoom) -->
       <div class="card">
         <h3>Sample Output / Architecture</h3>
         <img
           class="doc-image"
           src="https://raw.githubusercontent.com/mauryamohit07/WindowsServerTalks/main/docs/images/Image1.png"
-          alt="Sample DFS‑N export output / architecture"
-          loading="lazy"
-        />
+          alt="Sample DFS‑N export output screenshot" />
         <p>
-          Example output generated during DFS‑N namespace export. Use this as a reference for
-          validation and documentation. Replace with your own screenshots as needed—just copy this
-          block and update the <code>src</code> to another image in <code>docs/images/</code>.
+          Example output generated during DFS‑N namespace export. Replace with more screenshots as needed—duplicate
+          this card and update the <code>src</code> to other images under <code>docs/images/</code>.
         </p>
       </div>
 
@@ -76,7 +72,7 @@
           <li>DFS Management tools or <code>dfsutil</code> available</li>
           <li>PowerShell 5.1 or later</li>
           <li>Read access to Active Directory</li>
-          <li>Sufficient disk space (default: <code>C:\DFSBackup</code>)</li>
+          <li>Sufficient disk space (e.g., <code>C:\DFSBackup</code>)</li>
           <li>Run PowerShell as Administrator</li>
         </ul>
       </div>
@@ -85,8 +81,8 @@
       <div class="card">
         <h3>Automated Backup Process</h3>
         <p>
-          The script below automatically discovers DFS namespace roots in the domain, exports each
-          namespace to an XML file, and records execution details and export results.
+          The script below discovers DFS namespace roots in the domain, exports each to an XML file,
+          and records execution details and export results.
         </p>
       </div>
 
