@@ -526,3 +526,24 @@ button:focus,
   .copy-btn { background: #2F2F2F; border-color: #3A3A3A; }
   .copy-btn:hover { background: #3B3B3B; }
 }
+
+/* ==================================================
+   Header breadcrumb & link color FIX (force white)
+================================================== */
+.site-header,
+.site-header h1,
+.site-header .tagline,
+.site-header a,
+.site-header .breadcrumbs,
+.site-header .breadcrumbs a,
+.site-header .breadcrumbs span,
+.site-header .breadcrumbs [aria-current="page"] {
+  color: #ffffff;
+}
+
+/* Optional hover state */
+.site-header .breadcrumbs a:hover {
+  text-decoration: underline;
+  opacity: 0.85;
+}
+
