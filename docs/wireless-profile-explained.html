@@ -1,113 +1,342 @@
-<!-- ======================================================= -->
-<!-- Wireless UI Mapping (1–20): Validated with screenshots -->
-<!-- ======================================================= -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wireless Profile Samples (WLANProfile XML) · Windows Server Talks</title>
 
-<h2 id="ui-mapping">Wireless UI Mapping (1–20)</h2>
+  <!-- Theme color for mobile address bar -->
+  <meta name="theme-color" content="#0F6CBD">
 
-<!-- ================== -->
-<!-- Callouts 1–4 -->
-<!-- ================== -->
-<figure>
-  https://mauryamohit07.github.io/WindowsServerTalks/assets/images/wirelessprofileimage1.png
-  <figcaption>New Profile properties — Security tab (Callouts 1–4)</figcaption>
-</figure>
+  <!-- Site Styles -->
+  <link rel="stylesheet" href="https://mauryamohit07.github.io/WindowsServerTalks/assets/css/custom.css">
 
-<ol start="1">
-  <li>This section defines the security methods for your wireless profile.</li>
-  <li>This section defines the authentication methods and authentication mode for your wireless profile.</li>
-  <li>The option "max authentication failures" specifies the maximum number of authentication failures that are allowed before the client is disconnected from the wireless network.</li>
-  <li>"Cache user information for subsequent connections to this network" allows the device to store the user's login credentials for a wireless network, so that the user does not have to enter their credentials every time they connect to the network.</li>
-</ol>
+  <!-- Shared site enhancements (header + sidebar injection, copy buttons, lightbox, etc.) -->
+  <script src="https://mauryamohit07.github.io/WindowsServerTalks/assets/js/site.js" defer></script>
+</head>
+<body>
+  <!-- a11y: Skip link for keyboard users -->
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
-<div class="spacer"></div>
+  <!-- ===== Shared Header (injected from /assets/includes/header.html) ===== -->
+  <div id="header-container"></div>
 
-<!-- ================== -->
-<!-- Callouts 5–9 -->
-<!-- ================== -->
-<figure>
-  https://mauryamohit07.github.io/WindowsServerTalks/assets/images/wirelessprofileimage2.png
-  <figcaption>Protected EAP Properties (Callouts 5–9)</figcaption>
-</figure>
+  <!-- ===== Breadcrumbs (edit for this page) ===== -->
+  <nav class="breadcrumbs container" aria-label="Breadcrumb">
+    <a href="https://mauryamohit07.github.io/WindowsServerTalks/index.html">Home</a>
+    <span aria-hidden="true">›</span>
+    <span aria-current="page">Wireless Profile Samples (WLANProfile XML)</span>
+  </nav>
 
-<ol start="5">
-  <li>
-    If you check this option, client will verify the server’s identity by validating the certificate presented by the server during the authentication process. This helps ensure that the client is connecting to the intended server and not an imposter. If the certificate is not valid or cannot be verified, the client will not connect to the network. If you uncheck it, the client will connect to the network without verifying the identity of the server.
-  </li>
-  <li>You need to check the Trusted Root CA here.</li>
-  <li>
-    “Don’t ask user to authorize new servers or trusted CAs” means that the user will not be prompted to authorize new servers or trusted certification authorities when connecting to a wireless network.
-  </li>
-  <li>You can choose different authentication method here. (PEAP‑TLS or PEAP‑MSCHAPv2)</li>
-  <li>
-    “Enable fast reconnect” allows the device to quickly reconnect to a previously connected wireless network.
-    <br>
-    “Disconnect if server does not present cryptobinding TLV” specifies whether to disconnect from a wireless network if the server does not present a cryptobinding TLV.
-    <br>
-    “Enable Identity Privacy” allows the device to use a randomized MAC address when connecting to a wireless network, which helps protect the user’s privacy by preventing the network from tracking the device based on its MAC address.
-  </li>
-</ol>
+  <div class="layout container">
+    <!-- ===== Shared Sidebar (injected from /assets/includes/sidebar.html) ===== -->
+    <div id="sidebar-container"></div>
 
-<div class="spacer"></div>
+    <!-- ===== Main content ===== -->
+    <main id="main-content" class="content" role="main">
+      <!-- Page Heading -->
+      <h2 class="page-title">Wireless Profile Samples (WLANProfile XML)</h2>
+      <p class="page-subtitle">How to read, build, and validate Windows Native Wi‑Fi <code>WLANProfile</code> XML for enterprise networks.</p>
 
-<!-- ================== -->
-<!-- Callouts 10–15 -->
-<!-- ================== -->
-<figure>
-  https://mauryamohit07.github.io/WindowsServerTalks/assets/images/wirelessprofileimage3.png
-  <figcaption>Smart Card or other Certificate Properties (Callouts 10–15)</figcaption>
-</figure>
+      <!-- Summary / TL;DR -->
+      <section class="summary-box">
+        <h3>Summary</h3>
+        <p>
+          This article curates Microsoft’s <em>Wireless profile samples</em> and provides a hands‑on structure
+          to build your own <code>WLANProfile</code> XML. You’ll find quick export/import commands, schema
+          pointers, a verified <strong>Wireless UI Mapping (1–20)</strong> section, and a playground with multiple XML
+          sample boxes—each followed by an explanation list and an image placeholder for your screenshots.
+        </p>
+      </section>
 
-<ol start="10">
-  <li>This section defines how you choose smart card or certificate when doing authentication. You can go to Advanced for more selections.</li>
-  <li>
-    If you check this option, client will verify the server’s identity by validating the certificate presented by the server during the authentication process. This helps ensure that the client is connecting to the intended server and not an imposter. If the certificate is not valid or cannot be verified, the client will not connect to the network. If you uncheck it, the client will connect to the network without verifying the identity of the server.
-  </li>
-  <li>
-    List the server name of RADIUS server that you allow client to connect. The RADIUS servers that are not listed are untrusted and client will not connect to them.
-    <br>
-    It is not necessary to list.
-  </li>
-  <li>
-    If you do not check anything here, the certificates issued by Trusted Root CAs in NTAuth store will be used for authentication.
-    <br>
-    If you check specific Trusted Root CAs, only certificates issued by selected Root CAs will be used for authentication. And no need to use NTAuth store.
-    <br>
-    It is recommended to select same Trusted Root CAs here and in Advanced settings.
-  </li>
-  <li>
-    If you uncheck this option, when certificate authentication is failed, the user will be prompted to choose to authorize certificate and continue connecting to new servers.
-    <br>
-    If you check this option, the user will not be prompted to authorize new servers or trusted certification authorities and fail the connection without notification.
-  </li>
-  <li>
-    This option allows the user to specify a different username to use when connecting to a wireless network, instead of the default username associated with the user’s account.
-  </li>
-</ol>
+      <!-- Callouts (change class: info | success | warning | danger ) -->
+      <div class="callout info">
+        <strong>Note:</strong> Validate in a lab before production. Reference:
+        <a href="https://learn.microsoft.com/en-us/windows/win32/nativewifi/wireless-profile-samples" target="_blank" rel="noopener">
+          Microsoft – Wireless profile samples
+        </a>.
+      </div>
 
-<div class="spacer"></div>
+      <div class="spacer"></div>
 
-<!-- ================== -->
-<!-- Callouts 16–20 -->
-<!-- ================== -->
-<figure>
-  https://mauryamohit07.github.io/WindowsServerTalks/assets/images/wirelessprofileimage4.png
-  <figcaption>Configure Certificate Selection (Callouts 16–20)</figcaption>
-</figure>
+      <!-- =============================== -->
+      <!-- Wireless UI Mapping (1–20)     -->
+      <!-- =============================== -->
+      <h2 id="ui-mapping" class="step-title">Wireless UI Mapping (1–20)</h2>
+      <p class="step-desc">
+        The figures below map each numbered callout to its explanation. Text is provided exactly as specified.
+      </p>
 
-<ol start="16">
-  <li>
-    Certificate Issuer. When you configure the certificate issuer filter, you can specify that computers must select a certificate that is issued by a specific CA. When you configure this filter, the filter enumerates the root and intermediate certification authorities (CAs) for all certificates that are present in the certificate store on the local computer, and allows you to select the correct CA from the list.
-  </li>
-  <li>
-    Extended Key Usage (EKU). The extended key usage (EKU) is a certificate extension that specifies the intended purposes of the public key contained in the certificate.
-  </li>
-  <li>
-    “All purpose” EKU. This option allows the certificate to be used for any purpose, including client authentication, server authentication, and other purposes. This is the most permissive option and should be used only when necessary.
-  </li>
-  <li>
-    “Client auth and other EKUs”. This option allows the certificate to be used for client authentication and other purposes, but not for server authentication.
-  </li>
-  <li>
-    “Any purpose and other EKUs”. This option allows the certificate to be used for any purpose and other authorized purposes, but not for client or server authentication.
-  </li>
-</ol>
+      <!-- Figure: 1–4 -->
+      <figure>
+        <img class="doc-image"
+             src="https://mauryamohit07.github.io/WindowsServerTalks/assets/images/wirelessprofileimage1.png"
+             alt="New Profile properties: security method, authentication, max failures, cache user info (Callouts 1–4)">
+        <figcaption>New Profile properties — Security tab (Callouts 1–4)</figcaption>
+      </figure>
+      <ol start="1">
+        <li>This section defines the security methods for your wireless profile.</li>
+        <li>This section defines the authentication methods and authentication mode for your wireless profile.</li>
+        <li>The option "max authentication failures" specifies the maximum number of authentication failures that are allowed before the client is disconnected from the wireless network.</li>
+        <li>"Cache user information for subsequent connections to this network" allows the device to store the user's login credentials for a wireless network, so that the user does not have to enter their credentials every time they connect to the network.</li>
+      </ol>
+
+      <div class="spacer"></div>
+
+      <!-- Figure: 5–9 -->
+      <figure>
+        <img class="doc-image"
+             src="https://mauryamohit07.github.io/WindowsServerTalks/assets/images/wirelessprofileimage2.png"
+             alt="Protected EAP Properties: verify server, trusted root CAs, notifications, method, fast reconnect/privacy (Callouts 5–9)">
+        <figcaption>Protected EAP Properties (Callouts 5–9)</figcaption>
+      </figure>
+      <ol start="5">
+        <li>If you check this option, client will verify the server’s identity by validating the certificate presented by the server during the authentication process. This helps ensure that the client is connecting to the intended server and not an imposter. If the certificate is not valid or cannot be verified, the client will not connect to the network. If you uncheck it, the client will connect to the network without verifying the identity of the server.</li>
+        <li>You need to check the Trusted Root CA here.</li>
+        <li>“Don’t ask user to authorize new servers or trusted CAs” means that the user will not be prompted to authorize new servers or trusted certification authorities when connecting to a wireless network.</li>
+        <li>You can choose different authentication method here. (PEAP‑TLS or PEAP‑MSCHAPv2)</li>
+        <li>“Enable fast reconnect” allows the device to quickly reconnect to a previously connected wireless network. “Disconnect if server does not present cryptobinding TLV” specifies whether to disconnect from a wireless network if the server does not present a cryptobinding TLV. “Enable Identity Privacy” allows the device to use a randomized MAC address when connecting to a wireless network, which helps protect the user’s privacy by preventing the network from tracking the device based on its MAC address.</li>
+      </ol>
+
+      <div class="spacer"></div>
+
+      <!-- Figure: 10–15 -->
+      <figure>
+        <img class="doc-image"
+             src="https://mauryamohit07.github.io/WindowsServerTalks/assets/images/wirelessprofileimage3.png"
+             alt="Smart Card or other Certificate Properties: selection, verify server, servers list, CA list, prompts, different username (Callouts 10–15)">
+        <figcaption>Smart Card or other Certificate Properties (Callouts 10–15)</figcaption>
+      </figure>
+      <ol start="10">
+        <li>This section defines how you choose smart card or certificate when doing authentication. You can go to Advanced for more selections.</li>
+        <li>If you check this option, client will verify the server’s identity by validating the certificate presented by the server during the authentication process. This helps ensure that the client is connecting to the intended server and not an imposter. If the certificate is not valid or cannot be verified, the client will not connect to the network. If you uncheck it, the client will connect to the network without verifying the identity of the server.</li>
+        <li>List the server name of RADIUS server that you allow client to connect. The RADIUS servers that are not listed are untrusted and client will not connect to them. It is not necessary to list.</li>
+        <li>If you do not check anything here, the certificates issued by Trusted Root CAs in NTAuth store will be used for authentication. If you check specific Trusted Root CAs, only certificates issued by selected Root CAs will be used for authentication. And no need to use NTAuth store. It is recommended to select same Trusted Root CAs here and in Advanced settings.</li>
+        <li>If you uncheck this option, when certificate authentication is failed, the user will be prompted to choose to authorize certificate and continue connecting to new servers. If you check this option, the user will not be prompted to authorize new servers or trusted certification authorities and fail the connection without notification.</li>
+        <li>This option allows the user to specify a different username to use when connecting to a wireless network, instead of the default username associated with the user’s account.</li>
+      </ol>
+
+      <div class="spacer"></div>
+
+      <!-- Figure: 16–20 -->
+      <figure>
+        <img class="doc-image"
+             src="https://mauryamohit07.github.io/WindowsServerTalks/assets/images/wirelessprofileimage4.png"
+             alt="Configure Certificate Selection: certificate issuer, EKU, all purpose EKU, client auth EKU, any purpose EKU (Callouts 16–20)">
+        <figcaption>Configure Certificate Selection (Callouts 16–20)</figcaption>
+      </figure>
+      <ol start="16">
+        <li>Certificate Issuer. When you configure the certificate issuer filter, you can specify that computers must select a certificate that is issued by a specific CA. When you configure this filter, the filter enumerates the root and intermediate certification authorities (CAs) for all certificates that are present in the certificate store on the local computer, and allows you to select the correct CA from the list.</li>
+        <li>Extended Key Usage (EKU). The extended key usage (EKU) is a certificate extension that specifies the intended purposes of the public key contained in the certificate.</li>
+        <li>“All purpose” EKU. This option allows the certificate to be used for any purpose, including client authentication, server authentication, and other purposes. This is the most permissive option and should be used only when necessary.</li>
+        <li>“Client auth and other EKUs”. This option allows the certificate to be used for client authentication and other purposes, but not for server authentication.</li>
+        <li>“Any purpose and other EKUs”. This option allows the certificate to be used for any purpose and other authorized purposes, but not for client or server authentication.</li>
+      </ol>
+
+      <div class="spacer"></div>
+
+      <!-- ========================= -->
+      <!-- XML SAMPLES PLAYGROUND    -->
+      <!-- ========================= -->
+      <h2 id="xml-samples" class="step-title">XML Samples (Add your code here)</h2>
+      <p class="step-desc">
+        Paste portions of your <code>WLANProfile</code> XML into the boxes below. For each sample, add line‑by‑line notes in the “Explanation” panel and attach a matching screenshot.
+      </p>
+
+      <!-- Sample A -->
+      <h3 id="sample-a">Sample A — WPA2‑Enterprise (PEAP)</h3>
+      <pre><code class="language-xml">
+<!-- Paste the PEAP profile XML here -->
+<!-- e.g., OneX with EapHostConfig for PEAP / PEAP-MSCHAPv2 -->
+      </code></pre>
+      <details open><summary>Explanation (line-by-line)</summary>
+        <ol>
+          <li><code>&lt;SSIDConfig&gt;</code> — SSID broadcast and name.</li>
+          <li><code>&lt;MSM&gt;&lt;security&gt;</code> — EAP container.</li>
+          <li><code>&lt;OneX&gt;</code> — 802.1X settings + PEAP method block.</li>
+          <li>Inner method (e.g., MSCHAPv2) configuration.</li>
+        </ol>
+      </details>
+      <figure>
+        <img class="doc-image"
+             src="https://via.placeholder.com/1200x550.png?text=Screenshot+for+Sample+A"
+             alt="Placeholder screenshot for Sample A (PEAP)">
+        <figcaption>Replace with the UI screenshot matching this XML.</figcaption>
+      </figure>
+
+      <div class="spacer"></div>
+
+      <!-- Sample B -->
+      <h3 id="sample-b">Sample B — EAP‑TLS (Client Certificate)</h3>
+      <pre><code class="language-xml">
+<!-- Paste the EAP-TLS profile XML here -->
+<!-- Include certificate selection, EKU filters, and server validation -->
+      </code></pre>
+      <details><summary>Explanation (line-by-line)</summary>
+        <ol>
+          <li>Certificate store and simple selection.</li>
+          <li>Trusted Root CA &amp; server name checks.</li>
+          <li>EKU filtering for client authentication.</li>
+          <li>Fast reconnect / identity privacy toggles.</li>
+        </ol>
+      </details>
+      <figure>
+        <img class="doc-image"
+             src="https://via.placeholder.com/1200x550.png?text=Screenshot+for+Sample+B"
+             alt="Placeholder screenshot for Sample B (EAP-TLS)">
+        <figcaption>Attach the certificate selection / OneX properties screenshot.</figcaption>
+      </figure>
+
+      <div class="spacer"></div>
+
+      <!-- Sample C -->
+      <h3 id="sample-c">Sample C — EAP‑TTLS (TLS inner method)</h3>
+      <pre><code class="language-xml">
+<!-- Paste the EAP-TTLS XML here -->
+<!-- Include Phase2Authentication with inner EAP type -->
+      </code></pre>
+      <details><summary>Explanation (line-by-line)</summary>
+        <ol>
+          <li>Outer EAP‑TTLS configuration.</li>
+          <li>Server validation (root CA and names).</li>
+          <li>Phase 2 inner EAP (e.g., EAP‑TLS).</li>
+          <li>Anonymous identity and privacy settings.</li>
+        </ol>
+      </details>
+      <figure>
+        <img class="doc-image"
+             src="https://via.placeholder.com/1200x550.png?text=Screenshot+for+Sample+C"
+             alt="Placeholder screenshot for Sample C (EAP-TTLS)">
+        <figcaption>Map to the dialog that matches these nodes.</figcaption>
+      </figure>
+
+      <div class="spacer"></div>
+
+      <!-- Sample D -->
+      <h3 id="sample-d">Sample D — Hidden SSID + AutoSwitch</h3>
+      <pre><code class="language-xml">
+<!-- Paste the non-broadcast SSID profile XML here -->
+<!-- Include nonBroadcast=true and autoSwitch toggles -->
+      </code></pre>
+      <details><summary>Explanation (line-by-line)</summary>
+        <ol>
+          <li><code>&lt;nonBroadcast&gt;</code> controls probe behavior.</li>
+          <li><code>&lt;autoSwitch&gt;</code> helps roam across preferred networks.</li>
+          <li>Connection mode and priority considerations.</li>
+        </ol>
+      </details>
+      <figure>
+        <img class="doc-image"
+             src="https://via.placeholder.com/1200x550.png?text=Screenshot+for+Sample+D"
+             alt="Placeholder screenshot for Sample D (hidden SSID)">
+        <figcaption>Show the UI where hidden SSID is reflected.</figcaption>
+      </figure>
+
+      <div class="spacer"></div>
+
+      <!-- Sample E -->
+      <h3 id="sample-e">Sample E — WPA3‑Enterprise transition</h3>
+      <pre><code class="language-xml">
+<!-- Paste the WPA3-Enterprise profile here -->
+<!-- Note: validate OS/driver support before deploying -->
+      </code></pre>
+      <details><summary>Explanation (line-by-line)</summary>
+        <ol>
+          <li>Authentication value for WPA3‑Enterprise.</li>
+          <li>Encryption and cipher suite expectations.</li>
+          <li>Server certificate enforcement.</li>
+        </ol>
+      </details>
+      <figure>
+        <img class="doc-image"
+             src="https://via.placeholder.com/1200x550.png?text=Screenshot+for+Sample+E"
+             alt="Placeholder screenshot for Sample E (WPA3-Enterprise)">
+        <figcaption>Confirm driver/OS support screens here.</figcaption>
+      </figure>
+
+      <div class="spacer"></div>
+
+      <!-- Sample F -->
+      <h3 id="sample-f">Sample F — PEAP with strict server name pinning</h3>
+      <pre><code class="language-xml">
+<!-- Paste PEAP profile where ServerNames is explicitly set -->
+<!-- Include DisableUserPromptForServerValidation=true -->
+      </code></pre>
+      <details><summary>Explanation (line-by-line)</summary>
+        <ol>
+          <li>TrustedRootCAHash or CA list usage.</li>
+          <li><code>&lt;ServerNames&gt;</code> pinning strategy.</li>
+          <li>Prompt suppression and user experience.</li>
+        </ol>
+      </details>
+      <figure>
+        <img class="doc-image"
+             src="https://via.placeholder.com/1200x550.png?text=Screenshot+for+Sample+F"
+             alt="Placeholder screenshot for Sample F (PEAP with server pinning)">
+        <figcaption>Show Protected EAP dialog with server list and CA selection.</figcaption>
+      </figure>
+
+      <div class="spacer"></div>
+
+      <!-- Sample G -->
+      <h3 id="sample-g">Sample G — Proxy EAPHost in Phase 2 (TTLS → TLS)</h3>
+      <pre><code class="language-xml">
+<!-- Paste TTLS outer with inner EAP-TLS via nested EapHostConfig -->
+      </code></pre>
+      <details><summary>Explanation (line-by-line)</summary>
+        <ol>
+          <li>Outer method (TTLS V1) name and namespace.</li>
+          <li>Phase2Authentication with nested EapHostConfig.</li>
+          <li>Inner TLS certificate options.</li>
+        </ol>
+      </details>
+      <figure>
+        <img class="doc-image"
+             src="https://via.placeholder.com/1200x550.png?text=Screenshot+for+Sample+G"
+             alt="Placeholder screenshot for Sample G (TTLS→TLS)">
+        <figcaption>Attach server validation and client cert selection views.</figcaption>
+      </figure>
+
+      <div class="spacer"></div>
+
+      <!-- Sample H -->
+      <h3 id="sample-h">Sample H — Advanced TLS extensions &amp; EKU filtering</h3>
+      <pre><code class="language-xml">
+<!-- Paste EAP-TLS with TLSExtensions and EKU filters (e.g., ClientAuth EKU) -->
+      </code></pre>
+      <details><summary>Explanation (line-by-line)</summary>
+        <ol>
+          <li>TLSExtensions and FilteringInfo blocks.</li>
+          <li>CAHashList / IssuerHash scoping.</li>
+          <li>ClientAuth EKU and AnyPurpose lists.</li>
+        </ol>
+      </details>
+      <figure>
+        <img class="doc-image"
+             src="https://via.placeholder.com/1200x550.png?text=Screenshot+for+Sample+H"
+             alt="Placeholder screenshot for Sample H (TLS extensions)">
+        <figcaption>Map to certificate selection &amp; EKU UI screenshots.</figcaption>
+      </figure>
+
+      <!-- Final Notes / Next Steps -->
+      <section class="summary-box">
+        <h3>Next Steps</h3>
+        <ul>
+          <li>Replace any remaining placeholders (images/code) with your real content under <code>/assets/images/</code>.</li>
+          <li>Validate XML in a lab and test import via <code>netsh wlan add profile</code>.</li>
+          <li>Keep Microsoft’s samples handy:
+            <a href="https://learn.microsoft.com/en-us/windows/win32/nativewifi/wireless-profile-samples" target="_blank" rel="noopener">Wireless profile samples</a>.
+          </li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Mohit Maurya · Windows Server Talks</p>
+    </div>
+  </footer>
+</body>
+</html>
