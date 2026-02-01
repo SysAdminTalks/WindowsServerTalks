@@ -135,7 +135,7 @@
     Write-Host "Reports saved to:`nTXT: $TxtFile`nCSV: $CsvFile"
       </code></pre>
 
-      <h2>Sample Output</h2>
+      <h2>Output be like:</h2>
       <figure>
         <img class="doc-image"
              src="https://mauryamohit07.github.io/WindowsServerTalks/assets/images/image4.png"
@@ -152,9 +152,64 @@
         <figcaption>
           CSV export used to filter links before bulk restore.
         </figcaption>
+        <figcaption>
+          Also create a file in CSV format for the same.
+        </figcaption>
       </figure>
+      
+<h2>To restore at bulk. Admin can delete the rows as per date or age which is not required. </h2>
 
-      <h2>Expected Results</h2>
+    <pre><code class="language-powershell">
+***********************************************************************************
+Import-Module ActiveDirectory
+
+# Path to the CSV file containing ObjectGUIDs
+$CsvFile = "C:\DFSlogs\DFS_DeletedLinks_29102025_0331.csv"       # file created from above 
+
+# Path to the restore log
+$LogFile = "C:\DFSlogs\RestoreLog_$(Get-Date -Format 'ddMMyyyy_HHmm').txt"
+
+# Start log
+Set-Content -Path $LogFile -Value "DFS Restore Log - $(Get-Date)`r`n"
+
+# Import CSV and read ObjectGUID column
+$Entries = Import-Csv -Path $CsvFile
+
+foreach ($entry in $Entries) {
+    $guid = $entry.ObjectGUID
+    Write-Host "Restoring ObjectGUID: $guid"
+    Add-Content -Path $LogFile -Value "Processing ObjectGUID: $guid"
+
+    try {
+        # Attempt restore
+        Restore-ADObject -Identity $guid
+
+        # Validate restore
+        Start-Sleep -Seconds 2
+        $restoredObj = Get-ADObject -Filter { ObjectGUID -eq $guid } -ErrorAction SilentlyContinue
+        if ($restoredObj) {
+            $succMsg = "Successfully restored: $guid"
+            Write-Host $succMsg -ForegroundColor Green
+            Add-Content -Path $LogFile -Value $succMsg
+        } else {
+            $failMsg = "Restore attempted but object not found after restore: $guid"
+            Write-Host $failMsg -ForegroundColor Red
+            Add-Content -Path $LogFile -Value $failMsg
+        }
+    }
+    catch {
+        $errMsg = "Failed to restore: $guid - Error: $_"
+        Write-Host $errMsg -ForegroundColor Red
+        Add-Content -Path $LogFile -Value $errMsg
+    }
+}
+
+Write-Host "Restore process completed. Log saved to: $LogFile"
+
+************************************************************
+    </code></pre>  
+      
+      <h2>Above will restore and give output like </h2>
       <figure>
         <img class="doc-image"
              src="https://mauryamohit07.github.io/WindowsServerTalks/assets/images/image6.png"
