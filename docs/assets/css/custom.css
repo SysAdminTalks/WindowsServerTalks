@@ -565,4 +565,40 @@ button:focus,
   flex: 1 1 auto;
   min-width: 0;        /* prevents overflow issues with code blocks */
 }
+/* ===== Brand row in header (logo + text) ===== */
+.brand {
+  display: flex;
+  align-items: center;   /* vertically center logo with text */
+  gap: 14px;             /* space between logo and text */
+}
 
+/* Logo size/behavior */
+.brand-logo img {
+  height: 48px;          /* adjust: 40–56px works well */
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* Ensure H1/tagline keep your existing white colors */
+.site-header h1 {
+  margin: 0;
+  font-size: 34px;       /* or 32px to match your theme */
+  color: #fff;
+}
+.site-header .tagline {
+  margin-top: 4px;
+  font-size: 14px;
+  color: #fff;
+  opacity: .95;
+}
+
+/* Breadcrumbs remain on their own line under the brand */
+.site-header .breadcrumbs {
+  margin-top: 8px;       /* a little space below brand */
+}
+
+/* Responsive: slightly smaller logo on narrow viewports */
+@media (max-width: 600px) {
+  .brand-logo img { height: 40px; }
+}
