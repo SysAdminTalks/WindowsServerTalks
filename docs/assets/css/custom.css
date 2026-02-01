@@ -330,3 +330,52 @@ code {
 .skip-link:focus {
   left: 10px;
 }
+
+/* ==================================================
+   Page Enhancements (Documentation UX)
+================================================== */
+.page-title {
+  font-size: 26px;
+  margin-bottom: 4px;
+}
+
+.page-subtitle {
+  color: #555;
+  margin-bottom: 24px;
+}
+
+.summary-box {
+  background: #f7f9fc;
+  border-left: 4px solid #0067b8;
+  padding: 18px 22px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+.callout.warning {
+  background: #fff4e5;
+  border-left: 4px solid #ff8c00;
+  padding: 14px 18px;
+  border-radius: 6px;
+  margin-bottom: 28px;
+}
+
+.step-title {
+  margin-top: 36px;
+}
+
+.step-desc {
+  color: #555;
+  margin-bottom: 12px;
+}
+
+figure {
+  margin: 20px 0;
+}
+
+figcaption {
+  text-align: center;
+  font-size: 13px;
+  color: #666;
+  margin-top: 6px;
+}
