@@ -652,3 +652,8 @@ button:focus,
 .card-inline p {
   margin: 0;
 }
+
+.card-inline span {
+  color: #605E5C;
+  font-size: 14px;
+}
