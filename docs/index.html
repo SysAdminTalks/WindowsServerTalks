@@ -6,7 +6,6 @@
 
   <title>Windows Server Talks</title>
 
-  <!-- Theme color -->
   <meta name="theme-color" content="#0F6CBD">
 
   <!-- Site CSS -->
@@ -14,9 +13,7 @@
         href="https://sysadmintalks.github.io/WindowsServerTalks/assets/css/custom.css" />
 
   <!-- Site JS -->
-  <script
-    src="https://sysadmintalks.github.io/WindowsServerTalks/assets/js/site.js"
-    defer></script>
+  <script src="https://sysadmintalks.github.io/WindowsServerTalks/assets/js/site.js" defer></script>
 </head>
 
 <body>
@@ -31,13 +28,13 @@
     <span aria-current="page">Home</span>
   </nav>
 
-  <!-- Layout -->
+  <!-- ====== Layout Container ====== -->
   <div class="layout container">
 
-    <!-- Sidebar -->
+    <!-- Sidebar (auto-injected) -->
     <div id="sidebar-container"></div>
 
-    <!-- Main Content -->
+    <!-- ====== MAIN CONTENT ====== -->
     <main id="main-content" class="content" role="main">
 
       <h2>Welcome</h2>
@@ -47,11 +44,14 @@
         Windows Server administrators.
       </p>
 
-      <!-- =========================
-           Docs landing cards
-           ========================= -->
+      <!-- ==========================================================
+           📌 LANDING PAGE DOCUMENTATION CARDS
+           Add new cards inside this section ONLY
+           ========================================================== -->
 
-      <!-- Card 1 -->
+      <!-- ========================= -->
+      <!-- Card 1                    -->
+      <!-- ========================= -->
       <div class="card">
         <a href="domain-based-dfs-n-auto-backup.html" class="card-link">
           <div class="card-row">
@@ -66,7 +66,9 @@
         </a>
       </div>
 
-      <!-- Card 2 -->
+      <!-- ========================= -->
+      <!-- Card 2                    -->
+      <!-- ========================= -->
       <div class="card">
         <a href="recover-deleted-dfs-n-links.html" class="card-link">
           <div class="card-row">
@@ -81,42 +83,56 @@
         </a>
       </div>
 
-    </main>
-  </div>
-
-        <!-- Card 3 -->
+      <!-- ========================= -->
+      <!-- Card 3                    -->
+      <!-- New pages can be added after this -->
+      <!-- ========================= -->
       <div class="card">
         <a href="wireless-profile-explained.html" class="card-link">
           <div class="card-row">
             <div class="card-text card-inline">
               <h3>Windows Wireless Profile Explained</h3>
               <span>
-                — Breakdown of complete wireless profile xml.
+                — Breakdown of complete wireless profile XML.
               </span>
             </div>
           </div>
         </a>
       </div>
 
-    </main>
-  </div>
-
-    <!-- Card 4 -->
+      <!-- ========================= -->
+      <!-- Card 4                    -->
+      <!-- ========================= -->
       <div class="card">
         <a href="remove-invalid-mdm-firewall-rules.html" class="card-link">
           <div class="card-row">
             <div class="card-text card-inline">
               <h3>Remove “Invalid” MDM Firewall Rules</h3>
               <span>
-                — Breakdown of complete wireless profile xml.
+                — Full guide on registry sanitization and cleanup script.
               </span>
             </div>
           </div>
         </a>
       </div>
 
-    </main>
-  </div>
+      <!-- ==========================================================
+           ⭐ INSERT NEW CARDS HERE ⭐
+           Example:
+           <div class="card">
+             <a href="my-new-page.html" class="card-link">
+               <div class="card-row">
+                 <div class="card-text card-inline">
+                   <h3>My New Article</h3>
+                   <span>— Description here.</span>
+                 </div>
+               </div>
+             </a>
+           </div>
+           ========================================================== -->
+
+    </main><!-- END MAIN -->
+  </div><!-- END LAYOUT -->
 
   <!-- Footer -->
   <footer class="site-footer">
@@ -124,5 +140,6 @@
       <p>© 2026 SysAdminTalks · Windows Server Talks</p>
     </div>
   </footer>
+
 </body>
 </html>
