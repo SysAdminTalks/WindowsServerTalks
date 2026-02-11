@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Windows 10/11: Remove “Invalid” MDM Firewall Rules (Registry Sanitization) · Windows Server Talks</title>
+
+  <!-- Theme color for mobile address bar -->
+  <meta name="theme-color" content="#0F6CBD">
+
+  <!-- Site Styles -->
+  <link rel="stylesheet" href="https://sysadmintalks.github.io/WindowsServerTalks/assets/css/custom.css">
+
+  <!-- Shared site enhancements (header + sidebar injection, copy buttons, lightbox, etc.) -->
+  <script src="https://sysadmintalks.github.io/WindowsServerTalks/assets/js/site.js" defer></script>
+</head>
+<body>
+  <!-- a11y: Skip link for keyboard users -->
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <!-- ===== Shared Header (injected from /assets/includes/header.html) ===== -->
+  <div id="header-container"></div>
+
+  <!-- ===== Breadcrumbs (edit for this page) ===== -->
+  <nav class="breadcrumbs container" aria-label="Breadcrumb">
+    <a href="https://sysadmintalks.github.io/WindowsServerTalks/index.html">Home</a>
+    <span aria-hidden="true">›</span>
+    <span aria-current="page">Windows 10/11: Remove “Invalid” MDM Firewall Rules</span>
+  </nav>
+
+  <div class="layout container">
+    <!-- ===== Shared Sidebar (injected from /assets/includes/sidebar.html) ===== -->
+    <div id="sidebar-container"></div>
+
+    <!-- ===== Main content ===== -->
+    <main id="main-content" class="content" role="main">
+      <!-- Page Heading -->
+      <h2 class="page-title">Windows 10/11: Remove “Invalid” MDM Firewall Rules (Registry Sanitization)</h2>
+      <p class="page-subtitle">
+        Fix “Invalid” entries under MDM firewall rules caused by sync issues or corrupted policy remnants by sanitizing the MDM rule store in the registry.
+      </p>
+
+      <!-- Summary / TL;DR -->
+      <section class="summary-box">
+        <h3>Summary</h3>
+        <p>
+          Windows 10/11 devices sometimes show <strong>Invalid</strong> firewall rules under MDM-managed rules due to policy sync issues,
+          stale/corrupted profiles, or re-pushed policies that leave behind old corrupted entries. This article provides a targeted cleanup
+          method to sanitize the registry so that MDM firewall rules no longer contain any <strong>Invalid</strong> entries.
+        </p>
+      </section>
+
+      <!-- Callouts (change class: info | success | warning | danger ) -->
+      <div class="callout warning">
+        <strong>Warning:</strong> This procedure modifies the registry under <code>HKLM</code>. Use in a lab/pilot first, ensure you have
+        change approval, and run with elevated privileges (preferably SYSTEM when deployed via MDM tools).
+      </div>
+
+      <div class="spacer"></div>
+
+      <!-- =============================== -->
+      <!-- Problem Overview                -->
+      <!-- =============================== -->
+      <h2 id="overview" class="step-title">Problem Overview</h2>
+      <p class="step-desc">
+        In some environments, Windows Firewall shows MDM rules marked as <strong>Invalid</strong>. This is usually not a local firewall policy issue,
+        but a corruption/stale entry issue in the MDM rule store.
+      </p>
+
+      <ul>
+        <li><strong>Common triggers:</strong> MDM sync interruptions, policy/profile corruption, or policy re-pushes.</li>
+        <li><strong>What happens:</strong> The new profile is applied, but old corrupted registry values remain and continue to surface as “Invalid”.</li>
+        <li><strong>Goal:</strong> Sanitize the MDM rule store so that no “Invalid” rules remain.</li>
+      </ul>
+
+      <div class="spacer"></div>
+
+      <!-- =============================== -->
+      <!-- Rules Location                  -->
+      <!-- =============================== -->
+      <h2 id="rules-location" class="step-title">MDM Firewall Rules Location (Registry)</h2>
+      <p class="step-desc">
+        MDM-controlled firewall rules are stored in the registry at the following location:
+      </p>
+
+      <pre><code class="language-text">HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\Mdm\FirewallRules</code></pre>
+
+      <!-- Image placeholders -->
+      <figure>
+        <img class="doc-image"
+             src="https://via.placeholder.com/1200x550.png?text=Image+1:+Registry+Path+to+MDM+FirewallRules"
+             alt="Placeholder: Registry Editor showing the Mdm FirewallRules location">
+        <figcaption>// Place holder for image 1//</figcaption>
+      </figure>
+
+      <figure>
+        <img class="doc-image"
+             src="https://via.placeholder.com/1200x550.png?text=Image+2:+Windows+Firewall+UI+showing+Invalid+MDM+Rules"
+             alt="Placeholder: Windows Firewall UI showing Invalid rules under MDM rules">
+        <figcaption>// Place holder for image 2//</figcaption>
+      </figure>
+
+      <div class="spacer"></div>
+
+      <!-- =============================== -->
+      <!-- Why Standard Methods Fail       -->
+      <!-- =============================== -->
+      <h2 id="why-standard-fails" class="step-title">Why Standard Methods Fail</h2>
+      <p class="step-desc">
+        Standard firewall reset and PowerShell rule deletion often do not remove MDM-controlled rules because those rules are stored and protected
+        under the MDM policy channel.
+      </p>
+
+      <div class="callout danger">
+        <p style="margin:0;">
+          <strong>netsh advfirewall reset</strong> ❌ does <strong>NOT</strong> touch MDM rules stored under <code>...FirewallPolicy\Mdm\FirewallRules</code>.
+        </p>
+      </div>
+
+      <div class="callout danger">
+        <p style="margin:0;">
+          <strong>Remove-NetFirewallRule</strong> ❌ cannot remove <strong>MDM-controlled</strong> rules due to ownership/protection by the MDM policy channel.
+        </p>
+      </div>
+
+      <div class="callout info">
+        <p style="margin:0;">
+          <strong>Why the GUI sometimes works:</strong> The Windows Firewall UI can succeed because it may operate with additional privileges/permissions
+          not exposed through typical scripting interfaces.
+        </p>
+      </div>
+
+      <div class="spacer"></div>
+
+      <!-- =============================== -->
+      <!-- Approach                         -->
+      <!-- =============================== -->
+      <h2 id="approach" class="step-title">Sanitization Approach</h2>
+      <p class="step-desc">
+        The safest approach is a targeted cleanup that deletes only corrupted entries containing <code>Invalid</code> in either the registry value name
+        or the value data. This avoids impacting valid MDM rules.
+      </p>
+
+      <ul>
+        <li>Enumerate all values under <code>...Mdm\FirewallRules</code></li>
+        <li>Identify entries where the <strong>name</strong> or <strong>data</strong> contains <code>Invalid</code></li>
+        <li>Optionally disable rule first (<code>Active=TRUE</code> → <code>Active=FALSE</code>)</li>
+        <li>Delete the corrupted registry value</li>
+        <li>Write full logs to <code>C:\Windows\Temp</code></li>
+      </ul>
+
+      <div class="spacer"></div>
+
+      <!-- =============================== -->
+      <!-- Script                           -->
+      <!-- =============================== -->
+      <h2 id="script" class="step-title">Script: Invalid Rule Cleanup Script</h2>
+      <p class="step-desc">
+        Use the script below to clear only MDM firewall rules that contain <code>Invalid</code>. It logs every action to
+        <code>C:\Windows\Temp</code>.
+      </p>
+
+      <details open>
+        <summary><strong>CODE place holder start</strong></summary>
+
+        <pre><code class="language-powershell">***************Invalid Rule Cleanup Script ******************************
+
+# ==============================
+# MDM Firewall Corrupted Rule Cleanup
+# Delete ONLY rules containing 'Invalid' in name or data
+# Logs everything to C:\Windows\Temp
+# ==============================
+
+$ErrorActionPreference = "SilentlyContinue"
+
+$logFile = "C:\Windows\Temp\Mdm_CorruptRuleCleanup_$(Get-Date -Format yyyyMMdd_HHmmss).log"
+$mdmRulesPath = "HKLM:\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\Mdm\FirewallRules"
+
+"[$(Get-Date -Format u)] === SCRIPT STARTED ===" | Out-File $logFile -Append
+
+# Validate MDM FirewallRules key
+if (-not (Test-Path $mdmRulesPath)) {
+    "[$(Get-Date -Format u)] ERROR: MDM FirewallRules key not found." | Out-File $logFile -Append
+    exit 0
+}
+
+$rules = Get-ItemProperty $mdmRulesPath
+$corruptRules = @()
+
+# Detect corrupt rules
+foreach ($prop in $rules.PSObject.Properties) {
+    $nameHasInvalid = $prop.Name -match "Invalid"
+    $dataHasInvalid = $prop.Value -match "Invalid"
+
+    if ($nameHasInvalid -or $dataHasInvalid) {
+        $corruptRules += $prop.Name
+    }
+}
+
+if ($corruptRules.Count -eq 0) {
+    "[$(Get-Date -Format u)] No corrupted rules (Invalid*) found." | Out-File $logFile -Append
+    exit 0
+}
+
+"[$(Get-Date -Format u)] Found $($corruptRules.Count) corrupted rules to delete." | Out-File $logFile -Append
+
+# Process corrupt rules
+foreach ($rule in $corruptRules) {
+
+    $ruleData = (Get-ItemProperty $mdmRulesPath -Name $rule).$rule
+
+    "----------------------------------------"         | Out-File $logFile -Append
+    "[$(Get-Date -Format u)] Removing Rule: $rule"     | Out-File $logFile -Append
+    "Data: $ruleData"                                  | Out-File $logFile -Append
+
+    # Disable rule first (safety)
+    if ($ruleData -match "Active=TRUE") {
+        $disabledData = $ruleData -replace "Active=TRUE", "Active=FALSE"
+        Set-ItemProperty -Path $mdmRulesPath -Name $rule -Value $disabledData
+        "Action: Rule set to Active=FALSE" | Out-File $logFile -Append
+    }
+
+    # Delete registry value
+    Remove-ItemProperty -Path $mdmRulesPath -Name $rule -Force
+
+    if (-not (Get-ItemProperty $mdmRulesPath -Name $rule -ErrorAction SilentlyContinue)) {
+        "Action: Rule deleted successfully." | Out-File $logFile -Append
+    }
+    else {
+        "ERROR: Failed to delete rule!" | Out-File $logFile -Append
+    }
+}
+
+"----------------------------------------" | Out-File $logFile -Append
+"[$(Get-Date -Format u)] === SCRIPT COMPLETED ===" | Out-File $logFile -Append
+
+exit 0
+
+***************************************************************************************************************</code></pre>
+
+        <p><strong>Code place holder end</strong></p>
+      </details>
+
+      <div class="spacer"></div>
+
+      <!-- =============================== -->
+      <!-- How to Run                       -->
+      <!-- =============================== -->
+      <h2 id="how-to-run" class="step-title">How to Run</h2>
+      <p class="step-desc">
+        Because the script modifies a protected <code>HKLM</code> MDM rule store, run it in an elevated context.
+      </p>
+
+      <ol>
+        <li><strong>Run as Administrator</strong> for manual testing.</li>
+        <li><strong>Preferred for enterprise:</strong> run as <strong>SYSTEM</strong> (e.g., via Intune remediation, SCCM, or your endpoint tool).</li>
+        <li>Save the script as <code>MdmInvalidFirewallRuleCleanup.ps1</code>.</li>
+        <li>Execute:
+          <pre><code class="language-powershell">powershell.exe -ExecutionPolicy Bypass -File .\MdmInvalidFirewallRuleCleanup.ps1</code></pre>
+        </li>
+        <li>After cleanup, trigger an MDM sync (Settings → Accounts → Access work or school → Info → Sync) and verify the Invalid entries are gone.</li>
+      </ol>
+
+      <div class="callout success">
+        <strong>Tip:</strong> If deletion fails in an elevated admin session, deploy via a tool that runs as SYSTEM to ensure sufficient permissions.
+      </div>
+
+      <div class="spacer"></div>
+
+      <!-- =============================== -->
+      <!-- Logs                             -->
+      <!-- =============================== -->
+      <h2 id="logs" class="step-title">Logs Created</h2>
+      <p class="step-desc">
+        The script creates a timestamped log file under:
+      </p>
+      <pre><code class="language-text">C:\Windows\Temp</code></pre>
+
+      <p>Log file name format:</p>
+      <pre><code class="language-text">Mdm_CorruptRuleCleanup_YYYYMMDD_HHMMSS.log</code></pre>
+
+      <figure>
+        <img class="doc-image"
+             src="https://via.placeholder.com/1200x550.png?text=Image+3:+C%3A%5CWindows%5CTemp+Log+File"
+             alt="Placeholder: Windows Temp folder showing log file created">
+        <figcaption>// Place holder for image 3//</figcaption>
+      </figure>
+
+      <figure>
+        <img class="doc-image"
+             src="https://via.placeholder.com/1200x550.png?text=Image+4:+Sample+Log+Output"
+             alt="Placeholder: Notepad view of log output showing deleted Invalid rules">
+        <figcaption>// Place holder for image 4//</figcaption>
+      </figure>
+
+      <div class="spacer"></div>
+
+      <!-- =============================== -->
+      <!-- Validation & Next Steps          -->
+      <!-- =============================== -->
+      <section class="summary-box">
+        <h3>Validation & Next Steps</h3>
+        <ul>
+          <li><strong>Verify the registry:</strong> Confirm “Invalid” entries no longer exist under <code>...Mdm\FirewallRules</code>.</li>
+          <li><strong>Trigger policy sync:</strong> Re-sync MDM policy and confirm expected rules re-apply cleanly.</li>
+          <li><strong>Keep evidence:</strong> Attach the <code>C:\Windows\Temp</code> log file to your incident/change record.</li>
+          <li><strong>Prevent recurrence:</strong> Investigate root cause (device sync failures, policy conflicts, or repeated re-push behavior).</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Sys Admin Talks · Windows Server Talks</p>
+    </div>
+  </footer>
+</body>
+</html>
