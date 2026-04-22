@@ -13,7 +13,38 @@
 
   <!-- Shared site enhancements (header + sidebar injection, copy buttons, lightbox, etc.) -->
   <script src="https://sysadmintalks.github.io/WindowsServerTalks/assets/js/site.js" defer></script>
+
+  <!-- OPTIONAL: small styling for the GitHub support row -->
+  <style>
+    .github-support-row {
+      margin: 12px 0 18px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .github-support-row iframe {
+      border: 0;
+      overflow: hidden;
+    }
+    .github-feedback-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      color: inherit;
+      background: #fff;
+    }
+    .github-feedback-link:hover {
+      background: #f6f8fa;
+    }
+  </style>
 </head>
+
 <body>
   <!-- a11y: Skip link for keyboard users -->
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -36,7 +67,42 @@
     <main id="main-content" class="content" role="main">
       <!-- Page Heading -->
       <h2 class="page-title">Wireless Profile Samples (WLANProfile XML)</h2>
-      <p class="page-subtitle">How to read, build, and validate Windows Native Wi‑Fi <code>WLANProfile</code> XML for enterprise networks.</p>
+      <p class="page-subtitle">
+        How to read, build, and validate Windows Native Wi‑Fi <code>WLANProfile</code> XML for enterprise networks.
+      </p>
+
+      <!-- ✅ NEW: GitHub Star / Follow / Feedback row -->
+      <div class="github-support-row" aria-label="Support this project">
+        <!-- Star button (repo) -->
+        <iframe
+          src="https://ghbtns.com/github-btn.html?user=SysAdminTalks&repo=WindowsServerTalks&type=star&count=true&size=large"
+          frameborder="0"
+          scrolling="0"
+          width="170"
+          height="30"
+          title="GitHub Star button">
+        </iframe>
+
+        <!-- Follow button (user/org) -->
+        <iframe
+          src="https://ghbtns.com/github-btn.html?user=SysAdminTalks&type=follow&count=true&size=large"
+          frameborder="0"
+          scrolling="0"
+          width="230"
+          height="30"
+          title="GitHub Follow button">
+        </iframe>
+
+        <!-- Feedback -> New Issue -->
+        <a
+          class="github-feedback-link"
+          href="https://github.com/SysAdminTalks/WindowsServerTalks/issues/new"
+          target="_blank"
+          rel="noopener">
+          💬 Feedback (open an issue)
+        </a>
+      </div>
+      <!-- /NEW -->
 
       <!-- Summary / TL;DR -->
       <section class="summary-box">
@@ -135,15 +201,16 @@
 
       <div class="spacer"></div>
 
+      <div class="callout info">
+        <strong>Microsoft Wireless profile samples:</strong>
+        <a href="https://learn.microsoft.com/en-us/windows/win32/nativewifi/wireless-profile-samples"
+           target="_blank" rel="noopener">
+           (WLANProfile XML)
+        </a>
+      </div>
 
-<div class="callout info">
-  <strong>Microsoft Wireless profile samples:</strong>
-  <a href="https://learn.microsoft.com/en-us/windows/win32/nativewifi/wireless-profile-samples"
-     target="_blank" rel="noopener">
-     (WLANProfile XML)
-  </a>
-</div>
-<div class="spacer"></div>
+      <div class="spacer"></div>
+
       <!-- ========================= -->
       <!-- XML SAMPLES PLAYGROUND    -->
       <!-- ========================= -->
@@ -338,6 +405,7 @@
           </li>
         </ul>
       </section>
+
     </main>
   </div>
 
