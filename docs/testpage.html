@@ -3,44 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Wireless Profile Deep Dive (WLANProfile XML)</title>
+<title>Wireless Profile Samples (WLANProfile XML)</title>
 
 <meta name="theme-color" content="#0F6CBD">
 
 <link rel="stylesheet" href="https://sysadmintalks.github.io/WindowsServerTalks/assets/css/custom.css">
-<script src="https://sysadmintalks.github.io/WindowsServerTalks/assets/js/site.js" defer></script>
 
 <style>
-.github-support-row {
-  margin: 12px 0 18px;
-  display: flex;
-  gap: 12px;
-}
-
-.copy-btn {
-  margin-bottom: 6px;
-  padding: 5px 10px;
-  border: 1px solid #d0d7de;
-  cursor: pointer;
-  font-size: 12px;
-  background:#fff;
-}
-
+.github-support-row { margin:12px 0; display:flex; gap:10px; }
+.copy-btn { margin-bottom:6px; padding:4px 10px; cursor:pointer; font-size:12px; }
 </style>
-
 
 <script>
 function copyCode(id, btn){
-  const raw = document.getElementById(id + "_raw");
-  const src = raw ? raw.value : document.getElementById(id).innerText;
-
-  navigator.clipboard.writeText(src).then(()=>{
-    btn.innerText="Copied!";
-    setTimeout(()=>btn.innerText="Copy",1500);
-  });
+  navigator.clipboard.writeText(document.getElementById(id).innerText)
+  .then(()=>{btn.innerText="Copied!";setTimeout(()=>btn.innerText="Copy",1500);});
 }
 </script>
-
 
 </head>
 
@@ -48,16 +27,36 @@ function copyCode(id, btn){
 
 <div id="header-container"></div>
 
-<div class="layout container">
-<div id="sidebar-container"></div>
-
 <main class="content">
 
-<h2 class="page-title">Wireless Profile Deep Dive (WLANProfile XML)</h2>
+<h2>Wireless Profile Samples (WLANProfile XML)</h2>
 
-<p class="page-subtitle">
-Full mapping between Windows WiFi UI and WLANProfile XML including authentication, certificates and EAP behaviour.
+<p>
+How to read, build, and validate Windows Native Wi‑Fi <code>WLANProfile</code> XML for enterprise networks.
 </p>
+
+<section>
+<h3>Summary</h3>
+<p>
+This article curates Microsoft’s Wireless profile samples and provides a hands‑on structure to build your own WLANProfile XML.
+You’ll find XML mapping (1–50), explanation for each config, and live monitoring approach for changes.
+</p>
+</section>
+
+<div>
+<strong>Note:</strong>
+Validate in a lab before production.
+Reference:
+<a href="https://learn.microsoft.com/en-us/windows/win32/nativewifi/wireless-profile-samples" target="_blank">
+Wireless profile samples - Win32 apps | Microsoft Learn
+</a>
+</div>
+
+<hr>
+
+
+
+
 
 <!-- =============================== -->
 <!-- SECTION 1 -->
@@ -1210,6 +1209,44 @@ and policy enforcement. These restrictions are automatically applied by Windows.
 <!-- =============================== -->
 <!-- CLOSE OUT (END OF FILE) -->
 <!-- =============================== -->
+
+<hr>
+
+<h2>Monitor Live Changes in WLAN XML</h2>
+
+<p>
+The following workflow helps you track changes in WLAN XML configurations in real time using PowerShell.
+</p>
+
+<h3>What this script does</h3>
+
+<ul>
+<li>Exports WLAN profile to XML</li>
+<li>Maintains previous version</li>
+<li>Compares XML structure</li>
+<li>Displays changes in text format</li>
+</ul>
+
+<button onclick="copyCode('psscript',this)">Copy Script</button>
+
+<pre><code id="psscript">
+# PLACE SCRIPT HERE
+
+<#
+.SYNOPSIS
+Export WLAN profile "test" to C:\Wifi\test.xml, rotate previous to test.old.xml,
+compute clean structural diffs (namespace-agnostic; ignores xmlns),
+write results to difference.xml and difference.txt,
+and open difference.txt in Notepad (no popups).
+
+.NOTES
+Run PowerShell as Administrator if writing to C:\Wifi requires elevation.
+#>
+</code></pre>
+
+<p>
+Use this script to observe how configuration changes affect WLANProfile XML in real time.
+</p>
 
 </main>
 </div>
