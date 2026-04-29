@@ -3,10 +3,38 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Wireless Profile Deep Dive (WLANProfile XML)</title>
+<title>Wireless Profile Samples (WLANProfile XML)</title>
 
+<!-- Theme color for mobile address bar -->
+<meta name="theme-color" content="#0F6CBD">
+
+<!-- Site Styles -->
 <link rel="stylesheet" href="https://sysadmintalks.github.io/WindowsServerTalks/assets/css/custom.css">
+
+<!-- Shared site enhancements -->
 <script src="https://sysadmintalks.github.io/WindowsServerTalks/assets/js/site.js" defer></script>
+
+<!-- OPTIONAL: GitHub support row -->
+<style>
+.github-support-row {
+  margin: 12px 0 18px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.github-feedback-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  background: #fff;
+}
+</style>
 
 </head>
 
@@ -28,7 +56,7 @@
 
 <main id="main-content" class="content">
 
-<!-- GitHub Feedback Row -->
+<!-- Feedback Row -->
 <div class="github-support-row">
 <a class="github-feedback-link" href="#">💬 Feedback</a>
 </div>
@@ -36,28 +64,27 @@
 <h2 class="page-title">Wireless Profile Deep Dive (WLANProfile XML)</h2>
 
 <p class="page-subtitle">
-Complete mapping between Windows WiFi UI and WLANProfile XML including authentication, certificates, and EAP behaviour.
+Full mapping between Windows WiFi UI and WLANProfile XML including authentication, certificate handling and EAP flow.
 </p>
 
-<!-- ============================= -->
-<!-- SECTION 1: SECURITY SETTINGS -->
-<!-- ============================= -->
-
-<h2>1. Security Method Configuration</h2>
-
+<!-- ================================= -->
 <!-- IMAGE 1 -->
+<!-- ================================= -->
+
+<section>
+<h3>1. Security Method Selection</h3>
+
 <!-- Image 1 -->
 <img src="#">
-<p><strong>Security Methods</strong></p>
 
-<p>Defines the wireless security standard.</p>
+<p>Defines WiFi security standard used by the network.</p>
 
 <ul>
-<li><b>WPA2-Enterprise</b></li>
-<li><b>WPA3-Enterprise</b></li>
+<li>WPA2-Enterprise</li>
+<li>WPA3-Enterprise</li>
 </ul>
 
-<p>Enables 802.1X authentication via RADIUS.</p>
+<p>Uses 802.1X authentication with RADIUS.</p>
 
 <pre><code class="language-xml">
 <security>
@@ -68,28 +95,25 @@ Complete mapping between Windows WiFi UI and WLANProfile XML including authentic
   </authEncryption>
 </security>
 </code></pre>
+</section>
 
----
+<!-- ================================= -->
+<!-- IMAGE 2 -->
+<!-- ================================= -->
 
-<h2>2. Authentication Method (EAP)</h2>
+<section>
+<h3>2. Network Authentication Method (EAP)</h3>
 
 <!-- Image 2 -->
 <img src="#">
 
+<p>Defines how identity is verified.</p>
+
 <ul>
-<li>PEAP (Password-based)</li>
-<li>EAP-TLS (Certificate-based)</li>
+<li>PEAP (Password based)</li>
+<li>EAP-TLS (Certificate based)</li>
 <li>EAP-TTLS / EAP-FAST</li>
 </ul>
-
-<p><b>Authentication Mode Mapping</b></p>
-
-<table>
-<tr><th>GUI</th><th>XML</th></tr>
-<tr><td>User</td><td>user</td></tr>
-<tr><td>Machine</td><td>machine</td></tr>
-<tr><td>User or Computer</td><td>userOrComputer</td></tr>
-</table>
 
 <pre><code class="language-xml">
 <OneX>
@@ -97,117 +121,259 @@ Complete mapping between Windows WiFi UI and WLANProfile XML including authentic
   <authMode>userOrComputer</authMode>
 </OneX>
 </code></pre>
+</section>
 
----
+<!-- ================================= -->
+<!-- IMAGE 3 -->
+<!-- ================================= -->
 
-<h2>3. Max Authentication Failures</h2>
+<section>
+<h3>3. Authentication Mode Mapping</h3>
 
 <!-- Image 3 -->
 <img src="#">
 
-<p>Limits retry attempts to avoid infinite loops.</p>
+<table>
+<tr><th>GUI Value</th><th>XML</th></tr>
+<tr><td>User</td><td>user</td></tr>
+<tr><td>Machine</td><td>machine</td></tr>
+<tr><td>User or Computer</td><td>userOrComputer</td></tr>
+</table>
+</section>
 
-<pre><code class="language-xml">
-<maxAuthFailures>1</maxAuthFailures>
-</code></pre>
+<!-- ================================= -->
+<!-- IMAGE 4 -->
+<!-- ================================= -->
 
----
-
-<h2>4. Cache User Credentials</h2>
+<section>
+<h3>4. Max Authentication Failures</h3>
 
 <!-- Image 4 -->
 <img src="#">
 
-<p>Caches credentials for reuse (mainly PEAP-MSChapv2).</p>
+<p>Limits number of failed 802.1X attempts.</p>
 
 <pre><code class="language-xml">
-<cacheUserData>true</cacheUserData>
+<maxAuthFailures>1</maxAuthFailures>
 </code></pre>
+</section>
 
----
+<!-- ================================= -->
+<!-- IMAGE 5 -->
+<!-- ================================= -->
 
-<!-- ============================= -->
-<!-- CERTIFICATE CONTROL -->
-<!-- ============================= -->
-
-<h2>5. Trusted Root CA Selection</h2>
+<section>
+<h3>5. Cache User Credentials</h3>
 
 <!-- Image 5 -->
 <img src="#">
 
-<p>Restricts certificate trust chain.</p>
+<p>Stores credentials for faster reconnection.</p>
+
+<pre><code class="language-xml">
+<cacheUserData>true</cacheUserData>
+</code></pre>
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 6 -->
+<!-- ================================= -->
+
+<section>
+<h3>6. Trusted Root CA Filtering</h3>
+
+<!-- Image 6 -->
+<img src="#">
+
+<p>Restricts which Root CAs are trusted.</p>
 
 <pre><code class="language-xml">
 <ServerValidation>
   <TrustedRootCA>THUMBPRINT</TrustedRootCA>
 </ServerValidation>
 </code></pre>
+</section>
 
----
+<!-- ================================= -->
+<!-- IMAGE 7 -->
+<!-- ================================= -->
 
-<h2>6. EKU Filtering</h2>
+<section>
+<h3>7. EKU Filtering (Certificate Purpose)</h3>
 
-<!-- Image 6 -->
+<!-- Image 7 -->
 <img src="#">
-
-<ul>
-<li>Client Authentication → 1.3.6.1.5.5.7.3.2</li>
-<li>Any Purpose → 2.5.29.37.0</li>
-</ul>
 
 <pre><code class="language-xml">
 <TLSExtensions>
   <FilteringInfo>
-    <EKUMapping>
-      <EKUName>Client Authentication</EKUName>
-      <EKUOID>1.3.6.1.5.5.7.3.2</EKUOID>
-    </EKUMapping>
+    <AllPurposeEnabled>false</AllPurposeEnabled>
   </FilteringInfo>
 </TLSExtensions>
 </code></pre>
+</section>
 
----
+<!-- ================================= -->
+<!-- IMAGE 8 -->
+<!-- ================================= -->
 
-<!-- ============================= -->
-<!-- CONNECTION SETTINGS -->
-<!-- ============================= -->
+<section>
+<h3>8. EKU Mapping</h3>
 
-<h2>7. Connection Behaviour</h2>
-
-<!-- Image 13 -->
+<!-- Image 8 -->
 <img src="#">
 
-<p><b>Auto Connect</b></p>
+<pre><code class="language-xml">
+<EKUMapping>
+  <EKUMap>
+    <EKUName>Client Authentication</EKUName>
+    <EKUOID>1.3.6.1.5.5.7.3.2</EKUOID>
+  </EKUMap>
+</EKUMapping>
+</code></pre>
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 9 -->
+<!-- ================================= -->
+
+<section>
+<h3>9. Any Purpose / All Purpose</h3>
+
+<!-- Image 9 -->
+<img src="#">
+
 <pre><code>
+<AllPurposeEnabled>true</AllPurposeEnabled>
+</code></pre>
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 10 -->
+<!-- ================================= -->
+
+<section>
+<h3>10. EKU Selection Lists</h3>
+
+<!-- Image 10 -->
+<img src="#">
+
+<pre><code class="language-xml">
+<ClientAuthEKUList Enabled="true">
+</ClientAuthEKUList>
+</code></pre>
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 11 -->
+<!-- ================================= -->
+
+<section>
+<h3>11. Additional EKU / Certificate UI Mapping</h3>
+
+<!-- Image 11 -->
+#
+
+<p>Defines how certificate EKU selection behaves in Windows UI.</p>
+
+<ul>
+<li>Controls certificate selection filtering</li>
+<li>Maps GUI options to EKU XML layout</li>
+</ul>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 12 -->
+<!-- ================================= -->
+
+<section>
+<h3>12. Combined EKU Filtering Behaviour</h3>
+
+<!-- Image 12 -->
+#
+
+<p>Combines multiple EKU filtering rules.</p>
+
+<pre><code class="language-xml">
+<EKUMapping>
+  <EKUMap>
+    <EKUName>Client Authentication</EKUName>
+  </EKUMap>
+</EKUMapping>
+</code></pre>
+
+<p>Used when enforcing strict certificate selection rules.</p>
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 13 -->
+<!-- ================================= -->
+
+<section>
+<h3>13. Connection Mode</h3>
+
+<!-- Image 13 -->
+#
+
+<p>Controls connection behavior.</p>
+
+<pre><code class="language-xml">
 <connectionMode>auto</connectionMode>
 </code></pre>
 
-<!-- Image 14 -->
-<img src="#">
+<ul>
+<li>auto → Connect automatically</li>
+<li>manual → User initiates connection</li>
+</ul>
 
-<p><b>Auto Switch</b></p>
-<pre><code>
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 14 -->
+<!-- ================================= -->
+
+<section>
+<h3>14. Auto Switch Networks</h3>
+
+<!-- Image 14 -->
+#
+
+<pre><code class="language-xml">
 <autoSwitch>true</autoSwitch>
 </code></pre>
 
-<!-- Image 15 -->
-<img src="#">
+<p>Allows system to switch between preferred networks automatically.</p>
 
-<p><b>Hidden SSID</b></p>
-<pre><code>
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 15 -->
+<!-- ================================= -->
+
+<section>
+<h3>15. Hidden SSID Configuration</h3>
+
+<!-- Image 15 -->
+#
+
+<pre><code class="language-xml">
 <nonBroadcast>true</nonBroadcast>
 </code></pre>
 
----
+<p>Used for networks that do not broadcast SSID.</p>
 
-<!-- ============================= -->
-<!-- WPA3 + CERT AUTH -->
-<!-- ============================= -->
+</section>
 
-<h2>8. WPA3 Enterprise Configuration</h2>
+<!-- ================================= -->
+<!-- IMAGE 16 -->
+<!-- ================================= -->
+
+<section>
+<h3>16. WPA3 Enterprise Configuration</h3>
 
 <!-- Image 16 -->
-<img src="#">
+#
 
 <pre><code class="language-xml">
 <authentication>WPA3ENT</authentication>
@@ -215,131 +381,702 @@ Complete mapping between Windows WiFi UI and WLANProfile XML including authentic
 <useOneX>true</useOneX>
 </code></pre>
 
----
+<p>Defines WPA3 Enterprise security profile.</p>
 
-<h2>9. Certificate Selection Settings</h2>
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 17 -->
+<!-- ================================= -->
+
+<section>
+<h3>17. Cache User Data Disabled</h3>
+
+<!-- Image 17 -->
+#
+
+<pre><code>
+<cacheUserData>false</cacheUserData>
+</code></pre>
+
+<p>Disables credentials caching.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 18 -->
+<!-- ================================= -->
+
+<section>
+<h3>18. Simple Certificate Selection</h3>
 
 <!-- Image 18 -->
-<img src="#">
+#
 
-<ul>
-<li>Simple certificate selection</li>
-<li>Manual certificate selection</li>
-</ul>
+<pre><code>
+<SimpleCertSelection>false</SimpleCertSelection>
+</code></pre>
+
+<p>When disabled, allows manual certificate selection.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 19 -->
+<!-- ================================= -->
+
+<section>
+<h3>19. Simple Certificate Selection Enabled</h3>
+
+<!-- Image 19 -->
+#
 
 <pre><code>
 <SimpleCertSelection>true</SimpleCertSelection>
 </code></pre>
 
----
+<p>Automatically selects matching certificate.</p>
 
-<h2>10. Server Validation</h2>
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 20 -->
+<!-- ================================= -->
+
+<section>
+<h3>20. Server Name Validation</h3>
 
 <!-- Image 20 -->
-<img src="#">
+#
 
-<pre><code>
-<ServerNames>server1.com</ServerNames>
+<pre><code class="language-xml">
 <AcceptServerName>true</AcceptServerName>
+<ServerNames>server1.com</ServerNames>
 </code></pre>
 
----
+<ul>
+<li>Enables strict server validation</li>
+<li>Prevents rogue RADIUS servers</li>
+</ul>
 
-<h2>11. Disable User Prompt</h2>
+</section>
+
+  <!-- ================================= -->
+<!-- IMAGE 21 -->
+<!-- ================================= -->
+
+<section>
+<h3>21. Trusted Root CA Thumbprint Mapping</h3>
+
+<!-- Image 21 -->
+#
+
+<p>Defines specific Root CA trust using certificate thumbprint.</p>
+
+<pre><code class="language-xml">
+<TrustedRootCA>
+5e ee d8 6f a3 7c 67 52 30 64 2f 55 c8 4d db f6 7c d3 3c 80
+</TrustedRootCA>
+</code></pre>
+
+<p>Only certificates issued by this CA will be trusted.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 22 -->
+<!-- ================================= -->
+
+<section>
+<h3>22. Disable User Prompt for Server Validation</h3>
 
 <!-- Image 22 -->
-<img src="#">
+#
 
-<pre><code>
+<pre><code class="language-xml">
 <DisableUserPromptForServerValidation>true</DisableUserPromptForServerValidation>
 </code></pre>
 
----
-
-<!-- ============================= -->
-<!-- ADVANCED TLS SETTINGS -->
-<!-- ============================= -->
-
-<h2>12. TLS Extensions + EKU Control</h2>
-
-<pre><code class="language-xml">
-<TLSExtensions>
-  <FilteringInfo>
-    <AllPurposeEnabled>true</AllPurposeEnabled>
-    <ClientAuthEKUList Enabled="true"/>
-  </FilteringInfo>
-</TLSExtensions>
-</code></pre>
-
----
-
-<h2>13. Authentication Behaviour Modes</h2>
-
-<pre><code>
-<authMode>machine</authMode>
-<authMode>user</authMode>
-<authMode>machineOrUser</authMode>
-</code></pre>
-
----
-
-<!-- ============================= -->
-<!-- PERFORMANCE + SECURITY -->
-<!-- ============================= -->
-
-<h2>14. Fast Reconnect & Privacy</h2>
-
-<pre><code>
-<FastReconnect>true</FastReconnect>
-<EnableIdentityPrivacy>true</EnableIdentityPrivacy>
-<AnonymousUserName>PrivacyPlace</AnonymousUserName>
-</code></pre>
-
----
-
-<h2>15. Inner Authentication Methods</h2>
-
-<p>Supported inner methods:</p>
+<p>Prevents user interaction when certificate validation fails.</p>
 
 <ul>
-<li>PAP</li>
-<li>CHAP</li>
-<li>MS-CHAP</li>
+<li>True → Fail silently</li>
+<li>False → Prompt user</li>
 </ul>
 
----
+</section>
 
-<h2>16. Windows Credential Usage</h2>
+<!-- ================================= -->
+<!-- IMAGE 23 -->
+<!-- ================================= -->
+
+<section>
+<h3>23. Different Username Option</h3>
+
+<!-- Image 23 -->
+#
+
+<pre><code class="language-xml">
+<DifferentUsername>true</DifferentUsername>
+</code></pre>
+
+<p>Allows user to specify alternate identity during authentication.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 24 -->
+<!-- ================================= -->
+
+<section>
+<h3>24. CA Hash List Enabled</h3>
+
+<!-- Image 24 -->
+#
+
+<pre><code class="language-xml">
+<CAHashList Enabled="true">
+</CAHashList>
+</code></pre>
+
+<p>Enables filtering based on issuer hash list.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 25 -->
+<!-- ================================= -->
+
+<section>
+<h3>25. Issuer Hash Configuration</h3>
+
+<!-- Image 25 -->
+#
+
+<pre><code class="language-xml">
+<IssuerHash>
+5e ee d8 6f a3 7c 67 52 30 64 2f 55 c8 4d db f6 7c d3 3c 80
+</IssuerHash>
+</code></pre>
+
+<p>Specifies allowed certificate issuer.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 26 -->
+<!-- ================================= -->
+
+<section>
+<h3>26. All Purpose + EKU Lists</h3>
+
+<!-- Image 26 -->
+#
+
+<pre><code class="language-xml">
+<AllPurposeEnabled>true</AllPurposeEnabled>
+<AnyPurposeEKUList Enabled="true"/>
+<ClientAuthEKUList Enabled="true"/>
+</code></pre>
+
+<p>Allows broad certificate usage with additional EKU filters.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 27 -->
+<!-- ================================= -->
+
+<section>
+<h3>27. EKU Mapping Advanced Configuration</h3>
+
+<!-- Image 27 -->
+#
+
+<pre><code class="language-xml">
+<EKUName>All application policies</EKUName>
+<EKUOID>1.3.6.1.4.1.311.10.12.1</EKUOID>
+
+<EKUName>Any Purpose</EKUName>
+<EKUOID>2.5.29.37.0</EKUOID>
+</code></pre>
+
+<p>Defines advanced EKU policy combinations.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 28 -->
+<!-- ================================= -->
+
+<section>
+<h3>28. PMK Cache & Pre-authentication Settings</h3>
+
+<!-- Image 28 -->
+#
+
+<pre><code class="language-xml">
+<authMode>machineOrUser</authMode>
+<PMKCacheMode>enabled</PMKCacheMode>
+<PMKCacheSize>128</PMKCacheSize>
+<PMKCacheTTL>720</PMKCacheTTL>
+<preAuthMode>disabled</preAuthMode>
+</code></pre>
+
+<p>Improves roaming performance using PMK caching.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 29 -->
+<!-- ================================= -->
+
+<section>
+<h3>29. Machine Authentication Mode</h3>
+
+<!-- Image 29 -->
+#
+
+<pre><code class="language-xml">
+<authMode>machine</authMode>
+</code></pre>
+
+<p>Uses device credentials before user login.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 30 -->
+<!-- ================================= -->
+
+<section>
+<h3>30. User Authentication Mode</h3>
+
+<!-- Image 30 -->
+#
+
+<pre><code class="language-xml">
+<authMode>user</authMode>
+</code></pre>
+
+<p>Uses user credentials after login.</p>
+
+</section>
+
+  <!-- ================================= -->
+<!-- IMAGE 21 -->
+<!-- ================================= -->
+
+<section>
+<h3>21. Trusted Root CA Thumbprint Mapping</h3>
+
+<!-- Image 21 -->
+#
+
+<p>Defines specific Root CA trust using certificate thumbprint.</p>
+
+<pre><code class="language-xml">
+<TrustedRootCA>
+5e ee d8 6f a3 7c 67 52 30 64 2f 55 c8 4d db f6 7c d3 3c 80
+</TrustedRootCA>
+</code></pre>
+
+<p>Only certificates issued by this CA will be trusted.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 22 -->
+<!-- ================================= -->
+
+<section>
+<h3>22. Disable User Prompt for Server Validation</h3>
+
+<!-- Image 22 -->
+#
+
+<pre><code class="language-xml">
+<DisableUserPromptForServerValidation>true</DisableUserPromptForServerValidation>
+</code></pre>
+
+<p>Prevents user interaction when certificate validation fails.</p>
+
+<ul>
+<li>True → Fail silently</li>
+<li>False → Prompt user</li>
+</ul>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 23 -->
+<!-- ================================= -->
+
+<section>
+<h3>23. Different Username Option</h3>
+
+<!-- Image 23 -->
+#
+
+<pre><code class="language-xml">
+<DifferentUsername>true</DifferentUsername>
+</code></pre>
+
+<p>Allows user to specify alternate identity during authentication.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 24 -->
+<!-- ================================= -->
+
+<section>
+<h3>24. CA Hash List Enabled</h3>
+
+<!-- Image 24 -->
+#
+
+<pre><code class="language-xml">
+<CAHashList Enabled="true">
+</CAHashList>
+</code></pre>
+
+<p>Enables filtering based on issuer hash list.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 25 -->
+<!-- ================================= -->
+
+<section>
+<h3>25. Issuer Hash Configuration</h3>
+
+<!-- Image 25 -->
+#
+
+<pre><code class="language-xml">
+<IssuerHash>
+5e ee d8 6f a3 7c 67 52 30 64 2f 55 c8 4d db f6 7c d3 3c 80
+</IssuerHash>
+</code></pre>
+
+<p>Specifies allowed certificate issuer.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 26 -->
+<!-- ================================= -->
+
+<section>
+<h3>26. All Purpose + EKU Lists</h3>
+
+<!-- Image 26 -->
+#
+
+<pre><code class="language-xml">
+<AllPurposeEnabled>true</AllPurposeEnabled>
+<AnyPurposeEKUList Enabled="true"/>
+<ClientAuthEKUList Enabled="true"/>
+</code></pre>
+
+<p>Allows broad certificate usage with additional EKU filters.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 27 -->
+<!-- ================================= -->
+
+<section>
+<h3>27. EKU Mapping Advanced Configuration</h3>
+
+<!-- Image 27 -->
+#
+
+<pre><code class="language-xml">
+<EKUName>All application policies</EKUName>
+<EKUOID>1.3.6.1.4.1.311.10.12.1</EKUOID>
+
+<EKUName>Any Purpose</EKUName>
+<EKUOID>2.5.29.37.0</EKUOID>
+</code></pre>
+
+<p>Defines advanced EKU policy combinations.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 28 -->
+<!-- ================================= -->
+
+<section>
+<h3>28. PMK Cache & Pre-authentication Settings</h3>
+
+<!-- Image 28 -->
+#
+
+<pre><code class="language-xml">
+<authMode>machineOrUser</authMode>
+<PMKCacheMode>enabled</PMKCacheMode>
+<PMKCacheSize>128</PMKCacheSize>
+<PMKCacheTTL>720</PMKCacheTTL>
+<preAuthMode>disabled</preAuthMode>
+</code></pre>
+
+<p>Improves roaming performance using PMK caching.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 29 -->
+<!-- ================================= -->
+
+<section>
+<h3>29. Machine Authentication Mode</h3>
+
+<!-- Image 29 -->
+#
+
+<pre><code class="language-xml">
+<authMode>machine</authMode>
+</code></pre>
+
+<p>Uses device credentials before user login.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 30 -->
+<!-- ================================= -->
+
+<section>
+<h3>30. User Authentication Mode</h3>
+
+<!-- Image 30 -->
+#
+
+<pre><code class="language-xml">
+<authMode>user</authMode>
+</code></pre>
+
+<p>Uses user credentials after login.</p>
+
+</section>
+
+  <!-- ================================= -->
+<!-- IMAGE 41 -->
+<!-- ================================= -->
+
+<section>
+<h3>41. Default PEAP Behaviour Settings</h3>
+
+<!-- Image 41 -->
+#
+
+<pre><code class="language-xml">
+<AcceptServerName>false</AcceptServerName>
+<SimpleCertSelection>true</SimpleCertSelection>
+<DifferentUsername>false</DifferentUsername>
+<PerformServerValidation>true</PerformServerValidation>
+<DisableUserPromptForServerValidation>false</DisableUserPromptForServerValidation>
+<ServerNames></ServerNames>
+<Type>13</Type>
+</code></pre>
+
+<p>Represents default secured PEAP configuration with standard validation enabled.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 42 -->
+<!-- ================================= -->
+
+<section>
+<h3>42. Reduced PEAP Configuration (Removed Options)</h3>
+
+<!-- Image 42 -->
+#
+
+<p>Certain advanced parameters are removed when simpler authentication path is chosen.</p>
+
+<ul>
+<li>Reduced complexity configuration</li>
+<li>Automatic handling of inner EAP behavior</li>
+</ul>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 43 -->
+<!-- ================================= -->
+
+<section>
+<h3>43. Strict Server Validation with Hash Pinning</h3>
+
+<!-- Image 43 -->
+#
+
+<pre><code class="language-xml">
+<DisablePrompt>true</DisablePrompt>
+<ServerNames>ServerTest.com</ServerNames>
+<TrustedRootCAHash>
+5e ee d8 6f a3 7c 67 52 30 64 2f 55 c8 4d db f6 7c d3 3c 80
+</TrustedRootCAHash>
+</code></pre>
+
+<p>Ensures connection only to trusted RADIUS server.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 44 -->
+<!-- ================================= -->
+
+<section>
+<h3>44. PAP Authentication (Legacy)</h3>
+
+<!-- Image 44 -->
+#
+
+<pre><code class="language-xml">
+<PAPAuthentication>
+</PAPAuthentication>
+</code></pre>
+
+<p>Plain-text authentication (not recommended).</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 45 -->
+<!-- ================================= -->
+
+<section>
+<h3>45. CHAP Authentication</h3>
+
+<!-- Image 45 -->
+#
+
+<pre><code class="language-xml">
+<CHAPAuthentication>
+</CHAPAuthentication>
+</code></pre>
+
+<p>Challenge-Handshake authentication method.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 46 -->
+<!-- ================================= -->
+
+<section>
+<h3>46. MS-CHAP Authentication</h3>
+
+<!-- Image 46 -->
+#
+
+<pre><code class="language-xml">
+<MSCHAPAuthentication>
+</MSCHAPAuthentication>
+</code></pre>
+
+<p>Improved version of CHAP used in PEAP environments.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 47 -->
+<!-- ================================= -->
+
+<section>
+<h3>47. Use Windows Credentials Disabled</h3>
+
+<!-- Image 47 -->
+#
+
+<pre><code>
+<UseWinlogonCredentials>false</UseWinlogonCredentials>
+</code></pre>
+
+<p>User must manually enter credentials.</p>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 48 -->
+<!-- ================================= -->
+
+<section>
+<h3>48. Use Windows Credentials Enabled</h3>
+
+<!-- Image 48 -->
+#
 
 <pre><code>
 <UseWinlogonCredentials>true</UseWinlogonCredentials>
 </code></pre>
 
----
-
-<!-- ============================= -->
-<!-- SUMMARY -->
-<!-- ============================= -->
-
-<section class="summary-box">
-
-<h3>Key Takeaways</h3>
-
-<ul>
-<li>GUI selections directly map to WLANProfile XML</li>
-<li>Certificates and EKU filtering control authentication strictness</li>
-<li>Server validation prevents rogue AP attacks</li>
-<li>Connection behaviour affects roaming + user experience</li>
-<li>EAP type defines authentication flow (Password vs Cert)</li>
-</ul>
+<p>Automatically uses logged-in user credentials.</p>
 
 </section>
+
+<!-- ================================= -->
+<!-- IMAGE 49 -->
+<!-- ================================= -->
+
+<section>
+<h3>49. Advanced TLS Configuration Cleanup</h3>
+
+<!-- Image 49 -->
+#
+
+<p>Removes stricter validation parameters to allow flexible authentication.</p>
+
+<pre><code class="language-xml">
+<UseWinLogonCredentials>false</UseWinLogonCredentials>
+<Type>26</Type>
+</code></pre>
+
+</section>
+
+<!-- ================================= -->
+<!-- IMAGE 50 -->
+<!-- ================================= -->
+
+<section>
+<h3>50. Final Authentication Mode Change (WPA2)</h3>
+
+<!-- Image 50 -->
+#
+
+<pre><code class="language-xml">
+<authentication>WPA2</authentication>
+</code></pre>
+
+<p>Switches profile back to WPA2 (non-enterprise) configuration.</p>
+
+</section>
+
+
+
+
+
+
+
+
+
 
 </main>
 </div>
 
 <footer class="site-footer">
 <div class="container">
-<p>© 2026 Sys Admin Talks · Wireless Deep Dive</p>
+<p>© 2026 Sys Admin Talks</p>
 </div>
 </footer>
+
+</body>
+</html>
