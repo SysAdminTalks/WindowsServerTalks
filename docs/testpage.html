@@ -886,6 +886,353 @@
     </main>
   </div>
 
+     <section class="summary-box">
+        <h3>How to test yourself what GUI changes does in XML ?</h3>
+        <p>
+          Use the below script to check the changes happening in xml profile         
+      </p>
+           <h4>How the Script works ?</h4>
+
+        <p>
+          When you execute the script for the first time it caches the current XML and then you need to make the profile changes in GUI and rerun the script.
+          The script then export the current profile XML and checks the portion removed and added and give you the details in a notepad file, which opens as a popup.
+      </p>
+
+         <!--Script-->
+      <h3 id="sample-a">Script</h3>
+  <pre><code class="language-xml">
+<#
+run this first Set-ExecutionPolicy -scope Process -ExecutionPolicy RemoteSigned -Force
+.SYNOPSIS
+    Export WLAN profile "test" to C:\Wifi\test.xml, rotate previous to test.old.xml,
+    compute clean structural diffs (namespace-agnostic; ignores xmlns),
+    write results to difference.xml and difference.txt,
+    and open difference.txt in Notepad (no popups).
+
+.NOTES
+    Run PowerShell as Administrator if writing to C:\Wifi requires elevation.
+#>
+
+[CmdletBinding()]
+param(
+    [string]$ProfileName = 'test',
+    [string]$Folder      = 'C:\Wifi'
+)
+
+$ErrorActionPreference = 'Stop'
+
+# Canonical file paths
+$NewFile   = Join-Path $Folder 'test.xml'
+$OldFile   = Join-Path $Folder 'test.old.xml'
+$DiffXml   = Join-Path $Folder 'difference.xml'
+$DiffTxt   = Join-Path $Folder 'difference.txt'
+
+# Ensure destination folder
+if (-not (Test-Path -LiteralPath $Folder)) {
+    New-Item -Path $Folder -ItemType Directory -Force | Out-Null
+}
+
+# Step 2: delete test.old.xml if present
+if (Test-Path -LiteralPath $OldFile) {
+    Remove-Item -LiteralPath $OldFile -Force
+}
+
+# Step 3: if test.xml exists, rename to test.old.xml
+$Renamed = $false
+if (Test-Path -LiteralPath $NewFile) {
+    Rename-Item -LiteralPath $NewFile -NewName (Split-Path -Path $OldFile -Leaf) -Force
+    $Renamed = $true
+}
+
+# Step 4: Export WLAN profile "test" to C:\Wifi\test.xml
+$exportStart = Get-Date
+& netsh wlan export profile name="$ProfileName" key=clear folder="$Folder" | Out-Null
+
+$exported = Get-ChildItem -Path $Folder -Filter '*.xml' -ErrorAction SilentlyContinue |
+    Where-Object { $_.LastWriteTime -ge $exportStart.AddSeconds(-1) } |
+    Sort-Object LastWriteTime -Descending |
+    Select-Object -First 1
+
+if (-not $exported) {
+    throw "Export failed: netsh did not create any XML file in '$Folder'. Ensure the WLAN profile '$ProfileName' exists."
+}
+
+Move-Item -LiteralPath $exported.FullName -Destination $NewFile -Force
+
+# ===================== CLEAN STRUCTURAL DIFF (NO POPUP) =====================
+
+function Load-XmlDoc {
+    param([Parameter(Mandatory)][string]$Path)
+    $settings = New-Object System.Xml.XmlReaderSettings
+    $settings.IgnoreWhitespace = $true
+    $settings.IgnoreComments   = $true
+    $settings.IgnoreProcessingInstructions = $true
+    $reader = [System.Xml.XmlReader]::Create($Path, $settings)
+    $doc = New-Object System.Xml.XmlDocument
+    $doc.PreserveWhitespace = $false
+    $doc.Load($reader)
+    $reader.Close()
+    return $doc
+}
+
+function Get-LocalPath {
+    param([System.Xml.XmlNode]$node)
+
+    if (-not $node) { return '/' }
+
+    $parts = @()
+    $cur = $node
+    while ($cur -and $cur.NodeType -ne [System.Xml.XmlNodeType]::Document) {
+        if ($cur.NodeType -eq [System.Xml.XmlNodeType]::Element) {
+            # Compute sibling index by iterating elements with same LocalName
+            $idx = 1
+            $parent = $cur.ParentNode
+            if ($parent -and $parent.HasChildNodes) {
+                $idx = 0
+                foreach ($s in $parent.ChildNodes) {
+                    if ($s.NodeType -eq 'Element' -and $s.LocalName -eq $cur.LocalName) {
+                        $idx++
+                        if ([Object]::ReferenceEquals($s, $cur)) { break }
+                    }
+                }
+                if ($idx -le 0) { $idx = 1 }
+            }
+            $parts += ('{0}[{1}]' -f $cur.LocalName, $idx)
+        }
+        elseif ($cur.NodeType -eq [System.Xml.XmlNodeType]::Attribute) {
+            $parts += ('@{0}' -f $cur.LocalName)
+        }
+        $cur = $cur.ParentNode
+    }
+
+    if ($parts.Count -eq 0) { return '/' }
+    return '/' + ($parts[-1..-($parts.Count)] -join '/')
+}
+
+function Build-LeafMap {
+    param([System.Xml.XmlDocument]$doc)
+
+    $map = @{}
+
+    function Add-AttributeEntries {
+        param([System.Xml.XmlElement]$elem)
+        if ($elem.Attributes -and $elem.Attributes.Count -gt 0) {
+            foreach ($a in $elem.Attributes) {
+                # Ignore xmlns noise
+                if ($a.Name -eq 'xmlns' -or $a.Prefix -eq 'xmlns') { continue }
+                $pathElem = Get-LocalPath -node $elem
+                $pathAttr = "$pathElem/@$($a.LocalName)"
+                $val      = [string]$a.Value
+                $snippet  = '@{0}="{1}"' -f $a.LocalName, $val
+                $map[$pathAttr] = [pscustomobject]@{
+                    Name        = "@$($a.LocalName)"
+                    Value       = $val
+                    Snippet     = $snippet
+                    IsAttribute = $true
+                }
+            }
+        }
+    }
+
+    function Recurse {
+        param([System.Xml.XmlNode]$n)
+
+        if ($n.NodeType -eq [System.Xml.XmlNodeType]::Element) {
+            $elem = [System.Xml.XmlElement]$n
+
+            Add-AttributeEntries -elem $elem
+
+            # Leaf = no element children
+            $hasElemChildren = $false
+            foreach ($ch in $elem.ChildNodes) {
+                if ($ch.NodeType -eq 'Element') { $hasElemChildren = $true; break }
+            }
+
+            if (-not $hasElemChildren) {
+                $val = [string]$elem.InnerText
+                if ($null -ne $val) { $val = $val.Trim() } else { $val = '' }
+                $path = Get-LocalPath -node $elem
+                $name = $elem.LocalName
+                $snippet = "<{0}>{1}</{0}>" -f $name, $val
+
+                $map[$path] = [pscustomobject]@{
+                    Name        = $name
+                    Value       = $val
+                    Snippet     = $snippet
+                    IsAttribute = $false
+                }
+            }
+
+            foreach ($ch in $elem.ChildNodes) { Recurse -n $ch }
+        }
+    }
+
+    Recurse -n $doc.DocumentElement
+    return $map
+}
+
+function Write-Differences {
+    param(
+        [hashtable]$OldMap,
+        [hashtable]$NewMap,
+        [string]$XmlPath,
+        [string]$TxtPath
+    )
+
+    $generatedAt = (Get-Date).ToString('yyyy-MM-dd HH:mm:ss.fff')
+
+    $xml = New-Object System.Text.StringBuilder
+    [void]$xml.AppendLine('<?xml version="1.0" encoding="utf-8"?>')
+    [void]$xml.AppendLine("<Differences generatedAt=""$generatedAt"">")
+
+    $txt = New-Object System.Collections.Generic.List[string]
+
+    $allKeys = @($OldMap.Keys + $NewMap.Keys) | Select-Object -Unique | Sort-Object
+    $changeCount = 0
+
+    foreach ($k in $allKeys) {
+        $oldItem = $OldMap[$k]
+        $newItem = $NewMap[$k]
+
+        if ($null -eq $oldItem -and $null -ne $newItem) {
+            # ADDED
+            $changeCount++
+            $ts = (Get-Date).ToString('HH:mm:ss.fff')
+            $newSafe = $newItem.Snippet -replace ']]>', ']]]]><![CDATA[>'
+
+            [void]$xml.AppendLine("  <Change time=""$ts"" type=""Added"">")
+            [void]$xml.AppendLine("    <Path>$k</Path>")
+            [void]$xml.AppendLine("    <Variable>$($newItem.Name)</Variable>")
+            [void]$xml.AppendLine("    <OldSnippet/>")
+            [void]$xml.AppendLine("    <NewSnippet><![CDATA[$newSafe]]></NewSnippet>")
+            [void]$xml.AppendLine("  </Change>")
+
+            $txt.Add(('new change "{0}"' -f $newItem.Snippet))
+        }
+        elseif ($null -ne $oldItem -and $null -eq $newItem) {
+            # REMOVED
+            $changeCount++
+            $ts = (Get-Date).ToString('HH:mm:ss.fff')
+            $oldSafe = $oldItem.Snippet -replace ']]>', ']]]]><![CDATA[>'
+
+            [void]$xml.AppendLine("  <Change time=""$ts"" type=""Removed"">")
+            [void]$xml.AppendLine("    <Path>$k</Path>")
+            [void]$xml.AppendLine("    <Variable>$($oldItem.Name)</Variable>")
+            [void]$xml.AppendLine("    <OldSnippet><![CDATA[$oldSafe]]></OldSnippet>")
+            [void]$xml.AppendLine("    <NewSnippet/>")
+            [void]$xml.AppendLine("  </Change>")
+
+            $txt.Add(('removed "{0}"' -f $oldItem.Snippet))
+        }
+        elseif ($null -ne $oldItem -and $null -ne $newItem) {
+            # CHANGED
+            if ($oldItem.Value -ne $newItem.Value) {
+                $changeCount++
+                $ts = (Get-Date).ToString('HH:mm:ss.fff')
+                $oldSafe = $oldItem.Snippet -replace ']]>', ']]]]><![CDATA[>'
+                $newSafe = $newItem.Snippet -replace ']]>', ']]]]><![CDATA[>'
+
+                [void]$xml.AppendLine("  <Change time=""$ts"" type=""Changed"">")
+                [void]$xml.AppendLine("    <Path>$k</Path>")
+                [void]$xml.AppendLine("    <Variable>$($newItem.Name)</Variable>")
+                [void]$xml.AppendLine("    <OldSnippet><![CDATA[$oldSafe]]></OldSnippet>")
+                [void]$xml.AppendLine("    <NewSnippet><![CDATA[$newSafe]]></NewSnippet>")
+                [void]$xml.AppendLine("  </Change>")
+
+                $txt.Add(('new change "{0}"' -f $newItem.Snippet))
+            }
+        }
+    }
+
+    if ($changeCount -eq 0) {
+        $ts = (Get-Date).ToString('HH:mm:ss.fff')
+        [void]$xml.AppendLine("  <Change time=""$ts"" type=""None""><Path>/</Path><Variable/><OldSnippet/><NewSnippet/><Message>No differences found</Message></Change>")
+        $txt.Add("No differences found")
+    }
+
+    [void]$xml.AppendLine("</Differences>")
+
+    Set-Content -LiteralPath $XmlPath -Value $xml.ToString() -Encoding UTF8
+    Set-Content -LiteralPath $TxtPath -Value $txt -Encoding UTF8
+
+    if (-not (Test-Path -LiteralPath $XmlPath)) { Write-Warning "Could not find $XmlPath after writing." }
+    if (-not (Test-Path -LiteralPath $TxtPath)) { Write-Warning "Could not find $TxtPath after writing." }
+}
+
+function Do-Diff {
+    param(
+        [string]$OldPath,
+        [string]$NewPath,
+        [string]$XmlPath,
+        [string]$TxtPath
+    )
+
+    $oldDoc = Load-XmlDoc -Path $OldPath
+    $newDoc = Load-XmlDoc -Path $NewPath
+
+    $oldMap = Build-LeafMap -doc $oldDoc
+    $newMap = Build-LeafMap -doc $newDoc
+
+    Write-Differences -OldMap $oldMap -NewMap $newMap -XmlPath $XmlPath -TxtPath $TxtPath
+
+    # Open difference.txt robustly (no popup)
+    if (Test-Path -LiteralPath $TxtPath) {
+        try {
+            Invoke-Item -LiteralPath $TxtPath
+        } catch {
+            try {
+                Start-Process -FilePath "notepad.exe" -ArgumentList @("$TxtPath") -WindowStyle Normal | Out-Null
+            } catch {
+                Write-Warning "Failed to open '$TxtPath'. Please open it manually."
+            }
+        }
+    } else {
+        Write-Warning "Expected '$TxtPath' was not created. Please re-run the script."
+    }
+}
+
+# Run diff if we have an old copy; otherwise write stub and open it
+if ($Renamed -and (Test-Path -LiteralPath $OldFile)) {
+    Do-Diff -OldPath $OldFile -NewPath $NewFile -XmlPath $DiffXml -TxtPath $DiffTxt
+}
+else {
+    $generatedAt = (Get-Date).ToString('yyyy-MM-dd HH:mm:ss.fff')
+    $ts = (Get-Date).ToString('HH:mm:ss.fff')
+@"
+<?xml version="1.0" encoding="utf-8"?>
+<Differences generatedAt="$generatedAt">
+  <Change time="$ts" type="Info">
+    <Path>/</Path>
+    <Variable/>
+    <OldSnippet/>
+    <NewSnippet/>
+    <Message><![CDATA[No previous file existed (test.xml) to compare against.]]></Message>
+  </Change>
+</Differences>
+"@ | Set-Content -LiteralPath $DiffXml -Encoding UTF8
+
+    "No previous file existed (test.xml) to compare against." | Set-Content -LiteralPath $DiffTxt -Encoding UTF8
+
+    if (Test-Path -LiteralPath $DiffTxt) {
+        try {
+            Invoke-Item -LiteralPath $DiffTxt
+        } catch {
+            try {
+                Start-Process -FilePath "notepad.exe" -ArgumentList @("$DiffTxt") -WindowStyle Normal | Out-Null
+            } catch {
+                Write-Warning "Failed to open '$DiffTxt'. Please open it manually."
+            }
+        }
+    }
+}
+
+Write-Host "Exported WLAN profile '$ProfileName' to: $NewFile"
+if (Test-Path -LiteralPath $OldFile) { Write-Host "Previous version saved as: $OldFile" }
+Write-Host "Differences written to: $DiffXml and $DiffTxt"
+      </code></pre>
+       
+      </section>
+
   <footer class="site-footer">
     <div class="container">
       <p>© 2026 Sys Admin Talks</p>
