@@ -1,1262 +1,288 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Wireless Profile Samples (WLANProfile XML)</title>
-
-<meta name="theme-color" content="#0F6CBD">
-
-<link rel="stylesheet" href="https://sysadmintalks.github.io/WindowsServerTalks/assets/css/custom.css">
-
-<style>
-.github-support-row { margin:12px 0; display:flex; gap:10px; }
-.copy-btn { margin-bottom:6px; padding:4px 10px; cursor:pointer; font-size:12px; }
-</style>
-
-<script>
-function copyCode(id, btn){
-  navigator.clipboard.writeText(document.getElementById(id).innerText)
-  .then(()=>{btn.innerText="Copied!";setTimeout(()=>btn.innerText="Copy",1500);});
-}
-</script>
-
+    <meta charset="UTF-8">
+    <title>Wireless Profile Samples (WLANProfile XML)</title>
 </head>
 
 <body>
 
-<div id="header-container"></div>
+<h1>Wireless Profile Samples (WLANProfile XML)</h1>
 
-<main class="content">
+<p>
+<a href="../index.html">Home</a> › Wireless Profile Samples (WLANProfile XML)
+</p>
 
 <h2>Wireless Profile Samples (WLANProfile XML)</h2>
 
+<div class="intro">
 <p>
-How to read, build, and validate Windows Native Wi‑Fi <code>WLANProfile</code> XML for enterprise networks.
+How to read, build, and validate Windows Native Wi‑Fi <code>WLANProfile</code>
 </p>
-
-<section>
-<h3>Summary</h3>
-<p>
-This article curates Microsoft’s Wireless profile samples and provides a hands‑on structure to build your own WLANProfile XML.
-You’ll find XML mapping (1–50), explanation for each config, and live monitoring approach for changes.
-</p>
-</section>
-
-<div>
-<strong>Note:</strong>
-Validate in a lab before production.
-Reference:
-<a href="https://learn.microsoft.com/en-us/windows/win32/nativewifi/wireless-profile-samples" target="_blank">
-Wireless profile samples - Win32 apps | Microsoft Learn
-</a>
 </div>
+
+<h3>Summary</h3>
+
+<p>
+This article curates Microsoft’s Wireless profile samples and provides a structured way to build your own WLANProfile XML.
+It includes XML mapping, explanations, and monitoring approach.
+</p>
+
+<p><strong>Note:</strong> Validate in lab before production.</p>
 
 <hr>
 
-
-
-
-
-<!-- =============================== -->
-<!-- SECTION 1 -->
-<!-- =============================== -->
-
-<section>
 <h3>1. Security Method Selection</h3>
 
-<!-- Image 1 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s1',this)">Copy</button>
-<pre><code id="s1">
-<authentication>WPA2-Enterprise</authentication>
-<encryption>AES</encryption>
-<useOneX>true</useOneX>
-</code></pre>
-
-<p>Defines enterprise WiFi security and enables 802.1X authentication.</p>
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 2 -->
-<!-- =============================== -->
-
-<section>
-<h3>2. Network Authentication Method</h3>
-
-<!-- Image 2 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s2',this)">Copy</button>
-<pre><code id="s2">
-<cacheUserData>true</cacheUserData>
-<authMode>userOrComputer</authMode>
-</code></pre>
-
-<p>Defines EAP authentication and identity type.</p>
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 3 -->
-<!-- =============================== -->
-
-<section>
-<h3>3. Authentication Mode Mapping</h3>
-
-<!-- Image 3 -->
-#
-
-<p>User / Machine / Hybrid authentication mapping.</p>
-
-<table>
-<tr><th>GUI</th><th>XML</th></tr>
-<tr><td>User</td><td>user</td></tr>
-<tr><td>Machine</td><td>machine</td></tr>
-<tr><td>User or Computer</td><td>userOrComputer</td></tr>
-</table>
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 4 -->
-<!-- =============================== -->
-
-<section>
-<h3>4. Max Authentication Failures</h3>
-
-<!-- Image 4 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s4',this)">Copy</button>
-<pre><code id="s4">
-<maxAuthFailures>1</maxAuthFailures>
-</code></pre>
-
-<p>Limits retry attempts during authentication.</p>
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 5 -->
-<!-- =============================== -->
-
-<section>
-<h3>5. Cache User Credentials</h3>
-
-<!-- Image 5 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s5',this)">Copy</button>
-<pre><code id="s5">
-<cacheUserData>true</cacheUserData>
-</code></pre>
-
-<p>Caches credentials for faster reconnection.</p>
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 6 -->
-<!-- =============================== -->
-
-<section>
-<h3>6. Trusted Root CA Filtering</h3>
-
-<!-- Image 6 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s6',this)">Copy</button>
-<pre><code id="s6">
-<TrustedRootCA>THUMBPRINT</TrustedRootCA>
-</code></pre>
-
-<p>Restricts trusted certificate authorities.</p>
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 7 -->
-<!-- =============================== -->
-
-<section>
-<h3>7. EKU Filtering</h3>
-
-<!-- Image 7 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s7',this)">Copy</button>
-<pre><code id="s7">
-<AllPurposeEnabled>false</AllPurposeEnabled>
-</code></pre>
-
-<p>Controls allowed certificate purposes.</p>
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 8 -->
-<!-- =============================== -->
-
-<section>
-<h3>8. EKU Mapping</h3>
-
-<!-- Image 8 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s8',this)">Copy</button>
-<pre><code id="s8">
-<EKUName>Client Authentication</EKUName>
-<EKUOID>1.3.6.1.5.5.7.3.2</EKUOID>
-</code></pre>
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 9 -->
-<!-- =============================== -->
-
-<section>
-<h3>9. Any Purpose / All Purpose</h3>
-
-<!-- Image 9 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s9',this)">Copy</button>
-<pre><code id="s9">
-<AllPurposeEnabled>true</AllPurposeEnabled>
-</code></pre>
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 10 -->
-<!-- =============================== -->
-
-<section>
-<h3>10. EKU Selection List</h3>
-
-<!-- Image 10 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s10',this)">Copy</button>
-<pre><code id="s10">
-<ClientAuthEKUList Enabled="true"/>
-</code></pre>
-</section>
-
-  <!-- =============================== -->
-<!-- SECTION 11 -->
-<!-- =============================== -->
-
-<section>
-<h3>11. Certificate UI Mapping (Extended Behaviour)</h3>
-
-<!-- Image 11 -->
-#
-
-<p>Defines how Windows groups certificate selection options internally.</p>
-
-<ul>
-<li>Controls certificate filtering behaviour</li>
-<li>Maps GUI selection to XML policy</li>
-</ul>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 12 -->
-<!-- =============================== -->
-
-<section>
-<h3>12. EKU Combined Filtering Behaviour</h3>
-
-<!-- Image 12 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s12',this)">Copy</button>
-<pre><code id="s12">
-<EKUMapping>
-  <EKUMap>
-    <EKUName>Client Authentication</EKUName>
-  </EKUMap>
-</EKUMapping>
-</code></pre>
-
-<p>Used when strict certificate enforcement is required.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 13 -->
-<!-- =============================== -->
-
-<section>
-<h3>13. Connection Mode Configuration</h3>
-
-<!-- Image 13 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s13',this)">Copy</button>
-<pre><code id="s13">
-<connectionMode>auto</connectionMode>
-</code></pre>
-
-<ul>
-<li><b>auto</b> → Automatically connect</li>
-<li><b>manual</b> → User triggered connection</li>
-</ul>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 14 -->
-<!-- =============================== -->
-
-<section>
-<h3>14. Auto Switch Between Networks</h3>
-
-<!-- Image 14 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s14',this)">Copy</button>
-<pre><code id="s14">
-<autoSwitch>true</autoSwitch>
-</code></pre>
-
-<p>Allows device to move between preferred networks seamlessly.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 15 -->
-<!-- =============================== -->
-
-<section>
-<h3>15. Hidden SSID (Non-Broadcast Network)</h3>
-
-<!-- Image 15 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s15',this)">Copy</button>
-<pre><code id="s15">
-<nonBroadcast>true</nonBroadcast>
-</code></pre>
-
-<p>Used for networks that do not broadcast SSID.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 16 -->
-<!-- =============================== -->
-
-<section>
-<h3>16. WPA3 Enterprise Configuration</h3>
-
-<!-- Image 16 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s16',this)">Copy</button>
-<pre><code id="s16">
-<authentication>WPA3ENT</authentication>
-<encryption>AES</encryption>
-<useOneX>true</useOneX>
-</code></pre>
-
-<p>Defines WPA3 enterprise-level wireless security.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 17 -->
-<!-- =============================== -->
-
-<section>
-<h3>17. Disable Credential Caching</h3>
-
-<!-- Image 17 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s17',this)">Copy</button>
-<pre><code id="s17">
-<cacheUserData>false</cacheUserData>
-</code></pre>
-
-<p>Forces authentication every time without storing credentials.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 18 -->
-<!-- =============================== -->
-
-<section>
-<h3>18. Manual Certificate Selection Enabled</h3>
-
-<!-- Image 18 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s18',this)">Copy</button>
-<pre><code id="s18">
-<SimpleCertSelection>false</SimpleCertSelection>
-</code></pre>
-
-<p>Allows user to manually pick certificate.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 19 -->
-<!-- =============================== -->
-
-<section>
-<h3>19. Automatic Certificate Selection Enabled</h3>
-
-<!-- Image 19 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s19',this)">Copy</button>
-<pre><code id="s19">
-<SimpleCertSelection>true</SimpleCertSelection>
-</code></pre>
-
-<p>Automatically selects appropriate certificate.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 20 -->
-<!-- =============================== -->
-
-<section>
-<h3>20. Server Name Validation Enforcement</h3>
-
-<!-- Image 20 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s20',this)">Copy</button>
-<pre><code id="s20">
-<AcceptServerName>true</AcceptServerName>
-<ServerNames>server1.com</ServerNames>
-</code></pre>
-
-<ul>
-<li>Enforces trusted RADIUS server validation</li>
-<li>Prevents rogue authentication servers</li>
-</ul>
-
-</section>
-
-  <!-- =============================== -->
-<!-- SECTION 21 -->
-<!-- =============================== -->
-
-<section>
-<h3>21. Trusted Root CA Thumbprint Mapping</h3>
-
-<!-- Image 21 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s21',this)">Copy</button>
-<pre><code id="s21">
-<TrustedRootCA>
-5e ee d8 6f a3 7c 67 52 30 64 2f 55 c8 4d db f6 7c d3 3c 80
-</TrustedRootCA>
-</code></pre>
-
-<p>Defines exact certificate authority trust using thumbprint.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 22 -->
-<!-- =============================== -->
-
-<section>
-<h3>22. Disable User Prompt for Server Validation</h3>
-
-<!-- Image 22 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s22',this)">Copy</button>
-<pre><code id="s22">
-<DisableUserPromptForServerValidation>true</DisableUserPromptForServerValidation>
-</code></pre>
-
-<ul>
-<li>True → Silent failure</li>
-<li>False → User prompt shown</li>
-</ul>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 23 -->
-<!-- =============================== -->
-
-<section>
-<h3>23. Different Username Option</h3>
-
-<!-- Image 23 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s23',this)">Copy</button>
-<pre><code id="s23">
-<DifferentUsername>true</DifferentUsername>
-</code></pre>
-
-<p>Allows alternate credential usage for authentication.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 24 -->
-<!-- =============================== -->
-
-<section>
-<h3>24. CA Hash List Enablement</h3>
-
-<!-- Image 24 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s24',this)">Copy</button>
-<pre><code id="s24">
-<CAHashList Enabled="true">
-</CAHashList>
-</code></pre>
-
-<p>Enables issuer-based certificate filtering.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 25 -->
-<!-- =============================== -->
-
-<section>
-<h3>25. Issuer Hash Filtering</h3>
-
-<!-- Image 25 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s25',this)">Copy</button>
-<pre><code id="s25">
-<IssuerHash>
-5e ee d8 6f a3 7c 67 52 30 64 2f 55 c8 4d db f6 7c d3 3c 80
-</IssuerHash>
-</code></pre>
-
-<p>Restricts certificate selection to specific issuer.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 26 -->
-<!-- =============================== -->
-
-<section>
-<h3>26. All Purpose + EKU Combined Mode</h3>
-
-<!-- Image 26 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s26',this)">Copy</button>
-<pre><code id="s26">
-<AllPurposeEnabled>true</AllPurposeEnabled>
-<AnyPurposeEKUList Enabled="true"/>
-<ClientAuthEKUList Enabled="true"/>
-</code></pre>
-
-<p>Allows broad certificate usage with EKU control.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 27 -->
-<!-- =============================== -->
-
-<section>
-<h3>27. Advanced EKU Mapping</h3>
-
-<!-- Image 27 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s27',this)">Copy</button>
-<pre><code id="s27">
-<EKUName>All application policies</EKUName>
-<EKUOID>1.3.6.1.4.1.311.10.12.1</EKUOID>
-
-<EKUName>Any Purpose</EKUName>
-<EKUOID>2.5.29.37.0</EKUOID>
-</code></pre>
-
-<p>Defines multiple EKU constraints for certificate validation.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 28 -->
-<!-- =============================== -->
-
-<section>
-<h3>28. PMK Cache & Pre-Authentication</h3>
-
-<!-- Image 28 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s28',this)">Copy</button>
-<pre><code id="s28">
-<authMode>machineOrUser</authMode>
-<PMKCacheMode>enabled</PMKCacheMode>
-<PMKCacheSize>128</PMKCacheSize>
-<PMKCacheTTL>720</PMKCacheTTL>
-<preAuthMode>disabled</preAuthMode>
-</code></pre>
-
-<p>Improves roaming by caching security keys.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 29 -->
-<!-- =============================== -->
-
-<section>
-<h3>29. Machine Authentication Mode</h3>
-
-<!-- Image 29 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s29',this)">Copy</button>
-<pre><code id="s29">
-<authMode>machine</authMode>
-</code></pre>
-
-<p>Authentication using system identity before login.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 30 -->
-<!-- =============================== -->
-
-<section>
-<h3>30. User Authentication Mode</h3>
-
-<!-- Image 30 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s30',this)">Copy</button>
-<pre><code id="s30">
-<authMode>user</authMode>
-</code></pre>
-
-<p>Authentication using user credentials post login.</p>
-
-</section>
-<!-- =============================== -->
-<!-- SECTION 31 -->
-<!-- =============================== -->
-
-<section>
-<h3>31. Pre-Logon Authentication Behaviour</h3>
-
-<!-- Image 31 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s31',this)">Copy</button>
-<pre><code id="s31">
-<allowAdditionalDialogs>true</allowAdditionalDialogs>
-<maxDelay>10</maxDelay>
-<type>preLogon</type>
-<userBasedVirtualLan>false</userBasedVirtualLan>
-</code></pre>
-
-<p>Controls authentication before user logs into the machine using system identity.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 32 -->
-<!-- =============================== -->
-
-<section>
-<h3>32. PEAP Inner EAP Configuration</h3>
-
-<!-- Image 32 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s32',this)">Copy</button>
-<pre><code id="s32">
-<UseWinLogonCredentials>false</UseWinLogonCredentials>
-<Type>26</Type>
-<EnableQuarantineChecks>false</EnableQuarantineChecks>
-<FastReconnect>true</FastReconnect>
-<InnerEapOptional>false</InnerEapOptional>
-<PerformServerValidation>true</PerformServerValidation>
-<RequireCryptoBinding>false</RequireCryptoBinding>
-</code></pre>
-
-<p>Defines behaviour of inner EAP (PEAP) and certificate validation logic.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 33 -->
-<!-- =============================== -->
-
-<section>
-<h3>33. Credential Caching Re-enabled</h3>
-
-<!-- Image 33 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s33',this)">Copy</button>
-<pre><code id="s33">
-<cacheUserData>true</cacheUserData>
-</code></pre>
-
-<p>Stores credentials again after being disabled previously.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 34 -->
-<!-- =============================== -->
-
-<section>
-<h3>34. Fast Reconnect Disabled</h3>
-
-<!-- Image 34 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s34',this)">Copy</button>
-<pre><code id="s34">
-<FastReconnect>false</FastReconnect>
-</code></pre>
-
-<p>Forces full authentication instead of session resume.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 35 -->
-<!-- =============================== -->
-
-<section>
-<h3>35. Alternate Trusted Root CA</h3>
-
-<!-- Image 35 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s35',this)">Copy</button>
-<pre><code id="s35">
-<TrustedRootCA>
-05 63 b8 63 0d 62 d7 5a bb c8 ab 1e 4b df b5 a8 99 b2 4d 43
-</TrustedRootCA>
-</code></pre>
-
-<p>Defines secondary trusted certificate authority.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 36 -->
-<!-- =============================== -->
-
-<section>
-<h3>36. Server Validation Prompt Enabled</h3>
-
-<!-- Image 36 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s36',this)">Copy</button>
-<pre><code id="s36">
-<DisableUserPromptForServerValidation>false</DisableUserPromptForServerValidation>
-</code></pre>
-
-<p>User will be prompted if server validation fails.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 37 -->
-<!-- =============================== -->
-
-<section>
-<h3>37. Prompt When CA Not Found</h3>
-
-<!-- Image 37 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s37',this)">Copy</button>
-<pre><code id="s37">
-<AllowPromptingWhenServerCANotFound>true</AllowPromptingWhenServerCANotFound>
-</code></pre>
-
-<p>Allows user interaction when certificate authority is missing.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 38 -->
-<!-- =============================== -->
-
-<section>
-<h3>38. Strict Validation (No Prompt Mode)</h3>
-
-<!-- Image 38 -->
-#
-
-<p>The following configuration replaces previous prompt behaviour.</p>
-
-<h4>🔻 Removed XML</h4>
-
-<button class="copy-btn" onclick="copyCode('s38r',this)">Copy</button>
-<pre><code id="s38r">
-<AllowPromptingWhenServerCANotFound>true</AllowPromptingWhenServerCANotFound>
-</code></pre>
-
-<h4>✅ Added XML</h4>
-
-<button class="copy-btn" onclick="copyCode('s38a',this)">Copy</button>
-<pre><code id="s38a">
-<DisableUserPromptForServerValidation>true</DisableUserPromptForServerValidation>
-</code></pre>
-
-<p>System switches to strict mode without user interaction.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 39 -->
-<!-- =============================== -->
-
-<section>
-<h3>39. Identity Privacy & Secure Reconnect</h3>
-
-<!-- Image 39 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s39',this)">Copy</button>
-<pre><code id="s39">
-<FastReconnect>true</FastReconnect>
-<AnonymousUserName>PrivacyPlace</AnonymousUserName>
-<EnableIdentityPrivacy>true</EnableIdentityPrivacy>
-<RequireCryptoBinding>true</RequireCryptoBinding>
-</code></pre>
-
-<p>Enhances privacy by masking identity and enforcing secure reconnection.</p>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 40 -->
-<!-- =============================== -->
-
-<section>
-<h3>40. Default Behaviour Restrictions</h3>
-
-<!-- Image 40 -->
-#
-
-<p>
-Certain UI options become unavailable depending on EAP type, certificate configuration,
-and policy enforcement. These restrictions are automatically applied by Windows.
-</p>
-
-<ul>
-<li>Some fields are greyed out</li>
-<li>Depends on authentication method</li>
-<li>Common in PEAP / TLS configurations</li>
-</ul>
-
-</section>
-
-  <!-- =============================== -->
-<!-- SECTION 41 -->
-<!-- =============================== -->
-
-<section>
-<h3>41. Default PEAP Behaviour (Policy Driven)</h3>
-
-<!-- Image 41 -->
-#
-
-<p>This section reflects a policy-driven PEAP configuration and shows that a prior WinLogon credential node was removed and replaced with an EAP type marker.</p> <!-- 【1-51bb9c】 -->
-
-<h4>✅ Added / Updated XML Elements</h4>
-<button class="copy-btn" onclick="copyCode('s41a',this)">Copy</button>
-<pre><code id="s41a">
-&lt;AcceptServerName&gt;false&lt;/AcceptServerName&gt;
-&lt;SimpleCertSelection&gt;true&lt;/SimpleCertSelection&gt;
-&lt;DifferentUsername&gt;false&lt;/DifferentUsername&gt;
-&lt;PerformServerValidation&gt;true&lt;/PerformServerValidation&gt;
-&lt;DisableUserPromptForServerValidation&gt;false&lt;/DisableUserPromptForServerValidation&gt;
-&lt;ServerNames&gt;&lt;/ServerNames&gt;
-&lt;Type&gt;13&lt;/Type&gt;
-</code></pre>
-<textarea id="s41a_raw" style="display:none"><AcceptServerName>false</AcceptServerName>
-<SimpleCertSelection>true</SimpleCertSelection>
-<DifferentUsername>false</DifferentUsername>
-<PerformServerValidation>true</PerformServerValidation>
-<DisableUserPromptForServerValidation>false</DisableUserPromptForServerValidation>
-<ServerNames></ServerNames>
-<Type>13</Type></textarea>
-
-<h4>🔻 Removed XML Elements</h4>
-<button class="copy-btn" onclick="copyCode('s41r',this)">Copy</button>
-<pre><code id="s41r">
-&lt;UseWinLogonCredentials&gt;false&lt;/UseWinLogonCredentials&gt;
-</code></pre>
-<textarea id="s41r_raw" style="display:none"><UseWinLogonCredentials>false</UseWinLogonCredentials></textarea>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 42 -->
-<!-- =============================== -->
-
-<section>
-<h3>42. Reduced PEAP Configuration (Large Cleanup + New Identity Privacy Nodes)</h3>
-
-<!-- Image 42 -->
-#
-
-<p>This section introduces a major cleanup of multiple PEAP-related nodes and replaces them with identity-privacy and authentication-method nodes.</p> <!-- 【1-51bb9c】 -->
-
-<h4>🔻 Removed XML Elements</h4>
-<button class="copy-btn" onclick="copyCode('s42r',this)">Copy</button>
-<pre><code id="s42r">
-&lt;UseWinLogonCredentials&gt;false&lt;/UseWinLogonCredentials&gt;
-&lt;Type&gt;26&lt;/Type&gt;
-&lt;EnableQuarantineChecks&gt;false&lt;/EnableQuarantineChecks&gt;
-&lt;FastReconnect&gt;true&lt;/FastReconnect&gt;
-&lt;InnerEapOptional&gt;false&lt;/InnerEapOptional&gt;
-&lt;AcceptServerName&gt;false&lt;/AcceptServerName&gt;
-&lt;AllowPromptingWhenServerCANotFound&gt;true&lt;/AllowPromptingWhenServerCANotFound&gt;
-&lt;PerformServerValidation&gt;true&lt;/PerformServerValidation&gt;
-&lt;RequireCryptoBinding&gt;false&lt;/RequireCryptoBinding&gt;
-&lt;DisableUserPromptForServerValidation&gt;false&lt;/DisableUserPromptForServerValidation&gt;
-&lt;ServerNames&gt;&lt;/ServerNames&gt;
-&lt;Type&gt;25&lt;/Type&gt;
-</code></pre>
-<textarea id="s42r_raw" style="display:none"><UseWinLogonCredentials>false</UseWinLogonCredentials>
-<Type>26</Type>
-<EnableQuarantineChecks>false</EnableQuarantineChecks>
-<FastReconnect>true</FastReconnect>
-<InnerEapOptional>false</InnerEapOptional>
-<AcceptServerName>false</AcceptServerName>
-<AllowPromptingWhenServerCANotFound>true</AllowPromptingWhenServerCANotFound>
-<PerformServerValidation>true</PerformServerValidation>
-<RequireCryptoBinding>false</RequireCryptoBinding>
-<DisableUserPromptForServerValidation>false</DisableUserPromptForServerValidation>
-<ServerNames></ServerNames>
-<Type>25</Type></textarea>
-
-<h4>✅ Added XML Elements</h4>
-<button class="copy-btn" onclick="copyCode('s42a',this)">Copy</button>
-<pre><code id="s42a">
-&lt;cacheUserData&gt;true&lt;/cacheUserData&gt;
-&lt;AnonymousIdentity&gt;anonymous&lt;/AnonymousIdentity&gt;
-&lt;IdentityPrivacy&gt;true&lt;/IdentityPrivacy&gt;
-&lt;PAPAuthentication&gt;&lt;/PAPAuthentication&gt;
-&lt;DisablePrompt&gt;false&lt;/DisablePrompt&gt;
-&lt;ServerNames&gt;&lt;/ServerNames&gt;
-&lt;AuthorId&gt;311&lt;/AuthorId&gt;
-&lt;Type&gt;21&lt;/Type&gt;
-</code></pre>
-<textarea id="s42a_raw" style="display:none"><cacheUserData>true</cacheUserData>
-<AnonymousIdentity>anonymous</AnonymousIdentity>
-<IdentityPrivacy>true</IdentityPrivacy>
-<PAPAuthentication></PAPAuthentication>
-<DisablePrompt>false</DisablePrompt>
-<ServerNames></ServerNames>
-<AuthorId>311</AuthorId>
-<Type>21</Type></textarea>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 43 -->
-<!-- =============================== -->
-
-<section>
-<h3>43. Strict Server Validation with Root Hash Pinning</h3>
-
-<!-- Image 43 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s43',this)">Copy</button>
-<pre><code id="s43">
-&lt;DisablePrompt&gt;true&lt;/DisablePrompt&gt;
-&lt;ServerNames&gt;ServerTest.com&lt;/ServerNames&gt;
-&lt;TrustedRootCAHash&gt;5e ee d8 6f a3 7c 67 52 30 64 2f 55 c8 4d db f6 7c d3 3c 80&lt;/TrustedRootCAHash&gt;
-</code></pre>
-<textarea id="s43_raw" style="display:none"><DisablePrompt>true</DisablePrompt>
-<ServerNames>ServerTest.com</ServerNames>
-<TrustedRootCAHash>5e ee d8 6f a3 7c 67 52 30 64 2f 55 c8 4d db f6 7c d3 3c 80</TrustedRootCAHash></textarea>
-
-<p>Enforces pinned server name + pinned trusted root hash for maximum protection against rogue servers.</p> <!-- 【1-51bb9c】 -->
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 44 -->
-<!-- =============================== -->
-
-<section>
-<h3>44. Switch to CHAP Authentication (PAP Removed)</h3>
-
-<!-- Image 44 -->
-#
-
-<p>This section replaces PAP with CHAP as the inner authentication method.</p> <!-- 【1-51bb9c】 -->
-
-<h4>🔻 Removed XML Elements</h4>
-<button class="copy-btn" onclick="copyCode('s44r',this)">Copy</button>
-<pre><code id="s44r">
-&lt;PAPAuthentication&gt;&lt;/PAPAuthentication&gt;
-</code></pre>
-<textarea id="s44r_raw" style="display:none"><PAPAuthentication></PAPAuthentication></textarea>
-
-<h4>✅ Added XML Elements</h4>
-<button class="copy-btn" onclick="copyCode('s44a',this)">Copy</button>
-<pre><code id="s44a">
-&lt;CHAPAuthentication&gt;&lt;/CHAPAuthentication&gt;
-</code></pre>
-<textarea id="s44a_raw" style="display:none"><CHAPAuthentication></CHAPAuthentication></textarea>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 45 -->
-<!-- =============================== -->
-
-<section>
-<h3>45. Switch to MS-CHAP Authentication (CHAP Removed)</h3>
-
-<!-- Image 45 -->
-#
-
-<p>This section replaces CHAP with MS-CHAP.</p> <!-- 【1-51bb9c】 -->
-
-<h4>🔻 Removed XML Elements</h4>
-<button class="copy-btn" onclick="copyCode('s45r',this)">Copy</button>
-<pre><code id="s45r">
-&lt;CHAPAuthentication&gt;&lt;/CHAPAuthentication&gt;
-</code></pre>
-<textarea id="s45r_raw" style="display:none"><CHAPAuthentication></CHAPAuthentication></textarea>
-
-<h4>✅ Added XML Elements</h4>
-<button class="copy-btn" onclick="copyCode('s45a',this)">Copy</button>
-<pre><code id="s45a">
-&lt;MSCHAPAuthentication&gt;&lt;/MSCHAPAuthentication&gt;
-</code></pre>
-<textarea id="s45a_raw" style="display:none"><MSCHAPAuthentication></MSCHAPAuthentication></textarea>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 46 -->
-<!-- =============================== -->
-
-<section>
-<h3>46. Remove MS-CHAP + Introduce Winlogon Credential Flag</h3>
-
-<!-- Image 46 -->
-#
-
-<p>This section removes MS-CHAP and introduces a Winlogon credential usage flag.</p> <!-- 【1-51bb9c】 -->
-
-<h4>🔻 Removed XML Elements</h4>
-<button class="copy-btn" onclick="copyCode('s46r',this)">Copy</button>
-<pre><code id="s46r">
-&lt;MSCHAPAuthentication&gt;&lt;/MSCHAPAuthentication&gt;
-</code></pre>
-<textarea id="s46r_raw" style="display:none"><MSCHAPAuthentication></MSCHAPAuthentication></textarea>
-
-<h4>✅ Added XML Elements</h4>
-<button class="copy-btn" onclick="copyCode('s46a',this)">Copy</button>
-<pre><code id="s46a">
-&lt;UseWinlogonCredentials&gt;false&lt;/UseWinlogonCredentials&gt;
-</code></pre>
-<textarea id="s46a_raw" style="display:none"><UseWinlogonCredentials>false</UseWinlogonCredentials></textarea>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 47 -->
-<!-- =============================== -->
-
-<section>
-<h3>47. Enable UseWinlogonCredentials</h3>
-
-<!-- Image 47 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s47',this)">Copy</button>
-<pre><code id="s47">
-&lt;UseWinlogonCredentials&gt;true&lt;/UseWinlogonCredentials&gt;
-</code></pre>
-<textarea id="s47_raw" style="display:none"><UseWinlogonCredentials>true</UseWinlogonCredentials></textarea>
-
-<p>Enables automatic use of Windows logon credentials for authentication.</p> <!-- 【1-51bb9c】 -->
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 48 -->
-<!-- =============================== -->
-
-<section>
-<h3>48. Expanded Strict Validation + Vendor/Type Nodes (Winlogon Removed)</h3>
-
-<!-- Image 48 -->
-#
-
-<p>This section introduces strict validation + vendor/type nodes and removes the Winlogon credential usage flag.</p> <!-- 【1-51bb9c】 -->
-
-<h4>✅ Added / Updated XML Elements</h4>
-<button class="copy-btn" onclick="copyCode('s48a',this)">Copy</button>
-<pre><code id="s48a">
-&lt;AcceptServerName&gt;false&lt;/AcceptServerName&gt;
-&lt;SimpleCertSelection&gt;true&lt;/SimpleCertSelection&gt;
-&lt;DifferentUsername&gt;true&lt;/DifferentUsername&gt;
-&lt;PerformServerValidation&gt;true&lt;/PerformServerValidation&gt;
-&lt;DisableUserPromptForServerValidation&gt;true&lt;/DisableUserPromptForServerValidation&gt;
-&lt;ServerNames&gt;&lt;/ServerNames&gt;
-&lt;Type&gt;13&lt;/Type&gt;
-&lt;AuthorId&gt;0&lt;/AuthorId&gt;
-&lt;Type&gt;13&lt;/Type&gt;
-&lt;VendorId&gt;0&lt;/VendorId&gt;
-&lt;VendorType&gt;0&lt;/VendorType&gt;
-</code></pre>
-<textarea id="s48a_raw" style="display:none"><AcceptServerName>false</AcceptServerName>
-<SimpleCertSelection>true</SimpleCertSelection>
-<DifferentUsername>true</DifferentUsername>
-<PerformServerValidation>true</PerformServerValidation>
-<DisableUserPromptForServerValidation>true</DisableUserPromptForServerValidation>
-<ServerNames></ServerNames>
-<Type>13</Type>
-<AuthorId>0</AuthorId>
-<Type>13</Type>
-<VendorId>0</VendorId>
-<VendorType>0</VendorType></textarea>
-
-<h4>🔻 Removed XML Elements</h4>
-<button class="copy-btn" onclick="copyCode('s48r',this)">Copy</button>
-<pre><code id="s48r">
-&lt;UseWinlogonCredentials&gt;true&lt;/UseWinlogonCredentials&gt;
-</code></pre>
-<textarea id="s48r_raw" style="display:none"><UseWinlogonCredentials>true</UseWinlogonCredentials></textarea>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 49 -->
-<!-- =============================== -->
-
-<section>
-<h3>49. Cleanup: Remove Strict Validation Nodes + Add Type 26 Markers</h3>
-
-<!-- Image 49 -->
-#
-
-<p>The above introduced the removal of XML portion(s) and added new Type markers as requested.</p> <!-- 【1-51bb9c】 -->
-
-<h4>🔻 Removed XML Elements</h4>
-<button class="copy-btn" onclick="copyCode('s49r',this)">Copy</button>
-<pre><code id="s49r">
-&lt;AcceptServerName&gt;false&lt;/AcceptServerName&gt;
-&lt;SimpleCertSelection&gt;true&lt;/SimpleCertSelection&gt;
-&lt;DifferentUsername&gt;true&lt;/DifferentUsername&gt;
-&lt;PerformServerValidation&gt;true&lt;/PerformServerValidation&gt;
-&lt;DisableUserPromptForServerValidation&gt;true&lt;/DisableUserPromptForServerValidation&gt;
-&lt;ServerNames&gt;&lt;/ServerNames&gt;
-</code></pre>
-<textarea id="s49r_raw" style="display:none"><AcceptServerName>false</AcceptServerName>
-<SimpleCertSelection>true</SimpleCertSelection>
-<DifferentUsername>true</DifferentUsername>
-<PerformServerValidation>true</PerformServerValidation>
-<DisableUserPromptForServerValidation>true</DisableUserPromptForServerValidation>
-<ServerNames></ServerNames></textarea>
-
-<h4>✅ Added XML Elements</h4>
-<button class="copy-btn" onclick="copyCode('s49a',this)">Copy</button>
-<pre><code id="s49a">
-&lt;UseWinLogonCredentials&gt;false&lt;/UseWinLogonCredentials&gt;
-&lt;Type&gt;26&lt;/Type&gt;
-&lt;Type&gt;26&lt;/Type&gt;
-</code></pre>
-<textarea id="s49a_raw" style="display:none"><UseWinLogonCredentials>false</UseWinLogonCredentials>
-<Type>26</Type>
-<Type>26</Type></textarea>
-
-</section>
-
-<!-- =============================== -->
-<!-- SECTION 50 -->
-<!-- =============================== -->
-
-<section>
-<h3>50. Authentication Mode Change</h3>
-
-<!-- Image 50 -->
-#
-
-<button class="copy-btn" onclick="copyCode('s50',this)">Copy</button>
-<pre><code id="s50">
-&lt;authentication&gt;WPA2&lt;/authentication&gt;
-</code></pre>
-<textarea id="s50_raw" style="display:none"><authentication>WPA2</authentication></textarea>
-
-<p>Final switch to WPA2 in the profile.</p> <!-- 【1-51bb9c】 -->
-</section>
-
-<!-- =============================== -->
-<!-- CLOSE OUT (END OF FILE) -->
-<!-- =============================== -->
+<div class="code-block">
+<button class="copy-btn">Copy</button>
+<pre><code>&lt;authentication&gt;WPA2-Enterprise&lt;/authentication&gt;
+&lt;encryption&gt;AES&lt;/encryption&gt;
+&lt;useonex&gt;true&lt;/useonex&gt;</code></pre>
+</div>
+
+<p>Defines enterprise WiFi security using 802.1X authentication.</p>
 
 <hr>
 
-<h2>Monitor Live Changes in WLAN XML</h2>
+<h3>2. Network Authentication Method</h3>
 
-<p>
-The following workflow helps you track changes in WLAN XML configurations in real time using PowerShell.
-</p>
+<div class="code-block">
+<button class="copy-btn">Copy</button>
+<pre><code>&lt;cacheuserdata&gt;true&lt;/cacheuserdata&gt;
+&lt;authmode&gt;userOrComputer&lt;/authmode&gt;</code></pre>
+</div>
 
-<h3>What this script does</h3>
+<p>Defines identity type for authentication.</p>
+
+<hr>
+
+<h3>3. Authentication Mode Mapping</h3>
+
+<table>
+<tr>
+<th>GUI</th>
+<th>XML</th>
+</tr>
+<tr>
+<td>User</td>
+<td>user</td>
+</tr>
+<tr>
+<td>Machine</td>
+<td>machine</td>
+</tr>
+<tr>
+<td>User or Computer</td>
+<td>userOrComputer</td>
+</tr>
+</table>
+
+<hr>
+
+<h3>4. Max Authentication Failures</h3>
+
+<div class="code-block">
+<button class="copy-btn">Copy</button>
+<pre><code>&lt;maxauthfailures&gt;1&lt;/maxauthfailures&gt;</code></pre>
+</div>
+
+<p>Limits retry attempts during authentication.</p>
+
+<hr>
+
+<h3>5. Cache User Credentials</h3>
+
+<div class="code-block">
+<button class="copy-btn">Copy</button>
+<pre><code>&lt;cacheuserdata&gt;true&lt;/cacheuserdata&gt;</code></pre>
+</div>
+
+<p>Improves reconnection speed using cached credentials.</p>
+
+<hr>
+
+<h3>6. Trusted Root CA Filtering</h3>
+
+<div class="code-block">
+<button class="copy-btn">Copy</button>
+<pre><code>&lt;trustedrootca&gt;THUMBPRINT&lt;/trustedrootca&gt;</code></pre>
+</div>
+
+<p>Restricts trusted certificate authorities.</p>
+
+<hr>
+
+<h3>7. EKU Filtering</h3>
+
+<div class="code-block">
+<button class="copy-btn">Copy</button>
+<pre><code>&lt;allpurposeenabled&gt;false&lt;/allpurposeenabled&gt;</code></pre>
+</div>
+
+<p>Controls certificate usage.</p>
+
+<hr>
+
+<h3>8. EKU Mapping</h3>
+
+<div class="code-block">
+<button class="copy-btn">Copy</button>
+<pre><code>&lt;ekuname&gt;Client Authentication&lt;/ekuname&gt;
+&lt;ekuoid&gt;1.3.6.1.5.5.7.3.2&lt;/ekuoid&gt;</code></pre>
+</div>
+
+<p>Maps certificate authentication purpose.</p>
+
+<hr>
+
+<h3>9. Any Purpose / All Purpose</h3>
+
+<div class="code-block">
+<button class="copy-btn">Copy</button>
+<pre><code>&lt;allpurposeenabled&gt;true&lt;/allpurposeenabled&gt;</code></pre>
+</div>
+
+<p>Allows all certificate purposes.</p>
+
+<hr>
+
+<h3>10. EKU Selection List</h3>
+
+<div class="code-block">
+<button class="copy-btn">Copy</button>
+<pre><code>&lt;clientauthekulist enabled="true" /&gt;</code></pre>
+</div>
+
+<p>Enables EKU control.</p>
+
+<hr>
+<h3>13. Connection Mode Configuration</h3>
+
+<div class="code-block">
+<button class="copy-btn">Copy</button>
+<pre><code>&lt;connectionmode&gt;auto&lt;/connectionmode&gt;</code></pre>
+</div>
 
 <ul>
-<li>Exports WLAN profile to XML</li>
-<li>Maintains previous version</li>
-<li>Compares XML structure</li>
-<li>Displays changes in text format</li>
+<li>auto → automatic connection</li>
+<li>manual → user initiated</li>
 </ul>
 
-<button onclick="copyCode('psscript',this)">Copy Script</button>
+<hr>
 
-<pre><code id="psscript">
-# PLACE SCRIPT HERE
+<h3>16. WPA3 Enterprise Configuration</h3>
 
-<#
-.SYNOPSIS
-Export WLAN profile "test" to C:\Wifi\test.xml, rotate previous to test.old.xml,
-compute clean structural diffs (namespace-agnostic; ignores xmlns),
-write results to difference.xml and difference.txt,
-and open difference.txt in Notepad (no popups).
-
-.NOTES
-Run PowerShell as Administrator if writing to C:\Wifi requires elevation.
-#>
-</code></pre>
-
-<p>
-Use this script to observe how configuration changes affect WLANProfile XML in real time.
-</p>
-
-</main>
+<div class="code-block">
+<button class="copy-btn">Copy</button>
+<pre><code>&lt;authentication&gt;WPA3ENT&lt;/authentication&gt;
+&lt;encryption&gt;AES&lt;/encryption&gt;
+&lt;useonex&gt;true&lt;/useonex&gt;</code></pre>
 </div>
 
-<footer class="site-footer">
-<div class="container">
+<p>Defines WPA3 enterprise security.</p>
+
+<hr>
+
+<h3>21. Trusted Root CA Thumbprint Mapping</h3>
+
+<div class="code-block">
+<button class="copy-btn">Copy</button>
+<pre><code>&lt;trustedrootca&gt;
+5e ee d8 6f a3 7c 67 52 30 64 2f 55 c8 4d db f6 7c d3 3c 80
+&lt;/trustedrootca&gt;</code></pre>
+</div>
+
+<p>Defines pinned CA trust.</p>
+
+<hr>
+
+<h3>28. PMK Cache & Pre-Authentication</h3>
+
+<div class="code-block">
+<button class="copy-btn">Copy</button>
+<pre><code>&lt;authmode&gt;machineOrUser&lt;/authmode&gt;
+&lt;pmkcachemode&gt;enabled&lt;/pmkcachemode&gt;
+&lt;pmkcachesize&gt;128&lt;/pmkcachesize&gt;
+&lt;pmkcachettl&gt;720&lt;/pmkcachettl&gt;
+&lt;preauthmode&gt;disabled&lt;/preauthmode&gt;</code></pre>
+</div>
+
+<p>Improves roaming performance.</p>
+
+<hr>
+
+<h3>32. PEAP Inner EAP Configuration</h3>
+
+<div class="code-block">
+<button class="copy-btn">Copy</button>
+<pre><code>&lt;usewinlogoncredentials&gt;false&lt;/usewinlogoncredentials&gt;
+&lt;type&gt;26&lt;/type&gt;
+&lt;fastreconnect&gt;true&lt;/fastreconnect&gt;
+&lt;performservervalidation&gt;true&lt;/performservervalidation&gt;</code></pre>
+</div>
+
+<p>Defines authentication behavior.</p>
+
+<hr>
+
+<h3>43. Strict Validation with Root Hash Pinning</h3>
+
+<div class="code-block">
+<button class="copy-btn">Copy</button>
+<pre><code>&lt;DisablePrompt&gt;true&lt;/DisablePrompt&gt;
+&lt;ServerNames&gt;ServerTest.com&lt;/ServerNames&gt;
+&lt;TrustedRootCAHash&gt;
+5e ee d8 6f a3 7c 67 52 30 64 2f 55 c8 4d db f6 7c d3 3c 80
+&lt;/TrustedRootCAHash&gt;</code></pre>
+</div>
+
+<p>Ensures strict validation.</p>
+
+<hr>
+
+<h3>50. Authentication Mode Change</h3>
+
+<div class="code-block">
+<button class="copy-btn">Copy</button>
+<pre><code>&lt;authentication&gt;WPA2&lt;/authentication&gt;</code></pre>
+</div>
+
+<p>Final authentication configuration.</p>
+
+<hr>
+
+<h3>Monitor Live Changes in WLAN XML</h3>
+
+<p>Use PowerShell to:</p>
+<ul>
+<li>Export WLAN profile</li>
+<li>Track changes</li>
+<li>Compare XML differences</li>
+</ul>
+
+<div class="code-block">
+<button class="copy-btn">Copy</button>
+<pre><code>&lt;# PLACE SCRIPT HERE #&gt;</code></pre>
+</div>
+
+<hr>
+
+<h3>Validation & Next Steps</h3>
+
+<ul>
+<li>Validate XML profiles</li>
+<li>Apply via GPO / MDM</li>
+<li>Monitor logs</li>
+<li>Verify authentication</li>
+</ul>
+
+<hr>
+
 <p>© 2026 Sys Admin Talks</p>
-</div>
-</footer>
 
 </body>
 </html>
+
+
   
