@@ -3,154 +3,270 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><!-- PAGE TITLE --> Sample Doc Title · Windows Server Talks</title>
+  <title>Wireless Profile Samples (WLANProfile XML) · Windows Server Talks</title>
 
-  <!-- Theme color for mobile address bar -->
   <meta name="theme-color" content="#0F6CBD">
 
-  <!-- Site Styles -->
-  <link rel="stylesheet" href="https://mauryamohit07.github.io/WindowsServerTalks/assets/css/custom.css">
+  <link rel="stylesheet" href="https://sysadmintalks.github.io/WindowsServerTalks/assets/css/custom.css">
 
-  <!-- Shared site enhancements (header + sidebar injection, copy buttons, lightbox, etc.) -->
-  <script src="https://mauryamohit07.github.io/WindowsServerTalks/assets/js/site.js" defer></script>
+  <script src="https://sysadmintalks.github.io/WindowsServerTalks/assets/js/site.js" defer></script>
 </head>
+
 <body>
-  <!-- a11y: Skip link for keyboard users -->
-  <a class="skip-link" href="#main-content">Skip to content</a>
 
-  <!-- ===== Shared Header (injected from /assets/includes/header.html) ===== -->
-  <div id="header-container"></div>
+<a class="skip-link" href="#main-content">Skip to content</a>
 
-  <!-- ===== Breadcrumbs (edit for this page) ===== -->
-  <nav class="breadcrumbs container" aria-label="Breadcrumb">
-    <a href="https://mauryamohit07.github.io/WindowsServerTalks/index.html">Home</a>
-    <span aria-hidden="true">›</span>
-    <span aria-current="page"><!-- BREADCRUMB LABEL --> Sample Doc Title</span>
-  </nav>
+<div id="header-container"></div>
 
-  <div class="layout container">
-    <!-- ===== Shared Sidebar (injected from /assets/includes/sidebar.html) ===== -->
-    <div id="sidebar-container"></div>
+<nav class="breadcrumbs container" aria-label="Breadcrumb">
+  <a href="https://sysadmintalks.github.io/WindowsServerTalks/index.html">Home</a>
+  <span>›</span>
+  <span>Wireless Profile Samples (WLANProfile XML)</span>
+</nav>
 
-    <!-- ===== Main content ===== -->
-    <main id="main-content" class="content" role="main">
-      <!-- Page Heading -->
-      <h2 class="page-title"><!-- H1/H2 TITLE --> Sample Doc Title</h2>
-      <p class="page-subtitle"><!-- SUBTITLE --> Concise description or tagline goes here</p>
+<div class="layout container">
 
-      <!-- Summary / TL;DR -->
-      <section class="summary-box">
-        <h3>Summary</h3>
-        <p>
-          <!-- SHORT SUMMARY -->
-          Replace this text with 2–3 lines describing what this page covers and who it’s for.
-        </p>
-      </section>
+<div id="sidebar-container"></div>
 
-      <!-- Callouts (change class: info | success | warning | danger ) -->
-      <div class="callout info">
-        <strong>Note:</strong> Replace this callout content with a helpful tip or prerequisite.
-      </div>
+<main id="main-content" class="content">
 
-      <div class="spacer"></div>
+<h2 class="page-title">Wireless Profile Samples (WLANProfile XML)</h2>
 
-      <!-- Step/Section 1 -->
-      <h2 class="step-title">Step 1 — <!-- EDIT --> Add a clear actionable heading</h2>
-      <p class="step-desc">
-        <!-- DESCRIPTION -->
-        Briefly explain what happens in this step. Keep it actionable and scannable.
-      </p>
+<p class="page-subtitle">
+How to read, build, and validate Windows Native Wi‑Fi <code>WLANProfile</code> XML for enterprise networks.
+</p>
 
-      <!-- Placeholder Code Block -->
-      <pre><code class="language-powershell">
-# PLACEHOLDER: PowerShell snippet
-# Replace with your script or commands
-Write-Host "Hello from the sample template!"
-      </code></pre>
+<!-- ================= SUMMARY ================= -->
 
-      <!-- Placeholder Image (Figure 1) -->
-      <h2>Example Output</h2>
-      <figure>
-        <!-- Replace src with your image URL -->
-        <img class="doc-image"
-             src="https://via.placeholder.com/1200x650.png?text=Sample+Image+Placeholder"
-             alt="Describe what this image shows for accessibility">
-        <figcaption>
-          <!-- CAPTION -->
-          Short caption explaining the screenshot or diagram.
-        </figcaption>
-      </figure>
+<section class="summary-box">
+<h3>Summary</h3>
 
-      <div class="spacer"></div>
+<p>
+This article combines Microsoft wireless profile samples, GUI-to-XML mapping, 
+real production change data, and enterprise-level configurations 
+including WPA3, EAP-TLS, and PEAP.
+</p>
 
-      <!-- Step/Section 2 -->
-      <h2 class="step-title">Step 2 — <!-- EDIT --> Add another step title</h2>
-      <p class="step-desc">
-        <!-- DESCRIPTION -->
-        Outline what the admin/user should do next and expectations.
-      </p>
+<p>
+All configuration changes have been validated using a custom comparison script 
+developed by the content owner to track differences between exported Wi-Fi profiles.
+</p>
 
-      <!-- Another Code Block (JSON/YAML/CLI/etc.) -->
-      <pre><code class="language-bash">
-# PLACEHOLDER: Bash/CLI snippet
-echo "Run your command here"
-      </code></pre>
+</section>
 
-      <!-- Another Image -->
-      <figure>
-        <img class="doc-image"
-             src="https://via.placeholder.com/1200x650.png?text=Another+Placeholder"
-             alt="Second illustrative image placeholder">
-        <figcaption>
-          Optional: add a second caption or notes about this illustration.
-        </figcaption>
-      </figure>
+<div class="callout info">
+<strong>Note:</strong> Validate in lab before production.
+</div>
 
-      <div class="spacer"></div>
+<div class="spacer"></div>
 
-      <!-- Optional: Table (basic) -->
-      <h2>Reference Table (Optional)</h2>
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th><!-- Column 1 --> Field</th>
-              <th><!-- Column 2 --> Description</th>
-              <th><!-- Column 3 --> Example</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Placeholder A</td>
-              <td>Explain what this setting does.</td>
-              <td>e.g., <code>True</code> / <code>False</code></td>
-            </tr>
-            <tr>
-              <td>Placeholder B</td>
-              <td>When to use this option.</td>
-              <td>e.g., <code>Verbose</code></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+<!-- ================= UI MAPPING ================= -->
 
-      <!-- Final Notes / Next Steps -->
-      <section class="summary-box">
-        <h3>Next Steps</h3>
-        <ul>
-          <li>Replace all placeholders (title, breadcrumbs, captions, code, images).</li>
-          <li>Validate code blocks with actual scripts/commands.</li>
-          <li>Swap placeholder images with real screenshots under <code>/assets/images/</code>.</li>
-        </ul>
-      </section>
-    </main>
-  </div>
+<h2 class="step-title">Wireless UI Mapping (1–20)</h2>
 
-  <!-- ===== Footer ===== -->
-  <footer class="site-footer">
-    <div class="container">
-      <p>© <!-- YEAR --> 2026 <!-- AUTHOR --> Mohit Maurya · Windows Server Talks</p>
-    </div>
-  </footer>
+<p class="step-desc">
+Below images map GUI settings to WLANProfile XML.
+</p>
+
+<!-- IMAGE 1 -->
+
+<figure>
+<img class="doc-image" src="IMAGE_PLACEHOLDER_1.png">
+<!-- IMAGE FROM ARTICLE 1 → IMAGE 1 → SECURITY TAB (CALL OUT 1–4) -->
+<figcaption>Security Tab (Callouts 1–4)</figcaption>
+</figure>
+
+<ol>
+<li>Defines security method (WPA2/WPA3 Enterprise)</li>
+<li>Defines authentication method (PEAP/EAP-TLS)</li>
+<li>Max authentication failures</li>
+<li>Cache credentials</li>
+</ol>
+
+<div class="spacer"></div>
+
+<!-- IMAGE 2 -->
+
+<figure>
+<img class="doc-image" src="IMAGE_PLACEHOLDER_2.png">
+<!-- IMAGE FROM ARTICLE 1 → IMAGE 2 → PROTECTED EAP (CALL OUT 5–9) -->
+<figcaption>Protected EAP Properties</figcaption>
+</figure>
+
+<ol start="5">
+<li>Validate server certificate</li>
+<li>Select Trusted Root CA</li>
+<li>Disable unknown CA/server prompts</li>
+<li>Select inner authentication method</li>
+<li>Fast reconnect + identity privacy</li>
+</ol>
+
+<div class="spacer"></div>
+
+<!-- IMAGE 3 -->
+
+<figure>
+<img class="doc-image" src="IMAGE_PLACEHOLDER_3.png">
+<!-- IMAGE FROM ARTICLE 1 → IMAGE 3 → CERTIFICATE PROPERTIES (CALL OUT 10–15) -->
+<figcaption>Certificate Authentication</figcaption>
+</figure>
+
+<ol start="10">
+<li>Choose certificate or smart card</li>
+<li>Server validation</li>
+<li>Allowed RADIUS servers</li>
+<li>Trusted CA restriction</li>
+<li>Disable prompt</li>
+<li>Alternate username</li>
+</ol>
+
+<div class="spacer"></div>
+
+<!-- IMAGE 4 -->
+
+<figure>
+<img class="doc-image" src="IMAGE_PLACEHOLDER_4.png">
+<!-- IMAGE FROM ARTICLE 3 → IMAGE 4 → CERTIFICATE SELECTION / EKU FILTER (CALL OUT 16–20) -->
+<figcaption>Certificate EKU Filtering</figcaption>
+</figure>
+
+<ol start="16">
+<li>Certificate issuer filter</li>
+<li>Root CA selection</li>
+<li>EKU filtering</li>
+<li>Client authentication EKU</li>
+<li>Additional EKU rules</li>
+</ol>
+
+<div class="spacer"></div>
+
+<!-- ================= XML MAPPING ================= -->
+
+<h2 class="step-title">Core XML Mapping</h2>
+
+<pre><code>
+<security>
+  <authEncryption>
+    <authentication>WPA3ENT</authentication>
+    <encryption>AES</encryption>
+    <useOneX>true</useOneX>
+  </authEncryption>
+</security>
+</code></pre>
+
+<!-- ================= CONNECTION SETTINGS ================= -->
+
+<h2 class="step-title">Connection Behaviour</h2>
+
+<pre><code>
+<connectionMode>auto</connectionMode>
+<autoSwitch>true</autoSwitch>
+<nonBroadcast>true</nonBroadcast>
+</code></pre>
+
+<!-- ================= AUTH CONFIG ================= -->
+
+<h2 class="step-title">802.1X Configuration</h2>
+
+<pre><code>
+<OneX>
+  <authMode>machineOrUser</authMode>
+  <cacheUserData>true</cacheUserData>
+</OneX>
+</code></pre>
+
+<!-- ================= CERT SETTINGS ================= -->
+
+<h2 class="step-title">Certificate Validation</h2>
+
+<pre><code>
+<PerformServerValidation>true</PerformServerValidation>
+<DisableUserPromptForServerValidation>true</DisableUserPromptForServerValidation>
+<AcceptServerName>true</AcceptServerName>
+<ServerNames>server1.com</ServerNames>
+</code></pre>
+
+<!-- ================= EKU ================= -->
+
+<h2 class="step-title">EKU Filtering</h2>
+
+<pre><code>
+<TLSExtensions>
+  <FilteringInfo>
+    <AllPurposeEnabled>true</AllPurposeEnabled>
+  </FilteringInfo>
+</TLSExtensions>
+</code></pre>
+
+<!-- ================= PERFORMANCE ================= -->
+
+<h2 class="step-title">Performance Optimization</h2>
+
+<pre><code>
+<PMKCacheMode>enabled</PMKCacheMode>
+<PMKCacheSize>128</PMKCacheSize>
+<PMKCacheTTL>720</PMKCacheTTL>
+</code></pre>
+
+<!-- ================= ADVANCED ================= -->
+
+<h2 class="step-title">Advanced Security</h2>
+
+<pre><code>
+<FastReconnect>true</FastReconnect>
+<RequireCryptoBinding>true</RequireCryptoBinding>
+<EnableIdentityPrivacy>true</EnableIdentityPrivacy>
+</code></pre>
+
+<div class="spacer"></div>
+
+<!-- ================= SCRIPT ================= -->
+
+<h2 class="step-title">Validation Script (Diff Tool)</h2>
+
+<p>
+The following script is used by the content owner to:
+</p>
+
+<ul>
+<li>Export WLAN profile</li>
+<li>Store previous version</li>
+<li>Compare XML structure differences</li>
+<li>Generate readable diff output</li>
+</ul>
+
+<div class="callout info">
+Paste your PowerShell script below.
+</div>
+
+<pre><code>
+# PLACEHOLDER → INSERT YOUR WIFI XML DIFF SCRIPT HERE
+</code></pre>
+
+<div class="spacer"></div>
+
+<!-- ================= FINAL ================= -->
+
+<section class="summary-box">
+<h3>Next Steps</h3>
+
+<ul>
+<li>Replace all IMAGE placeholders</li>
+<li>Validate XML using netsh</li>
+<li>Test authentication scenarios</li>
+<li>Use script for diff tracking on multiple systems</li>
+</ul>
+
+</section>
+
+</main>
+</div>
+
+<footer class="site-footer">
+<div class="container">
+<p>© 2026 Sys Admin Talks</p>
+</div>
+</footer>
+
 </body>
 </html>
