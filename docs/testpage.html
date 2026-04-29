@@ -35,7 +35,7 @@
       border-color: #888888;
     }
 
-    /* Safety fallback for pre/code blocks to prevent white flash before JS loads */
+    /* Safety fallback for pre/code blocks */
     pre {
       background-color: #1e1e1e;
       color: #d4d4d4;
@@ -52,7 +52,6 @@
   <script>
     function copyCode(id, btn) {
       const raw = document.getElementById(id + "_raw");
-      // Prefer hidden raw value, fallback to clean textContent
       const src = raw ? raw.value : document.getElementById(id).textContent.trim();
       
       navigator.clipboard.writeText(src).then(() => {
@@ -95,7 +94,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-1" class="step-title">1. Security Method Selection</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage1.png" alt="1. Security Method Selection UI">
+        <figcaption>Security Method Selection</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s1',this)">Copy</button>
       <pre><code id="s1" class="language-xml">
 &lt;encryption&gt;AES&lt;/encryption&gt;
@@ -105,7 +107,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-2" class="step-title">2. Network Authentication Method</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage2.png" alt="2. Network Authentication Method UI">
+        <figcaption>Network Authentication Method</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s2',this)">Copy</button>
       <pre><code id="s2" class="language-xml">
 &lt;cacheUserData&gt;true&lt;/cacheUserData&gt;
@@ -115,7 +120,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-3" class="step-title">3. Authentication Mode Mapping</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage3.png" alt="3. Authentication Mode Mapping UI">
+        <figcaption>Authentication Mode Mapping</figcaption>
+      </figure>
       <p class="step-desc">User / Machine / Hybrid authentication mapping.</p>
       <table>
         <tr><th>GUI</th><th>XML</th></tr>
@@ -126,7 +134,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-4" class="step-title">4. Max Authentication Failures</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage4.png" alt="4. Max Authentication Failures UI">
+        <figcaption>Max Authentication Failures</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s4',this)">Copy</button>
       <pre><code id="s4" class="language-xml">
 &lt;maxAuthFailures&gt;1&lt;/maxAuthFailures&gt;
@@ -135,7 +146,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-5" class="step-title">5. Cache User Credentials</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage5.png" alt="5. Cache User Credentials UI">
+        <figcaption>Cache User Credentials</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s5',this)">Copy</button>
       <pre><code id="s5" class="language-xml">
 &lt;cacheUserData&gt;true&lt;/cacheUserData&gt;
@@ -144,7 +158,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-6" class="step-title">6. Trusted Root CA Filtering</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage6.png" alt="6. Trusted Root CA Filtering UI">
+        <figcaption>Trusted Root CA Filtering</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s6',this)">Copy</button>
       <pre><code id="s6" class="language-xml">
 &lt;TrustedRootCA&gt;THUMBPRINT&lt;/TrustedRootCA&gt;
@@ -153,7 +170,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-7" class="step-title">7. EKU Filtering</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage7.png" alt="7. EKU Filtering UI">
+        <figcaption>EKU Filtering</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s7',this)">Copy</button>
       <pre><code id="s7" class="language-xml">
 &lt;AllPurposeEnabled&gt;false&lt;/AllPurposeEnabled&gt;
@@ -162,7 +182,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-8" class="step-title">8. EKU Mapping</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage8.png" alt="8. EKU Mapping UI">
+        <figcaption>EKU Mapping</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s8',this)">Copy</button>
       <pre><code id="s8" class="language-xml">
 &lt;EKUName&gt;Client Authentication&lt;/EKUName&gt;
@@ -171,7 +194,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-9" class="step-title">9. Any Purpose / All Purpose</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage9.png" alt="9. Any Purpose / All Purpose UI">
+        <figcaption>Any Purpose / All Purpose</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s9',this)">Copy</button>
       <pre><code id="s9" class="language-xml">
 &lt;AllPurposeEnabled&gt;true&lt;/AllPurposeEnabled&gt;
@@ -179,15 +205,20 @@
       <div class="spacer"></div>
 
       <h3 id="sec-10" class="step-title">10. EKU Selection List</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage10.png" alt="10. EKU Selection List UI">
+        <figcaption>EKU Selection List</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s10',this)">Copy</button>
       <pre><code id="s10" class="language-xml">
 &lt;ClientAuthEKUList Enabled="true"/&gt;
       </code></pre>
       <div class="spacer"></div>
-
-      <h3 id="sec-11" class="step-title">11. Certificate UI Mapping (Extended Behaviour)</h3>
-      <p>#</p>
+<h3 id="sec-11" class="step-title">11. Certificate UI Mapping (Extended Behaviour)</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage11.png" alt="11. Certificate UI Mapping UI">
+        <figcaption>Certificate UI Mapping (Extended Behaviour)</figcaption>
+      </figure>
       <p class="step-desc">Defines how Windows groups certificate selection options internally.</p>
       <ul>
         <li>Controls certificate filtering behaviour</li>
@@ -196,7 +227,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-12" class="step-title">12. EKU Combined Filtering Behaviour</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage12.png" alt="12. EKU Combined Filtering Behaviour UI">
+        <figcaption>EKU Combined Filtering Behaviour</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s12',this)">Copy</button>
       <pre><code id="s12" class="language-xml">
 &lt;EKUMapping&gt;
@@ -209,7 +243,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-13" class="step-title">13. Connection Mode Configuration</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage13.png" alt="13. Connection Mode Configuration UI">
+        <figcaption>Connection Mode Configuration</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s13',this)">Copy</button>
       <pre><code id="s13" class="language-xml">
 &lt;connectionMode&gt;auto&lt;/connectionMode&gt;
@@ -221,7 +258,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-14" class="step-title">14. Auto Switch Between Networks</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage14.png" alt="14. Auto Switch Between Networks UI">
+        <figcaption>Auto Switch Between Networks</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s14',this)">Copy</button>
       <pre><code id="s14" class="language-xml">
 &lt;autoSwitch&gt;true&lt;/autoSwitch&gt;
@@ -230,7 +270,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-15" class="step-title">15. Hidden SSID (Non-Broadcast Network)</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage15.png" alt="15. Hidden SSID UI">
+        <figcaption>Hidden SSID (Non-Broadcast Network)</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s15',this)">Copy</button>
       <pre><code id="s15" class="language-xml">
 &lt;nonBroadcast&gt;true&lt;/nonBroadcast&gt;
@@ -239,7 +282,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-16" class="step-title">16. WPA3 Enterprise Configuration</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage16.png" alt="16. WPA3 Enterprise Configuration UI">
+        <figcaption>WPA3 Enterprise Configuration</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s16',this)">Copy</button>
       <pre><code id="s16" class="language-xml">
 &lt;authentication&gt;WPA3ENT&lt;/authentication&gt;
@@ -250,7 +296,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-17" class="step-title">17. Disable Credential Caching</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage17.png" alt="17. Disable Credential Caching UI">
+        <figcaption>Disable Credential Caching</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s17',this)">Copy</button>
       <pre><code id="s17" class="language-xml">
 &lt;cacheUserData&gt;false&lt;/cacheUserData&gt;
@@ -259,7 +308,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-18" class="step-title">18. Manual Certificate Selection Enabled</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage18.png" alt="18. Manual Certificate Selection UI">
+        <figcaption>Manual Certificate Selection Enabled</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s18',this)">Copy</button>
       <pre><code id="s18" class="language-xml">
 &lt;SimpleCertSelection&gt;false&lt;/SimpleCertSelection&gt;
@@ -268,7 +320,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-19" class="step-title">19. Automatic Certificate Selection Enabled</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage19.png" alt="19. Automatic Certificate Selection UI">
+        <figcaption>Automatic Certificate Selection Enabled</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s19',this)">Copy</button>
       <pre><code id="s19" class="language-xml">
 &lt;SimpleCertSelection&gt;true&lt;/SimpleCertSelection&gt;
@@ -277,7 +332,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-20" class="step-title">20. Server Name Validation Enforcement</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage20.png" alt="20. Server Name Validation UI">
+        <figcaption>Server Name Validation Enforcement</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s20',this)">Copy</button>
       <pre><code id="s20" class="language-xml">
 &lt;AcceptServerName&gt;true&lt;/AcceptServerName&gt;
@@ -288,9 +346,11 @@
         <li>Prevents rogue authentication servers</li>
       </ul>
       <div class="spacer"></div>
-
-      <h3 id="sec-21" class="step-title">21. Trusted Root CA Thumbprint Mapping</h3>
-      <p>#</p>
+<h3 id="sec-21" class="step-title">21. Trusted Root CA Thumbprint Mapping</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage21.png" alt="21. Trusted Root CA Thumbprint Mapping UI">
+        <figcaption>Trusted Root CA Thumbprint Mapping</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s21',this)">Copy</button>
       <pre><code id="s21" class="language-xml">
 &lt;TrustedRootCA&gt;
@@ -301,7 +361,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-22" class="step-title">22. Disable User Prompt for Server Validation</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage22.png" alt="22. Disable User Prompt for Server Validation UI">
+        <figcaption>Disable User Prompt for Server Validation</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s22',this)">Copy</button>
       <pre><code id="s22" class="language-xml">
 &lt;DisableUserPromptForServerValidation&gt;true&lt;/DisableUserPromptForServerValidation&gt;
@@ -313,7 +376,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-23" class="step-title">23. Different Username Option</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage23.png" alt="23. Different Username Option UI">
+        <figcaption>Different Username Option</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s23',this)">Copy</button>
       <pre><code id="s23" class="language-xml">
 &lt;DifferentUsername&gt;true&lt;/DifferentUsername&gt;
@@ -322,7 +388,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-24" class="step-title">24. CA Hash List Enablement</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage24.png" alt="24. CA Hash List Enablement UI">
+        <figcaption>CA Hash List Enablement</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s24',this)">Copy</button>
       <pre><code id="s24" class="language-xml">
 &lt;CAHashList Enabled="true"&gt;
@@ -332,7 +401,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-25" class="step-title">25. Issuer Hash Filtering</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage25.png" alt="25. Issuer Hash Filtering UI">
+        <figcaption>Issuer Hash Filtering</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s25',this)">Copy</button>
       <pre><code id="s25" class="language-xml">
 &lt;IssuerHash&gt;
@@ -343,7 +415,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-26" class="step-title">26. All Purpose + EKU Combined Mode</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage26.png" alt="26. All Purpose + EKU Combined Mode UI">
+        <figcaption>All Purpose + EKU Combined Mode</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s26',this)">Copy</button>
       <pre><code id="s26" class="language-xml">
 &lt;AllPurposeEnabled&gt;true&lt;/AllPurposeEnabled&gt;
@@ -354,7 +429,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-27" class="step-title">27. Advanced EKU Mapping</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage27.png" alt="27. Advanced EKU Mapping UI">
+        <figcaption>Advanced EKU Mapping</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s27',this)">Copy</button>
       <pre><code id="s27" class="language-xml">
 &lt;EKUName&gt;All application policies&lt;/EKUName&gt;
@@ -367,7 +445,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-28" class="step-title">28. PMK Cache & Pre-Authentication</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage28.png" alt="28. PMK Cache & Pre-Authentication UI">
+        <figcaption>PMK Cache & Pre-Authentication</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s28',this)">Copy</button>
       <pre><code id="s28" class="language-xml">
 &lt;authMode&gt;machineOrUser&lt;/authMode&gt;
@@ -380,7 +461,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-29" class="step-title">29. Machine Authentication Mode</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage29.png" alt="29. Machine Authentication Mode UI">
+        <figcaption>Machine Authentication Mode</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s29',this)">Copy</button>
       <pre><code id="s29" class="language-xml">
 &lt;authMode&gt;machine&lt;/authMode&gt;
@@ -389,7 +473,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-30" class="step-title">30. User Authentication Mode</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage30.png" alt="30. User Authentication Mode UI">
+        <figcaption>User Authentication Mode</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s30',this)">Copy</button>
       <pre><code id="s30" class="language-xml">
 &lt;authMode&gt;user&lt;/authMode&gt;
@@ -397,8 +484,11 @@
       <p class="step-desc">Authentication using user credentials post login.</p>
       <div class="spacer"></div>
 
-      <h3 id="sec-31" class="step-title">31. Pre-Logon Authentication Behaviour</h3>
-      <p>#</p>
+<h3 id="sec-31" class="step-title">31. Pre-Logon Authentication Behaviour</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage31.png" alt="31. Pre-Logon Authentication Behaviour UI">
+        <figcaption>Pre-Logon Authentication Behaviour</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s31',this)">Copy</button>
       <pre><code id="s31" class="language-xml">
 &lt;allowAdditionalDialogs&gt;true&lt;/allowAdditionalDialogs&gt;
@@ -410,7 +500,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-32" class="step-title">32. PEAP Inner EAP Configuration</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage32.png" alt="32. PEAP Inner EAP Configuration UI">
+        <figcaption>PEAP Inner EAP Configuration</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s32',this)">Copy</button>
       <pre><code id="s32" class="language-xml">
 &lt;UseWinLogonCredentials&gt;false&lt;/UseWinLogonCredentials&gt;
@@ -425,7 +518,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-33" class="step-title">33. Credential Caching Re-enabled</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage33.png" alt="33. Credential Caching Re-enabled UI">
+        <figcaption>Credential Caching Re-enabled</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s33',this)">Copy</button>
       <pre><code id="s33" class="language-xml">
 &lt;cacheUserData&gt;true&lt;/cacheUserData&gt;
@@ -434,7 +530,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-34" class="step-title">34. Fast Reconnect Disabled</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage34.png" alt="34. Fast Reconnect Disabled UI">
+        <figcaption>Fast Reconnect Disabled</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s34',this)">Copy</button>
       <pre><code id="s34" class="language-xml">
 &lt;FastReconnect&gt;false&lt;/FastReconnect&gt;
@@ -443,7 +542,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-35" class="step-title">35. Alternate Trusted Root CA</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage35.png" alt="35. Alternate Trusted Root CA UI">
+        <figcaption>Alternate Trusted Root CA</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s35',this)">Copy</button>
       <pre><code id="s35" class="language-xml">
 &lt;TrustedRootCA&gt;
@@ -454,7 +556,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-36" class="step-title">36. Server Validation Prompt Enabled</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage36.png" alt="36. Server Validation Prompt Enabled UI">
+        <figcaption>Server Validation Prompt Enabled</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s36',this)">Copy</button>
       <pre><code id="s36" class="language-xml">
 &lt;DisableUserPromptForServerValidation&gt;false&lt;/DisableUserPromptForServerValidation&gt;
@@ -463,7 +568,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-37" class="step-title">37. Prompt When CA Not Found</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage37.png" alt="37. Prompt When CA Not Found UI">
+        <figcaption>Prompt When CA Not Found</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s37',this)">Copy</button>
       <pre><code id="s37" class="language-xml">
 &lt;AllowPromptingWhenServerCANotFound&gt;true&lt;/AllowPromptingWhenServerCANotFound&gt;
@@ -472,7 +580,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-38" class="step-title">38. Strict Validation (No Prompt Mode)</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage38.png" alt="38. Strict Validation UI">
+        <figcaption>Strict Validation (No Prompt Mode)</figcaption>
+      </figure>
       <p class="step-desc">The following configuration replaces previous prompt behaviour.</p>
 
       <h4>🔻 Removed XML</h4>
@@ -490,7 +601,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-39" class="step-title">39. Identity Privacy & Secure Reconnect</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage39.png" alt="39. Identity Privacy & Secure Reconnect UI">
+        <figcaption>Identity Privacy & Secure Reconnect</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s39',this)">Copy</button>
       <pre><code id="s39" class="language-xml">
 &lt;FastReconnect&gt;true&lt;/FastReconnect&gt;
@@ -502,7 +616,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-40" class="step-title">40. Default Behaviour Restrictions</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage40.png" alt="40. Default Behaviour Restrictions UI">
+        <figcaption>Default Behaviour Restrictions</figcaption>
+      </figure>
       <p class="step-desc">
         Certain UI options become unavailable depending on EAP type, certificate configuration,
         and policy enforcement. These restrictions are automatically applied by Windows.
@@ -514,8 +631,11 @@
       </ul>
       <div class="spacer"></div>
 
-      <h3 id="sec-41" class="step-title">41. Default PEAP Behaviour (Policy Driven)</h3>
-      <p>#</p>
+<h3 id="sec-41" class="step-title">41. Default PEAP Behaviour (Policy Driven)</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage41.png" alt="41. Default PEAP Behaviour UI">
+        <figcaption>Default PEAP Behaviour (Policy Driven)</figcaption>
+      </figure>
       <p class="step-desc">This section reflects a policy-driven PEAP configuration and shows that a prior WinLogon credential node was removed and replaced with an EAP type marker.</p>
 
       <h4>✅ Added / Updated XML Elements</h4>
@@ -546,7 +666,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-42" class="step-title">42. Reduced PEAP Configuration (Large Cleanup + New Identity Privacy Nodes)</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage42.png" alt="42. Reduced PEAP Configuration UI">
+        <figcaption>Reduced PEAP Configuration (Large Cleanup)</figcaption>
+      </figure>
       <p class="step-desc">This section introduces a major cleanup of multiple PEAP-related nodes and replaces them with identity-privacy and authentication-method nodes.</p>
 
       <h4>🔻 Removed XML Elements</h4>
@@ -601,7 +724,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-43" class="step-title">43. Strict Server Validation with Root Hash Pinning</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage43.png" alt="43. Strict Server Validation UI">
+        <figcaption>Strict Server Validation with Root Hash Pinning</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s43',this)">Copy</button>
       <pre><code id="s43" class="language-xml">
 &lt;DisablePrompt&gt;true&lt;/DisablePrompt&gt;
@@ -615,7 +741,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-44" class="step-title">44. Switch to CHAP Authentication (PAP Removed)</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage44.png" alt="44. Switch to CHAP Authentication UI">
+        <figcaption>Switch to CHAP Authentication</figcaption>
+      </figure>
       <p class="step-desc">This section replaces PAP with CHAP as the inner authentication method.</p>
 
       <h4>🔻 Removed XML Elements</h4>
@@ -634,7 +763,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-45" class="step-title">45. Switch to MS-CHAP Authentication (CHAP Removed)</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage45.png" alt="45. Switch to MS-CHAP Authentication UI">
+        <figcaption>Switch to MS-CHAP Authentication</figcaption>
+      </figure>
       <p class="step-desc">This section replaces CHAP with MS-CHAP.</p>
 
       <h4>🔻 Removed XML Elements</h4>
@@ -653,7 +785,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-46" class="step-title">46. Remove MS-CHAP + Introduce Winlogon Credential Flag</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage46.png" alt="46. Remove MS-CHAP + Introduce Winlogon UI">
+        <figcaption>Remove MS-CHAP + Introduce Winlogon Credential Flag</figcaption>
+      </figure>
       <p class="step-desc">This section removes MS-CHAP and introduces a Winlogon credential usage flag.</p>
 
       <h4>🔻 Removed XML Elements</h4>
@@ -672,7 +807,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-47" class="step-title">47. Enable UseWinlogonCredentials</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage47.png" alt="47. Enable UseWinlogonCredentials UI">
+        <figcaption>Enable UseWinlogonCredentials</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s47',this)">Copy</button>
       <pre><code id="s47" class="language-xml">
 &lt;UseWinlogonCredentials&gt;true&lt;/UseWinlogonCredentials&gt;
@@ -682,7 +820,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-48" class="step-title">48. Expanded Strict Validation + Vendor/Type Nodes (Winlogon Removed)</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage48.png" alt="48. Expanded Strict Validation UI">
+        <figcaption>Expanded Strict Validation + Vendor/Type Nodes</figcaption>
+      </figure>
       <p class="step-desc">This section introduces strict validation + vendor/type nodes and removes the Winlogon credential usage flag.</p>
 
       <h4>✅ Added / Updated XML Elements</h4>
@@ -721,7 +862,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-49" class="step-title">49. Cleanup: Remove Strict Validation Nodes + Add Type 26 Markers</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage49.png" alt="49. Remove Strict Validation Nodes UI">
+        <figcaption>Cleanup: Remove Strict Validation Nodes</figcaption>
+      </figure>
       <p class="step-desc">The above introduced the removal of XML portion(s) and added new Type markers as requested.</p>
 
       <h4>🔻 Removed XML Elements</h4>
@@ -754,7 +898,10 @@
       <div class="spacer"></div>
 
       <h3 id="sec-50" class="step-title">50. Authentication Mode Change</h3>
-      <p>#</p>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage50.png" alt="50. Authentication Mode Change UI">
+        <figcaption>Authentication Mode Change</figcaption>
+      </figure>
       <button class="copy-btn" onclick="copyCode('s50',this)">Copy</button>
       <pre><code id="s50" class="language-xml">
 &lt;authentication&gt;WPA2&lt;/authentication&gt;
