@@ -3,123 +3,108 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Wireless Profile Samples (WLANProfile XML) · Windows Server Talks</title>
+  <title>Wireless Profile Deep Dive (WLANProfile XML) · Windows Server Talks</title>
 
-  <!-- Theme color for mobile address bar -->
   <meta name="theme-color" content="#0F6CBD">
 
-  <!-- Site Styles -->
   <link rel="stylesheet" href="https://sysadmintalks.github.io/WindowsServerTalks/assets/css/custom.css">
-
-  <!-- Shared site enhancements (header + sidebar injection, copy buttons, lightbox, etc.) -->
   <script src="https://sysadmintalks.github.io/WindowsServerTalks/assets/js/site.js" defer></script>
-
-  <!-- OPTIONAL: small styling for the GitHub support row -->
+  
   <style>
-    .github-support-row {
-      margin: 12px 0 18px;
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items: center;
+    /* GitHub Support Row */
+    .github-support-row { margin:12px 0 18px; display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+    .github-support-row iframe { border:0; overflow:hidden; }
+    .github-feedback-link { display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border:1px solid #d0d7de; border-radius:6px; text-decoration:none; font-weight:600; color:inherit; background:#ffffff; }
+    .github-feedback-link:hover { background:#f6f8fa; }
+    
+    /* Fixed Dark Copy Button Styles */
+    .copy-btn { 
+      margin-bottom: 8px; 
+      padding: 6px 12px; 
+      border: 1px solid #444444; 
+      cursor: pointer; 
+      font-size: 12px;
+      font-weight: 600; 
+      background: #2d2d2d; 
+      color: #ffffff; 
+      border-radius: 4px;
+      transition: background 0.2s ease, border-color 0.2s ease;
     }
-    .github-support-row iframe {
-      border: 0;
-      overflow: hidden;
+    .copy-btn:hover {
+      background: #404040;
+      border-color: #888888;
     }
-    .github-feedback-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 10px;
-      border: 1px solid #d0d7de;
+
+    /* Safety fallback for pre/code blocks */
+    pre {
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      padding: 12px;
       border-radius: 6px;
-      text-decoration: none;
-      font-weight: 600;
-      color: inherit;
-      background: #fff;
+      overflow-x: auto;
+      border: 1px solid #333333;
     }
-    .github-feedback-link:hover {
-      background: #f6f8fa;
+    code {
+      font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
     }
   </style>
-</head>
 
+  <script>
+    function copyCode(id, btn) {
+      const raw = document.getElementById(id + "_raw");
+      const src = raw ? raw.value : document.getElementById(id).textContent.trim();
+      
+      navigator.clipboard.writeText(src).then(() => {
+        const originalText = btn.innerText;
+        btn.innerText = "Copied!";
+        setTimeout(() => { btn.innerText = originalText; }, 1500);
+      }).catch(err => {
+        console.error('Failed to copy code: ', err);
+      });
+    }
+  </script>
+</head>
 <body>
-  <!-- a11y: Skip link for keyboard users -->
   <a class="skip-link" href="#main-content">Skip to content</a>
 
-  <!-- ===== Shared Header (injected from /assets/includes/header.html) ===== -->
   <div id="header-container"></div>
 
-  <!-- ===== Breadcrumbs (edit for this page) ===== -->
   <nav class="breadcrumbs container" aria-label="Breadcrumb">
     <a href="https://sysadmintalks.github.io/WindowsServerTalks/index.html">Home</a>
     <span aria-hidden="true">›</span>
-    <span aria-current="page">Wireless Profile Samples (WLANProfile XML)</span>
+    <span aria-current="page">Wireless Profile Deep Dive (WLANProfile XML)</span>
   </nav>
 
   <div class="layout container">
-    <!-- ===== Shared Sidebar (injected from /assets/includes/sidebar.html) ===== -->
     <div id="sidebar-container"></div>
 
-    <!-- ===== Main content ===== -->
     <main id="main-content" class="content" role="main">
 
-       <!-- ✅ NEW: GitHub Star / Follow / Feedback row -->
       <div class="github-support-row" aria-label="Support this project">
-        <!-- Star button (repo) -->
-        <iframe
-          src="https://ghbtns.com/github-btn.html?user=SysAdminTalks&repo=WindowsServerTalks&type=star&count=true&size=large"
-          frameborder="0"
-          scrolling="0"
-          width="170"
-          height="30"
-          title="GitHub Star button">
-        </iframe>
-
-        <!-- Follow button (user/org) -->
-        <iframe
-          src="https://ghbtns.com/github-btn.html?user=SysAdminTalks&type=follow&count=true&size=large"
-          frameborder="0"
-          scrolling="0"
-          width="230"
-          height="30"
-          title="GitHub Follow button">
-        </iframe>
-
-        <!-- Feedback -> New Issue -->
-        <a
-          class="github-feedback-link"
-          href="https://github.com/SysAdminTalks/WindowsServerTalks/issues/new"
-          target="_blank"
-          rel="noopener">
+        <iframe src="https://ghbtns.com/github-btn.html?user=SysAdminTalks&repo=WindowsServerTalks&type=star&count=true&size=large" frameborder="0" scrolling="0" width="170" height="30" title="GitHub Star"></iframe>
+        <iframe src="https://ghbtns.com/github-btn.html?user=SysAdminTalks&type=follow&count=true&size=large" frameborder="0" scrolling="0" width="230" height="30" title="GitHub Follow"></iframe>
+        <a class="github-feedback-link" href="https://github.com/SysAdminTalks/WindowsServerTalks/issues/new" target="_blank" rel="noopener">
           💬 Feedback (open an issue)
         </a>
       </div>
-      <!-- /NEW -->
-     <!-- Page Heading -->
-      <h2 class="page-title">Wireless Profile Samples (WLANProfile XML)</h2>
+      
+       <h2 class="page-title">Wireless Profile Samples (WLANProfile XML)</h2>
       <p class="page-subtitle">
         How to read, build, and validate Windows Native Wi‑Fi <code>WLANProfile</code> XML for enterprise networks.
       </p>
-
-
-     
-
+           
       <!-- Summary / TL;DR -->
-     <section class="summary-box">
+      <section class="summary-box">
         <h3>Summary</h3>
         <p>
           This article curates Microsoft’s <em>Wireless profile samples</em> and provides a hands‑on structure
           to build your own <code>WLANProfile</code> XML. You’ll find quick export/import commands, schema
-          pointers, a verified <strong>Wireless UI Mapping XML portions</strong> section, and a playground with multiple XML
+          pointers, a verified <strong>Wireless UI Mapping </strong> section, and a playground with multiple XML
           sample boxes—each followed by an explanation list and an image placeholder for your screenshots.
         </p>
       </section>
 
       <!-- Callouts (change class: info | success | warning | danger ) -->
-     
       <div class="callout info">
         <strong>Note:</strong> Validate in a lab before production. Reference:
         <a href="https://learn.microsoft.com/en-us/windows/win32/nativewifi/wireless-profile-samples" target="_blank" rel="noopener">
@@ -128,296 +113,1131 @@
       </div>
 
       <div class="spacer"></div>
+      
+      
+      <div class="spacer"></div>
 
-      <!-- =============================== -->
-      <!-- Wireless UI Mapping (1–20)     -->
-      <!-- =============================== -->
-      <h2 id="ui-mapping" class="step-title">Wireless UI Mapping (1–20)</h2>
+      <h3 id="sec-1" class="step-title">1. Security Method Selection</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage1.png" alt="1. Security Method Selection UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s1',this)">Copy</button>
+      <pre><code id="s1" class="language-xml">
+&lt;encryption&gt;AES&lt;/encryption&gt;
+&lt;useOneX&gt;true&lt;/useOneX&gt;
+      </code></pre>
+      <p class="step-desc">Defines enterprise WiFi security and enables 802.1X authentication.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-2" class="step-title">2. Network Authentication Method</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage2.png" alt="2. Network Authentication Method UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s2',this)">Copy</button>
+      <pre><code id="s2" class="language-xml">
+&lt;cacheUserData&gt;true&lt;/cacheUserData&gt;
+&lt;authMode&gt;userOrComputer&lt;/authMode&gt;
+      </code></pre>
+      <p class="step-desc">Defines EAP authentication and identity type.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-3" class="step-title">3. Authentication Mode Mapping</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage3.png" alt="3. Authentication Mode Mapping UI">
+      </figure>
+      <p class="step-desc">User / Machine / Hybrid authentication mapping.</p>
+      <table>
+        <tr><th>GUI</th><th>XML</th></tr>
+        <tr><td>User</td><td>user</td></tr>
+        <tr><td>Machine</td><td>machine</td></tr>
+        <tr><td>User or Computer</td><td>userOrComputer</td></tr>
+      </table>
+      <div class="spacer"></div>
+
+      <h3 id="sec-4" class="step-title">4. Max Authentication Failures</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage4.png" alt="4. Max Authentication Failures UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s4',this)">Copy</button>
+      <pre><code id="s4" class="language-xml">
+&lt;maxAuthFailures&gt;1&lt;/maxAuthFailures&gt;
+      </code></pre>
+      <p class="step-desc">Limits retry attempts during authentication.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-5" class="step-title">5. Cache User Credentials</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage5.png" alt="5. Cache User Credentials UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s5',this)">Copy</button>
+      <pre><code id="s5" class="language-xml">
+&lt;cacheUserData&gt;true&lt;/cacheUserData&gt;
+      </code></pre>
+      <p class="step-desc">Caches credentials for faster reconnection.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-6" class="step-title">6. Trusted Root CA Filtering</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage6.png" alt="6. Trusted Root CA Filtering UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s6',this)">Copy</button>
+      <pre><code id="s6" class="language-xml">
+&lt;TrustedRootCA&gt;THUMBPRINT&lt;/TrustedRootCA&gt;
+      </code></pre>
+      <p class="step-desc">Restricts trusted certificate authorities.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-7" class="step-title">7. EKU Filtering</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage7.png" alt="7. EKU Filtering UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s7',this)">Copy</button>
+      <pre><code id="s7" class="language-xml">
+&lt;AllPurposeEnabled&gt;false&lt;/AllPurposeEnabled&gt;
+      </code></pre>
+      <p class="step-desc">Controls allowed certificate purposes.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-8" class="step-title">8. EKU Mapping</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage8.png" alt="8. EKU Mapping UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s8',this)">Copy</button>
+      <pre><code id="s8" class="language-xml">
+&lt;EKUName&gt;Client Authentication&lt;/EKUName&gt;
+&lt;EKUOID&gt;1.3.6.1.5.5.7.3.2&lt;/EKUOID&gt;
+      </code></pre>
+      <div class="spacer"></div>
+
+      <h3 id="sec-9" class="step-title">9. Any Purpose / All Purpose</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage9.png" alt="9. Any Purpose / All Purpose UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s9',this)">Copy</button>
+      <pre><code id="s9" class="language-xml">
+&lt;AllPurposeEnabled&gt;true&lt;/AllPurposeEnabled&gt;
+      </code></pre>
+      <div class="spacer"></div>
+
+      <h3 id="sec-10" class="step-title">10. EKU Selection List</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage10.png" alt="10. EKU Selection List UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s10',this)">Copy</button>
+      <pre><code id="s10" class="language-xml">
+&lt;ClientAuthEKUList Enabled="true"/&gt;
+      </code></pre>
+      <div class="spacer"></div>
+   <h3 id="sec-11" class="step-title">11. Certificate UI Mapping (Extended Behaviour)</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage11.png" alt="11. Certificate UI Mapping UI">
+      </figure>
+      <p class="step-desc">Defines how Windows groups certificate selection options internally.</p>
+      <ul>
+        <li>Controls certificate filtering behaviour</li>
+        <li>Maps GUI selection to XML policy</li>
+      </ul>
+      <div class="spacer"></div>
+
+      <h3 id="sec-12" class="step-title">12. EKU Combined Filtering Behaviour</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage12.png" alt="12. EKU Combined Filtering Behaviour UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s12',this)">Copy</button>
+      <pre><code id="s12" class="language-xml">
+&lt;EKUMapping&gt;
+  &lt;EKUMap&gt;
+    &lt;EKUName&gt;Client Authentication&lt;/EKUName&gt;
+  &lt;/EKUMap&gt;
+&lt;/EKUMapping&gt;
+      </code></pre>
+      <p class="step-desc">Used when strict certificate enforcement is required.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-13" class="step-title">13. Connection Mode Configuration</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage13.png" alt="13. Connection Mode Configuration UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s13',this)">Copy</button>
+      <pre><code id="s13" class="language-xml">
+&lt;connectionMode&gt;auto&lt;/connectionMode&gt;
+      </code></pre>
+      <ul>
+        <li><b>auto</b> → Automatically connect</li>
+        <li><b>manual</b> → User triggered connection</li>
+      </ul>
+      <div class="spacer"></div>
+
+      <h3 id="sec-14" class="step-title">14. Auto Switch Between Networks</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage14.png" alt="14. Auto Switch Between Networks UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s14',this)">Copy</button>
+      <pre><code id="s14" class="language-xml">
+&lt;autoSwitch&gt;true&lt;/autoSwitch&gt;
+      </code></pre>
+      <p class="step-desc">Allows device to move between preferred networks seamlessly.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-15" class="step-title">15. Hidden SSID (Non-Broadcast Network)</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage15.png" alt="15. Hidden SSID UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s15',this)">Copy</button>
+      <pre><code id="s15" class="language-xml">
+&lt;nonBroadcast&gt;true&lt;/nonBroadcast&gt;
+      </code></pre>
+      <p class="step-desc">Used for networks that do not broadcast SSID.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-16" class="step-title">16. WPA3 Enterprise Configuration</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage16.png" alt="16. WPA3 Enterprise Configuration UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s16',this)">Copy</button>
+      <pre><code id="s16" class="language-xml">
+&lt;authentication&gt;WPA3ENT&lt;/authentication&gt;
+&lt;encryption&gt;AES&lt;/encryption&gt;
+&lt;useOneX&gt;true&lt;/useOneX&gt;
+      </code></pre>
+      <p class="step-desc">Defines WPA3 enterprise-level wireless security.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-17" class="step-title">17. Disable Credential Caching</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage17.png" alt="17. Disable Credential Caching UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s17',this)">Copy</button>
+      <pre><code id="s17" class="language-xml">
+&lt;cacheUserData&gt;false&lt;/cacheUserData&gt;
+      </code></pre>
+      <p class="step-desc">Forces authentication every time without storing credentials.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-18" class="step-title">18. Manual Certificate Selection Enabled</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage18.png" alt="18. Manual Certificate Selection UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s18',this)">Copy</button>
+      <pre><code id="s18" class="language-xml">
+&lt;SimpleCertSelection&gt;false&lt;/SimpleCertSelection&gt;
+      </code></pre>
+      <p class="step-desc">Allows user to manually pick certificate.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-19" class="step-title">19. Automatic Certificate Selection Enabled</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage19.png" alt="19. Automatic Certificate Selection UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s19',this)">Copy</button>
+      <pre><code id="s19" class="language-xml">
+&lt;SimpleCertSelection&gt;true&lt;/SimpleCertSelection&gt;
+      </code></pre>
+      <p class="step-desc">Automatically selects appropriate certificate.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-20" class="step-title">20. Server Name Validation Enforcement</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage20.png" alt="20. Server Name Validation UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s20',this)">Copy</button>
+      <pre><code id="s20" class="language-xml">
+&lt;AcceptServerName&gt;true&lt;/AcceptServerName&gt;
+&lt;ServerNames&gt;server1.com&lt;/ServerNames&gt;
+      </code></pre>
+      <ul>
+        <li>Enforces trusted RADIUS server validation</li>
+        <li>Prevents rogue authentication servers</li>
+      </ul>
+      <div class="spacer"></div>
+
+     <h3 id="sec-21" class="step-title">21. Trusted Root CA Thumbprint Mapping</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage21.png" alt="21. Trusted Root CA Thumbprint Mapping UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s21',this)">Copy</button>
+      <pre><code id="s21" class="language-xml">
+&lt;TrustedRootCA&gt;
+5e ee d8 6f a3 7c 67 52 30 64 2f 55 c8 4d db f6 7c d3 3c 80
+&lt;/TrustedRootCA&gt;
+      </code></pre>
+      <p class="step-desc">Defines exact certificate authority trust using thumbprint.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-22" class="step-title">22. Disable User Prompt for Server Validation</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage22.png" alt="22. Disable User Prompt for Server Validation UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s22',this)">Copy</button>
+      <pre><code id="s22" class="language-xml">
+&lt;DisableUserPromptForServerValidation&gt;true&lt;/DisableUserPromptForServerValidation&gt;
+      </code></pre>
+      <ul>
+        <li>True → Silent failure</li>
+        <li>False → User prompt shown</li>
+      </ul>
+      <div class="spacer"></div>
+
+      <h3 id="sec-23" class="step-title">23. Different Username Option</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage23.png" alt="23. Different Username Option UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s23',this)">Copy</button>
+      <pre><code id="s23" class="language-xml">
+&lt;DifferentUsername&gt;true&lt;/DifferentUsername&gt;
+      </code></pre>
+      <p class="step-desc">Allows alternate credential usage for authentication.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-24" class="step-title">24. CA Hash List Enablement</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage24.png" alt="24. CA Hash List Enablement UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s24',this)">Copy</button>
+      <pre><code id="s24" class="language-xml">
+&lt;CAHashList Enabled="true"&gt;
+&lt;/CAHashList&gt;
+      </code></pre>
+      <p class="step-desc">Enables issuer-based certificate filtering.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-25" class="step-title">25. Issuer Hash Filtering</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage25.png" alt="25. Issuer Hash Filtering UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s25',this)">Copy</button>
+      <pre><code id="s25" class="language-xml">
+&lt;IssuerHash&gt;
+5e ee d8 6f a3 7c 67 52 30 64 2f 55 c8 4d db f6 7c d3 3c 80
+&lt;/IssuerHash&gt;
+      </code></pre>
+      <p class="step-desc">Restricts certificate selection to specific issuer.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-26" class="step-title">26. All Purpose + EKU Combined Mode</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage26.png" alt="26. All Purpose + EKU Combined Mode UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s26',this)">Copy</button>
+      <pre><code id="s26" class="language-xml">
+&lt;AllPurposeEnabled&gt;true&lt;/AllPurposeEnabled&gt;
+&lt;AnyPurposeEKUList Enabled="true"/&gt;
+&lt;ClientAuthEKUList Enabled="true"/&gt;
+      </code></pre>
+      <p class="step-desc">Allows broad certificate usage with EKU control.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-27" class="step-title">27. Advanced EKU Mapping</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage27.png" alt="27. Advanced EKU Mapping UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s27',this)">Copy</button>
+      <pre><code id="s27" class="language-xml">
+&lt;EKUName&gt;All application policies&lt;/EKUName&gt;
+&lt;EKUOID&gt;1.3.6.1.4.1.311.10.12.1&lt;/EKUOID&gt;
+
+&lt;EKUName&gt;Any Purpose&lt;/EKUName&gt;
+&lt;EKUOID&gt;2.5.29.37.0&lt;/EKUOID&gt;
+      </code></pre>
+      <p class="step-desc">Defines multiple EKU constraints for certificate validation.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-28" class="step-title">28. PMK Cache & Pre-Authentication</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage28.png" alt="28. PMK Cache & Pre-Authentication UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s28',this)">Copy</button>
+      <pre><code id="s28" class="language-xml">
+&lt;authMode&gt;machineOrUser&lt;/authMode&gt;
+&lt;PMKCacheMode&gt;enabled&lt;/PMKCacheMode&gt;
+&lt;PMKCacheSize&gt;128&lt;/PMKCacheSize&gt;
+&lt;PMKCacheTTL&gt;720&lt;/PMKCacheTTL&gt;
+&lt;preAuthMode&gt;disabled&lt;/preAuthMode&gt;
+      </code></pre>
+      <p class="step-desc">Improves roaming by caching security keys.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-29" class="step-title">29. Machine Authentication Mode</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage29.png" alt="29. Machine Authentication Mode UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s29',this)">Copy</button>
+      <pre><code id="s29" class="language-xml">
+&lt;authMode&gt;machine&lt;/authMode&gt;
+      </code></pre>
+      <p class="step-desc">Authentication using system identity before login.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-30" class="step-title">30. User Authentication Mode</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage30.png" alt="30. User Authentication Mode UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s30',this)">Copy</button>
+      <pre><code id="s30" class="language-xml">
+&lt;authMode&gt;user&lt;/authMode&gt;
+      </code></pre>
+      <p class="step-desc">Authentication using user credentials post login.</p>
+      <div class="spacer"></div>
+<h3 id="sec-31" class="step-title">31. Pre-Logon Authentication Behaviour</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage31.png" alt="31. Pre-Logon Authentication Behaviour UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s31',this)">Copy</button>
+      <pre><code id="s31" class="language-xml">
+&lt;allowAdditionalDialogs&gt;true&lt;/allowAdditionalDialogs&gt;
+&lt;maxDelay&gt;10&lt;/maxDelay&gt;
+&lt;type&gt;preLogon&lt;/type&gt;
+&lt;userBasedVirtualLan&gt;false&lt;/userBasedVirtualLan&gt;
+      </code></pre>
+      <p class="step-desc">Controls authentication before user logs into the machine using system identity.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-32" class="step-title">32. PEAP Inner EAP Configuration</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage32.png" alt="32. PEAP Inner EAP Configuration UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s32',this)">Copy</button>
+      <pre><code id="s32" class="language-xml">
+&lt;UseWinLogonCredentials&gt;false&lt;/UseWinLogonCredentials&gt;
+&lt;Type&gt;26&lt;/Type&gt;
+&lt;EnableQuarantineChecks&gt;false&lt;/EnableQuarantineChecks&gt;
+&lt;FastReconnect&gt;true&lt;/FastReconnect&gt;
+&lt;InnerEapOptional&gt;false&lt;/InnerEapOptional&gt;
+&lt;PerformServerValidation&gt;true&lt;/PerformServerValidation&gt;
+&lt;RequireCryptoBinding&gt;false&lt;/RequireCryptoBinding&gt;
+      </code></pre>
+      <p class="step-desc">Defines behaviour of inner EAP (PEAP) and certificate validation logic.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-33" class="step-title">33. Credential Caching Re-enabled</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage33.png" alt="33. Credential Caching Re-enabled UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s33',this)">Copy</button>
+      <pre><code id="s33" class="language-xml">
+&lt;cacheUserData&gt;true&lt;/cacheUserData&gt;
+      </code></pre>
+      <p class="step-desc">Stores credentials again after being disabled previously.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-34" class="step-title">34. Fast Reconnect Disabled</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage34.png" alt="34. Fast Reconnect Disabled UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s34',this)">Copy</button>
+      <pre><code id="s34" class="language-xml">
+&lt;FastReconnect&gt;false&lt;/FastReconnect&gt;
+      </code></pre>
+      <p class="step-desc">Forces full authentication instead of session resume.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-35" class="step-title">35. Alternate Trusted Root CA</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage35.png" alt="35. Alternate Trusted Root CA UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s35',this)">Copy</button>
+      <pre><code id="s35" class="language-xml">
+&lt;TrustedRootCA&gt;
+05 63 b8 63 0d 62 d7 5a bb c8 ab 1e 4b df b5 a8 99 b2 4d 43
+&lt;/TrustedRootCA&gt;
+      </code></pre>
+      <p class="step-desc">Defines secondary trusted certificate authority.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-36" class="step-title">36. Server Validation Prompt Enabled</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage36.png" alt="36. Server Validation Prompt Enabled UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s36',this)">Copy</button>
+      <pre><code id="s36" class="language-xml">
+&lt;DisableUserPromptForServerValidation&gt;false&lt;/DisableUserPromptForServerValidation&gt;
+      </code></pre>
+      <p class="step-desc">User will be prompted if server validation fails.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-37" class="step-title">37. Prompt When CA Not Found</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage37.png" alt="37. Prompt When CA Not Found UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s37',this)">Copy</button>
+      <pre><code id="s37" class="language-xml">
+&lt;AllowPromptingWhenServerCANotFound&gt;true&lt;/AllowPromptingWhenServerCANotFound&gt;
+      </code></pre>
+      <p class="step-desc">Allows user interaction when certificate authority is missing.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-38" class="step-title">38. Strict Validation (No Prompt Mode)</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage38.png" alt="38. Strict Validation UI">
+      </figure>
+      <p class="step-desc">The following configuration replaces previous prompt behaviour.</p>
+
+      <h4>🔻 Removed XML</h4>
+      <button class="copy-btn" onclick="copyCode('s38r',this)">Copy</button>
+      <pre><code id="s38r" class="language-xml">
+&lt;AllowPromptingWhenServerCANotFound&gt;true&lt;/AllowPromptingWhenServerCANotFound&gt;
+      </code></pre>
+
+      <h4>✅ Added XML</h4>
+      <button class="copy-btn" onclick="copyCode('s38a',this)">Copy</button>
+      <pre><code id="s38a" class="language-xml">
+&lt;DisableUserPromptForServerValidation&gt;true&lt;/DisableUserPromptForServerValidation&gt;
+      </code></pre>
+      <p class="step-desc">System switches to strict mode without user interaction.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-39" class="step-title">39. Identity Privacy & Secure Reconnect</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage39.png" alt="39. Identity Privacy & Secure Reconnect UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s39',this)">Copy</button>
+      <pre><code id="s39" class="language-xml">
+&lt;FastReconnect&gt;true&lt;/FastReconnect&gt;
+&lt;AnonymousUserName&gt;PrivacyPlace&lt;/AnonymousUserName&gt;
+&lt;EnableIdentityPrivacy&gt;true&lt;/EnableIdentityPrivacy&gt;
+&lt;RequireCryptoBinding&gt;true&lt;/RequireCryptoBinding&gt;
+      </code></pre>
+      <p class="step-desc">Enhances privacy by masking identity and enforcing secure reconnection.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-40" class="step-title">40. Default Behaviour Restrictions</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage40.png" alt="40. Default Behaviour Restrictions UI">
+      </figure>
       <p class="step-desc">
-        The figures below map each numbered callout to its explanation. Text is provided exactly as specified.
+        Certain UI options become unavailable depending on EAP type, certificate configuration,
+        and policy enforcement. These restrictions are automatically applied by Windows.
+      </p>
+      <ul>
+        <li>Some fields are greyed out</li>
+        <li>Depends on authentication method</li>
+        <li>Common in PEAP / TLS configurations</li>
+      </ul>
+      <div class="spacer"></div>
+
+  <h3 id="sec-41" class="step-title">41. Default PEAP Behaviour (Policy Driven)</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage41.png" alt="41. Default PEAP Behaviour UI">
+      </figure>
+      <p class="step-desc">This section reflects a policy-driven PEAP configuration and shows that a prior WinLogon credential node was removed and replaced with an EAP type marker.</p>
+
+      <h4>✅ Added / Updated XML Elements</h4>
+      <button class="copy-btn" onclick="copyCode('s41a',this)">Copy</button>
+      <pre><code id="s41a" class="language-xml">
+&lt;AcceptServerName&gt;false&lt;/AcceptServerName&gt;
+&lt;SimpleCertSelection&gt;true&lt;/SimpleCertSelection&gt;
+&lt;DifferentUsername&gt;false&lt;/DifferentUsername&gt;
+&lt;PerformServerValidation&gt;true&lt;/PerformServerValidation&gt;
+&lt;DisableUserPromptForServerValidation&gt;false&lt;/DisableUserPromptForServerValidation&gt;
+&lt;ServerNames&gt;&lt;/ServerNames&gt;
+&lt;Type&gt;13&lt;/Type&gt;
+      </code></pre>
+      <textarea id="s41a_raw" style="display:none"><AcceptServerName>false</AcceptServerName>
+<SimpleCertSelection>true</SimpleCertSelection>
+<DifferentUsername>false</DifferentUsername>
+<PerformServerValidation>true</PerformServerValidation>
+<DisableUserPromptForServerValidation>false</DisableUserPromptForServerValidation>
+<ServerNames></ServerNames>
+<Type>13</Type></textarea>
+
+      <h4>🔻 Removed XML Elements</h4>
+      <button class="copy-btn" onclick="copyCode('s41r',this)">Copy</button>
+      <pre><code id="s41r" class="language-xml">
+&lt;UseWinLogonCredentials&gt;false&lt;/UseWinLogonCredentials&gt;
+      </code></pre>
+      <textarea id="s41r_raw" style="display:none"><UseWinLogonCredentials>false</UseWinLogonCredentials></textarea>
+      <div class="spacer"></div>
+
+      <h3 id="sec-42" class="step-title">42. Reduced PEAP Configuration (Large Cleanup + New Identity Privacy Nodes)</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage42.png" alt="42. Reduced PEAP Configuration UI">
+      </figure>
+      <p class="step-desc">This section introduces a major cleanup of multiple PEAP-related nodes and replaces them with identity-privacy and authentication-method nodes.</p>
+
+      <h4>🔻 Removed XML Elements</h4>
+      <button class="copy-btn" onclick="copyCode('s42r',this)">Copy</button>
+      <pre><code id="s42r" class="language-xml">
+&lt;UseWinLogonCredentials&gt;false&lt;/UseWinLogonCredentials&gt;
+&lt;Type&gt;26&lt;/Type&gt;
+&lt;EnableQuarantineChecks&gt;false&lt;/EnableQuarantineChecks&gt;
+&lt;FastReconnect&gt;true&lt;/FastReconnect&gt;
+&lt;InnerEapOptional&gt;false&lt;/InnerEapOptional&gt;
+&lt;AcceptServerName&gt;false&lt;/AcceptServerName&gt;
+&lt;AllowPromptingWhenServerCANotFound&gt;true&lt;/AllowPromptingWhenServerCANotFound&gt;
+&lt;PerformServerValidation&gt;true&lt;/PerformServerValidation&gt;
+&lt;RequireCryptoBinding&gt;false&lt;/RequireCryptoBinding&gt;
+&lt;DisableUserPromptForServerValidation&gt;false&lt;/DisableUserPromptForServerValidation&gt;
+&lt;ServerNames&gt;&lt;/ServerNames&gt;
+&lt;Type&gt;25&lt;/Type&gt;
+      </code></pre>
+      <textarea id="s42r_raw" style="display:none"><UseWinLogonCredentials>false</UseWinLogonCredentials>
+<Type>26</Type>
+<EnableQuarantineChecks>false</EnableQuarantineChecks>
+<FastReconnect>true</FastReconnect>
+<InnerEapOptional>false</InnerEapOptional>
+<AcceptServerName>false</AcceptServerName>
+<AllowPromptingWhenServerCANotFound>true</AllowPromptingWhenServerCANotFound>
+<PerformServerValidation>true</PerformServerValidation>
+<RequireCryptoBinding>false</RequireCryptoBinding>
+<DisableUserPromptForServerValidation>false</DisableUserPromptForServerValidation>
+<ServerNames></ServerNames>
+<Type>25</Type></textarea>
+
+      <h4>✅ Added XML Elements</h4>
+      <button class="copy-btn" onclick="copyCode('s42a',this)">Copy</button>
+      <pre><code id="s42a" class="language-xml">
+&lt;cacheUserData&gt;true&lt;/cacheUserData&gt;
+&lt;AnonymousIdentity&gt;anonymous&lt;/AnonymousIdentity&gt;
+&lt;IdentityPrivacy&gt;true&lt;/IdentityPrivacy&gt;
+&lt;PAPAuthentication&gt;&lt;/PAPAuthentication&gt;
+&lt;DisablePrompt&gt;false&lt;/DisablePrompt&gt;
+&lt;ServerNames&gt;&lt;/ServerNames&gt;
+&lt;AuthorId&gt;311&lt;/AuthorId&gt;
+&lt;Type&gt;21&lt;/Type&gt;
+      </code></pre>
+      <textarea id="s42a_raw" style="display:none"><cacheUserData>true</cacheUserData>
+<AnonymousIdentity>anonymous</AnonymousIdentity>
+<IdentityPrivacy>true</IdentityPrivacy>
+<PAPAuthentication></PAPAuthentication>
+<DisablePrompt>false</DisablePrompt>
+<ServerNames></ServerNames>
+<AuthorId>311</AuthorId>
+<Type>21</Type></textarea>
+      <div class="spacer"></div>
+
+      <h3 id="sec-43" class="step-title">43. Strict Server Validation with Root Hash Pinning</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage43.png" alt="43. Strict Server Validation UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s43',this)">Copy</button>
+      <pre><code id="s43" class="language-xml">
+&lt;DisablePrompt&gt;true&lt;/DisablePrompt&gt;
+&lt;ServerNames&gt;ServerTest.com&lt;/ServerNames&gt;
+&lt;TrustedRootCAHash&gt;5e ee d8 6f a3 7c 67 52 30 64 2f 55 c8 4d db f6 7c d3 3c 80&lt;/TrustedRootCAHash&gt;
+      </code></pre>
+      <textarea id="s43_raw" style="display:none"><DisablePrompt>true</DisablePrompt>
+<ServerNames>ServerTest.com</ServerNames>
+<TrustedRootCAHash>5e ee d8 6f a3 7c 67 52 30 64 2f 55 c8 4d db f6 7c d3 3c 80</TrustedRootCAHash></textarea>
+      <p class="step-desc">Enforces pinned server name + pinned trusted root hash for maximum protection against rogue servers.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-44" class="step-title">44. Switch to CHAP Authentication (PAP Removed)</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage44.png" alt="44. Switch to CHAP Authentication UI">
+      </figure>
+      <p class="step-desc">This section replaces PAP with CHAP as the inner authentication method.</p>
+
+      <h4>🔻 Removed XML Elements</h4>
+      <button class="copy-btn" onclick="copyCode('s44r',this)">Copy</button>
+      <pre><code id="s44r" class="language-xml">
+&lt;PAPAuthentication&gt;&lt;/PAPAuthentication&gt;
+      </code></pre>
+      <textarea id="s44r_raw" style="display:none"><PAPAuthentication></PAPAuthentication></textarea>
+
+      <h4>✅ Added XML Elements</h4>
+      <button class="copy-btn" onclick="copyCode('s44a',this)">Copy</button>
+      <pre><code id="s44a" class="language-xml">
+&lt;CHAPAuthentication&gt;&lt;/CHAPAuthentication&gt;
+      </code></pre>
+      <textarea id="s44a_raw" style="display:none"><CHAPAuthentication></CHAPAuthentication></textarea>
+      <div class="spacer"></div>
+
+      <h3 id="sec-45" class="step-title">45. Switch to MS-CHAP Authentication (CHAP Removed)</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage45.png" alt="45. Switch to MS-CHAP Authentication UI">
+      </figure>
+      <p class="step-desc">This section replaces CHAP with MS-CHAP.</p>
+
+      <h4>🔻 Removed XML Elements</h4>
+      <button class="copy-btn" onclick="copyCode('s45r',this)">Copy</button>
+      <pre><code id="s45r" class="language-xml">
+&lt;CHAPAuthentication&gt;&lt;/CHAPAuthentication&gt;
+      </code></pre>
+      <textarea id="s45r_raw" style="display:none"><CHAPAuthentication></CHAPAuthentication></textarea>
+
+      <h4>✅ Added XML Elements</h4>
+      <button class="copy-btn" onclick="copyCode('s45a',this)">Copy</button>
+      <pre><code id="s45a" class="language-xml">
+&lt;MSCHAPAuthentication&gt;&lt;/MSCHAPAuthentication&gt;
+      </code></pre>
+      <textarea id="s45a_raw" style="display:none"><MSCHAPAuthentication></MSCHAPAuthentication></textarea>
+      <div class="spacer"></div>
+
+      <h3 id="sec-46" class="step-title">46. Remove MS-CHAP + Introduce Winlogon Credential Flag</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage46.png" alt="46. Remove MS-CHAP + Introduce Winlogon UI">
+      </figure>
+      <p class="step-desc">This section removes MS-CHAP and introduces a Winlogon credential usage flag.</p>
+
+      <h4>🔻 Removed XML Elements</h4>
+      <button class="copy-btn" onclick="copyCode('s46r',this)">Copy</button>
+      <pre><code id="s46r" class="language-xml">
+&lt;MSCHAPAuthentication&gt;&lt;/MSCHAPAuthentication&gt;
+      </code></pre>
+      <textarea id="s46r_raw" style="display:none"><MSCHAPAuthentication></MSCHAPAuthentication></textarea>
+
+      <h4>✅ Added XML Elements</h4>
+      <button class="copy-btn" onclick="copyCode('s46a',this)">Copy</button>
+      <pre><code id="s46a" class="language-xml">
+&lt;UseWinlogonCredentials&gt;false&lt;/UseWinlogonCredentials&gt;
+      </code></pre>
+      <textarea id="s46a_raw" style="display:none"><UseWinlogonCredentials>false</UseWinlogonCredentials></textarea>
+      <div class="spacer"></div>
+
+      <h3 id="sec-47" class="step-title">47. Enable UseWinlogonCredentials</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage47.png" alt="47. Enable UseWinlogonCredentials UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s47',this)">Copy</button>
+      <pre><code id="s47" class="language-xml">
+&lt;UseWinlogonCredentials&gt;true&lt;/UseWinlogonCredentials&gt;
+      </code></pre>
+      <textarea id="s47_raw" style="display:none"><UseWinlogonCredentials>true</UseWinlogonCredentials></textarea>
+      <p class="step-desc">Enables automatic use of Windows logon credentials for authentication.</p>
+      <div class="spacer"></div>
+
+      <h3 id="sec-48" class="step-title">48. Expanded Strict Validation + Vendor/Type Nodes (Winlogon Removed)</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage48.png" alt="48. Expanded Strict Validation UI">
+      </figure>
+      <p class="step-desc">This section introduces strict validation + vendor/type nodes and removes the Winlogon credential usage flag.</p>
+
+      <h4>✅ Added / Updated XML Elements</h4>
+      <button class="copy-btn" onclick="copyCode('s48a',this)">Copy</button>
+      <pre><code id="s48a" class="language-xml">
+&lt;AcceptServerName&gt;false&lt;/AcceptServerName&gt;
+&lt;SimpleCertSelection&gt;true&lt;/SimpleCertSelection&gt;
+&lt;DifferentUsername&gt;true&lt;/DifferentUsername&gt;
+&lt;PerformServerValidation&gt;true&lt;/PerformServerValidation&gt;
+&lt;DisableUserPromptForServerValidation&gt;true&lt;/DisableUserPromptForServerValidation&gt;
+&lt;ServerNames&gt;&lt;/ServerNames&gt;
+&lt;Type&gt;13&lt;/Type&gt;
+&lt;AuthorId&gt;0&lt;/AuthorId&gt;
+&lt;Type&gt;13&lt;/Type&gt;
+&lt;VendorId&gt;0&lt;/VendorId&gt;
+&lt;VendorType&gt;0&lt;/VendorType&gt;
+      </code></pre>
+      <textarea id="s48a_raw" style="display:none"><AcceptServerName>false</AcceptServerName>
+<SimpleCertSelection>true</SimpleCertSelection>
+<DifferentUsername>true</DifferentUsername>
+<PerformServerValidation>true</PerformServerValidation>
+<DisableUserPromptForServerValidation>true</DisableUserPromptForServerValidation>
+<ServerNames></ServerNames>
+<Type>13</Type>
+<AuthorId>0</AuthorId>
+<Type>13</Type>
+<VendorId>0</VendorId>
+<VendorType>0</VendorType></textarea>
+
+      <h4>🔻 Removed XML Elements</h4>
+      <button class="copy-btn" onclick="copyCode('s48r',this)">Copy</button>
+      <pre><code id="s48r" class="language-xml">
+&lt;UseWinlogonCredentials&gt;true&lt;/UseWinlogonCredentials&gt;
+      </code></pre>
+      <textarea id="s48r_raw" style="display:none"><UseWinlogonCredentials>true</UseWinlogonCredentials></textarea>
+      <div class="spacer"></div>
+
+      <h3 id="sec-49" class="step-title">49. Cleanup: Remove Strict Validation Nodes + Add Type 26 Markers</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage49.png" alt="49. Remove Strict Validation Nodes UI">
+      </figure>
+      <p class="step-desc">The above introduced the removal of XML portion(s) and added new Type markers as requested.</p>
+
+      <h4>🔻 Removed XML Elements</h4>
+      <button class="copy-btn" onclick="copyCode('s49r',this)">Copy</button>
+      <pre><code id="s49r" class="language-xml">
+&lt;AcceptServerName&gt;false&lt;/AcceptServerName&gt;
+&lt;SimpleCertSelection&gt;true&lt;/SimpleCertSelection&gt;
+&lt;DifferentUsername&gt;true&lt;/DifferentUsername&gt;
+&lt;PerformServerValidation&gt;true&lt;/PerformServerValidation&gt;
+&lt;DisableUserPromptForServerValidation&gt;true&lt;/DisableUserPromptForServerValidation&gt;
+&lt;ServerNames&gt;&lt;/ServerNames&gt;
+      </code></pre>
+      <textarea id="s49r_raw" style="display:none"><AcceptServerName>false</AcceptServerName>
+<SimpleCertSelection>true</SimpleCertSelection>
+<DifferentUsername>true</DifferentUsername>
+<PerformServerValidation>true</PerformServerValidation>
+<DisableUserPromptForServerValidation>true</DisableUserPromptForServerValidation>
+<ServerNames></ServerNames></textarea>
+
+      <h4>✅ Added XML Elements</h4>
+      <button class="copy-btn" onclick="copyCode('s49a',this)">Copy</button>
+      <pre><code id="s49a" class="language-xml">
+&lt;UseWinLogonCredentials&gt;false&lt;/UseWinLogonCredentials&gt;
+&lt;Type&gt;26&lt;/Type&gt;
+&lt;Type&gt;26&lt;/Type&gt;
+      </code></pre>
+      <textarea id="s49a_raw" style="display:none"><UseWinLogonCredentials>false</UseWinLogonCredentials>
+<Type>26</Type>
+<Type>26</Type></textarea>
+      <div class="spacer"></div>
+
+      <h3 id="sec-50" class="step-title">50. Authentication Mode Change</h3>
+      <figure>
+        <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage50.png" alt="50. Authentication Mode Change UI">
+      </figure>
+      <button class="copy-btn" onclick="copyCode('s50',this)">Copy</button>
+      <pre><code id="s50" class="language-xml">
+&lt;authentication&gt;WPA2&lt;/authentication&gt;
+      </code></pre>
+      <textarea id="s50_raw" style="display:none"><authentication>WPA2</authentication></textarea>
+      <p class="step-desc">Final switch to WPA2 in the profile.</p>
+
+   
+
+     <section class="summary-box">
+        <h3>How to test yourself what GUI changes does in XML ?</h3>
+        <p>
+          Use the below script to check the changes happening in xml profile         
+      </p>
+           <h4>How the Script works ?</h4>
+
+        <p>
+          When you execute the script for the first time it caches the current XML and then you need to make the profile changes in GUI and rerun the script.
+          The script then export the current profile XML and checks the portion removed and added and give you the details in a notepad file, which opens as a popup.
       </p>
 
-      <!-- Figure: 1–4 -->
-      <figure>
-        <img class="doc-image"
-             src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessprofileimage1.png"
-             alt="New Profile properties: security method, authentication, max failures, cache user info (Callouts 1–4)">
-        <figcaption>New Profile properties — Security tab (Callouts 1–4)</figcaption>
-      </figure>
-      <ol start="1">
-        <li>This section defines the security methods for your wireless profile.</li>
-        <li>This section defines the authentication methods and authentication mode for your wireless profile.</li>
-        <li>The option "max authentication failures" specifies the maximum number of authentication failures that are allowed before the client is disconnected from the wireless network.</li>
-        <li>"Cache user information for subsequent connections to this network" allows the device to store the user's login credentials for a wireless network, so that the user does not have to enter their credentials every time they connect to the network.</li>
-      </ol>
+         <!--Script-->
+      <h3 id="sample-a">Script</h3>
+  <pre><code class="language-xml">
+<#
+run this first Set-ExecutionPolicy -scope Process -ExecutionPolicy RemoteSigned -Force
+.SYNOPSIS
+    Export WLAN profile "test" to C:\Wifi\test.xml, rotate previous to test.old.xml,
+    compute clean structural diffs (namespace-agnostic; ignores xmlns),
+    write results to difference.xml and difference.txt,
+    and open difference.txt in Notepad (no popups).
 
-      <div class="spacer"></div>
+.NOTES
+    Run PowerShell as Administrator if writing to C:\Wifi requires elevation.
+#>
 
-      <!-- Figure: 5–9 -->
-      <figure>
-        <img class="doc-image"
-             src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessprofileimage2.png"
-             alt="Protected EAP Properties: verify server, trusted root CAs, notifications, method, fast reconnect/privacy (Callouts 5–9)">
-        <figcaption>Protected EAP Properties (Callouts 5–9)</figcaption>
-      </figure>
-      <ol start="5">
-        <li>If you check this option, client will verify the server’s identity by validating the certificate presented by the server during the authentication process. This helps ensure that the client is connecting to the intended server and not an imposter. If the certificate is not valid or cannot be verified, the client will not connect to the network. If you uncheck it, the client will connect to the network without verifying the identity of the server.</li>
-        <li>You need to check the Trusted Root CA here.</li>
-        <li>“Don’t ask user to authorize new servers or trusted CAs” means that the user will not be prompted to authorize new servers or trusted certification authorities when connecting to a wireless network.</li>
-        <li>You can choose different authentication method here. (PEAP‑TLS or PEAP‑MSCHAPv2)</li>
-        <li>“Enable fast reconnect” allows the device to quickly reconnect to a previously connected wireless network. “Disconnect if server does not present cryptobinding TLV” specifies whether to disconnect from a wireless network if the server does not present a cryptobinding TLV. “Enable Identity Privacy” allows the device to use a randomized MAC address when connecting to a wireless network, which helps protect the user’s privacy by preventing the network from tracking the device based on its MAC address.</li>
-      </ol>
+[CmdletBinding()]
+param(
+    [string]$ProfileName = 'test',
+    [string]$Folder      = 'C:\Wifi'
+)
 
-      <div class="spacer"></div>
+$ErrorActionPreference = 'Stop'
 
-      <!-- Figure: 10–15 -->
-      <figure>
-        <img class="doc-image"
-             src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessprofileimage3.png"
-             alt="Smart Card or other Certificate Properties: selection, verify server, servers list, CA list, prompts, different username (Callouts 10–15)">
-        <figcaption>Smart Card or other Certificate Properties (Callouts 10–15)</figcaption>
-      </figure>
-      <ol start="10">
-        <li>This section defines how you choose smart card or certificate when doing authentication. You can go to Advanced for more selections.</li>
-        <li>If you check this option, client will verify the server’s identity by validating the certificate presented by the server during the authentication process. This helps ensure that the client is connecting to the intended server and not an imposter. If the certificate is not valid or cannot be verified, the client will not connect to the network. If you uncheck it, the client will connect to the network without verifying the identity of the server.</li>
-        <li>List the server name of RADIUS server that you allow client to connect. The RADIUS servers that are not listed are untrusted and client will not connect to them. It is not necessary to list.</li>
-        <li>If you do not check anything here, the certificates issued by Trusted Root CAs in NTAuth store will be used for authentication. If you check specific Trusted Root CAs, only certificates issued by selected Root CAs will be used for authentication. And no need to use NTAuth store. It is recommended to select same Trusted Root CAs here and in Advanced settings.</li>
-        <li>If you uncheck this option, when certificate authentication is failed, the user will be prompted to choose to authorize certificate and continue connecting to new servers. If you check this option, the user will not be prompted to authorize new servers or trusted certification authorities and fail the connection without notification.</li>
-        <li>This option allows the user to specify a different username to use when connecting to a wireless network, instead of the default username associated with the user’s account.</li>
-      </ol>
+# Canonical file paths
+$NewFile   = Join-Path $Folder 'test.xml'
+$OldFile   = Join-Path $Folder 'test.old.xml'
+$DiffXml   = Join-Path $Folder 'difference.xml'
+$DiffTxt   = Join-Path $Folder 'difference.txt'
 
-      <div class="spacer"></div>
+# Ensure destination folder
+if (-not (Test-Path -LiteralPath $Folder)) {
+    New-Item -Path $Folder -ItemType Directory -Force | Out-Null
+}
 
-      <!-- Figure: 16–20 -->
-      <figure>
-        <img class="doc-image"
-             src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessprofileimage4.png"
-             alt="Configure Certificate Selection: certificate issuer, EKU, all purpose EKU, client auth EKU, any purpose EKU (Callouts 16–20)">
-        <figcaption>Configure Certificate Selection (Callouts 16–20)</figcaption>
-      </figure>
-      <ol start="16">
-        <li>Certificate Issuer. When you configure the certificate issuer filter, you can specify that computers must select a certificate that is issued by a specific CA. When you configure this filter, the filter enumerates the root and intermediate certification authorities (CAs) for all certificates that are present in the certificate store on the local computer, and allows you to select the correct CA from the list.</li>
-        <li>Extended Key Usage (EKU). The extended key usage (EKU) is a certificate extension that specifies the intended purposes of the public key contained in the certificate.</li>
-        <li>“All purpose” EKU. This option allows the certificate to be used for any purpose, including client authentication, server authentication, and other purposes. This is the most permissive option and should be used only when necessary.</li>
-        <li>“Client auth and other EKUs”. This option allows the certificate to be used for client authentication and other purposes, but not for server authentication.</li>
-        <li>“Any purpose and other EKUs”. This option allows the certificate to be used for any purpose and other authorized purposes, but not for client or server authentication.</li>
-      </ol>
+# Step 2: delete test.old.xml if present
+if (Test-Path -LiteralPath $OldFile) {
+    Remove-Item -LiteralPath $OldFile -Force
+}
 
-      <div class="spacer"></div>
+# Step 3: if test.xml exists, rename to test.old.xml
+$Renamed = $false
+if (Test-Path -LiteralPath $NewFile) {
+    Rename-Item -LiteralPath $NewFile -NewName (Split-Path -Path $OldFile -Leaf) -Force
+    $Renamed = $true
+}
 
-      <div class="callout info">
-        <strong>Microsoft Wireless profile samples:</strong>
-        <a href="https://learn.microsoft.com/en-us/windows/win32/nativewifi/wireless-profile-samples"
-           target="_blank" rel="noopener">
-           (WLANProfile XML)
-        </a>
-      </div>
+# Step 4: Export WLAN profile "test" to C:\Wifi\test.xml
+$exportStart = Get-Date
+& netsh wlan export profile name="$ProfileName" key=clear folder="$Folder" | Out-Null
 
-      <div class="spacer"></div>
+$exported = Get-ChildItem -Path $Folder -Filter '*.xml' -ErrorAction SilentlyContinue |
+    Where-Object { $_.LastWriteTime -ge $exportStart.AddSeconds(-1) } |
+    Sort-Object LastWriteTime -Descending |
+    Select-Object -First 1
 
-      <!-- ========================= -->
-      <!-- XML SAMPLES PLAYGROUND    -->
-      <!-- ========================= -->
-      <h2 id="xml-samples" class="step-title">XML Samples (Add your code here)</h2>
-      <p class="step-desc">
-        Paste portions of your <code>WLANProfile</code> XML into the boxes below. For each sample, add line‑by‑line notes in the “Explanation” panel and attach a matching screenshot.
-      </p>
+if (-not $exported) {
+    throw "Export failed: netsh did not create any XML file in '$Folder'. Ensure the WLAN profile '$ProfileName' exists."
+}
 
-      <!-- Sample A -->
-      <h3 id="sample-a">Sample A — WPA2‑Enterprise (PEAP)</h3>
-      <pre><code class="language-xml">
-<!-- Paste the PEAP profile XML here -->
-<!-- e.g., OneX with EapHostConfig for PEAP / PEAP-MSCHAPv2 -->
+Move-Item -LiteralPath $exported.FullName -Destination $NewFile -Force
+
+# ===================== CLEAN STRUCTURAL DIFF (NO POPUP) =====================
+
+function Load-XmlDoc {
+    param([Parameter(Mandatory)][string]$Path)
+    $settings = New-Object System.Xml.XmlReaderSettings
+    $settings.IgnoreWhitespace = $true
+    $settings.IgnoreComments   = $true
+    $settings.IgnoreProcessingInstructions = $true
+    $reader = [System.Xml.XmlReader]::Create($Path, $settings)
+    $doc = New-Object System.Xml.XmlDocument
+    $doc.PreserveWhitespace = $false
+    $doc.Load($reader)
+    $reader.Close()
+    return $doc
+}
+
+function Get-LocalPath {
+    param([System.Xml.XmlNode]$node)
+
+    if (-not $node) { return '/' }
+
+    $parts = @()
+    $cur = $node
+    while ($cur -and $cur.NodeType -ne [System.Xml.XmlNodeType]::Document) {
+        if ($cur.NodeType -eq [System.Xml.XmlNodeType]::Element) {
+            # Compute sibling index by iterating elements with same LocalName
+            $idx = 1
+            $parent = $cur.ParentNode
+            if ($parent -and $parent.HasChildNodes) {
+                $idx = 0
+                foreach ($s in $parent.ChildNodes) {
+                    if ($s.NodeType -eq 'Element' -and $s.LocalName -eq $cur.LocalName) {
+                        $idx++
+                        if ([Object]::ReferenceEquals($s, $cur)) { break }
+                    }
+                }
+                if ($idx -le 0) { $idx = 1 }
+            }
+            $parts += ('{0}[{1}]' -f $cur.LocalName, $idx)
+        }
+        elseif ($cur.NodeType -eq [System.Xml.XmlNodeType]::Attribute) {
+            $parts += ('@{0}' -f $cur.LocalName)
+        }
+        $cur = $cur.ParentNode
+    }
+
+    if ($parts.Count -eq 0) { return '/' }
+    return '/' + ($parts[-1..-($parts.Count)] -join '/')
+}
+
+function Build-LeafMap {
+    param([System.Xml.XmlDocument]$doc)
+
+    $map = @{}
+
+    function Add-AttributeEntries {
+        param([System.Xml.XmlElement]$elem)
+        if ($elem.Attributes -and $elem.Attributes.Count -gt 0) {
+            foreach ($a in $elem.Attributes) {
+                # Ignore xmlns noise
+                if ($a.Name -eq 'xmlns' -or $a.Prefix -eq 'xmlns') { continue }
+                $pathElem = Get-LocalPath -node $elem
+                $pathAttr = "$pathElem/@$($a.LocalName)"
+                $val      = [string]$a.Value
+                $snippet  = '@{0}="{1}"' -f $a.LocalName, $val
+                $map[$pathAttr] = [pscustomobject]@{
+                    Name        = "@$($a.LocalName)"
+                    Value       = $val
+                    Snippet     = $snippet
+                    IsAttribute = $true
+                }
+            }
+        }
+    }
+
+    function Recurse {
+        param([System.Xml.XmlNode]$n)
+
+        if ($n.NodeType -eq [System.Xml.XmlNodeType]::Element) {
+            $elem = [System.Xml.XmlElement]$n
+
+            Add-AttributeEntries -elem $elem
+
+            # Leaf = no element children
+            $hasElemChildren = $false
+            foreach ($ch in $elem.ChildNodes) {
+                if ($ch.NodeType -eq 'Element') { $hasElemChildren = $true; break }
+            }
+
+            if (-not $hasElemChildren) {
+                $val = [string]$elem.InnerText
+                if ($null -ne $val) { $val = $val.Trim() } else { $val = '' }
+                $path = Get-LocalPath -node $elem
+                $name = $elem.LocalName
+                $snippet = "<{0}>{1}</{0}>" -f $name, $val
+
+                $map[$path] = [pscustomobject]@{
+                    Name        = $name
+                    Value       = $val
+                    Snippet     = $snippet
+                    IsAttribute = $false
+                }
+            }
+
+            foreach ($ch in $elem.ChildNodes) { Recurse -n $ch }
+        }
+    }
+
+    Recurse -n $doc.DocumentElement
+    return $map
+}
+
+function Write-Differences {
+    param(
+        [hashtable]$OldMap,
+        [hashtable]$NewMap,
+        [string]$XmlPath,
+        [string]$TxtPath
+    )
+
+    $generatedAt = (Get-Date).ToString('yyyy-MM-dd HH:mm:ss.fff')
+
+    $xml = New-Object System.Text.StringBuilder
+    [void]$xml.AppendLine('<?xml version="1.0" encoding="utf-8"?>')
+    [void]$xml.AppendLine("<Differences generatedAt=""$generatedAt"">")
+
+    $txt = New-Object System.Collections.Generic.List[string]
+
+    $allKeys = @($OldMap.Keys + $NewMap.Keys) | Select-Object -Unique | Sort-Object
+    $changeCount = 0
+
+    foreach ($k in $allKeys) {
+        $oldItem = $OldMap[$k]
+        $newItem = $NewMap[$k]
+
+        if ($null -eq $oldItem -and $null -ne $newItem) {
+            # ADDED
+            $changeCount++
+            $ts = (Get-Date).ToString('HH:mm:ss.fff')
+            $newSafe = $newItem.Snippet -replace ']]>', ']]]]><![CDATA[>'
+
+            [void]$xml.AppendLine("  <Change time=""$ts"" type=""Added"">")
+            [void]$xml.AppendLine("    <Path>$k</Path>")
+            [void]$xml.AppendLine("    <Variable>$($newItem.Name)</Variable>")
+            [void]$xml.AppendLine("    <OldSnippet/>")
+            [void]$xml.AppendLine("    <NewSnippet><![CDATA[$newSafe]]></NewSnippet>")
+            [void]$xml.AppendLine("  </Change>")
+
+            $txt.Add(('new change "{0}"' -f $newItem.Snippet))
+        }
+        elseif ($null -ne $oldItem -and $null -eq $newItem) {
+            # REMOVED
+            $changeCount++
+            $ts = (Get-Date).ToString('HH:mm:ss.fff')
+            $oldSafe = $oldItem.Snippet -replace ']]>', ']]]]><![CDATA[>'
+
+            [void]$xml.AppendLine("  <Change time=""$ts"" type=""Removed"">")
+            [void]$xml.AppendLine("    <Path>$k</Path>")
+            [void]$xml.AppendLine("    <Variable>$($oldItem.Name)</Variable>")
+            [void]$xml.AppendLine("    <OldSnippet><![CDATA[$oldSafe]]></OldSnippet>")
+            [void]$xml.AppendLine("    <NewSnippet/>")
+            [void]$xml.AppendLine("  </Change>")
+
+            $txt.Add(('removed "{0}"' -f $oldItem.Snippet))
+        }
+        elseif ($null -ne $oldItem -and $null -ne $newItem) {
+            # CHANGED
+            if ($oldItem.Value -ne $newItem.Value) {
+                $changeCount++
+                $ts = (Get-Date).ToString('HH:mm:ss.fff')
+                $oldSafe = $oldItem.Snippet -replace ']]>', ']]]]><![CDATA[>'
+                $newSafe = $newItem.Snippet -replace ']]>', ']]]]><![CDATA[>'
+
+                [void]$xml.AppendLine("  <Change time=""$ts"" type=""Changed"">")
+                [void]$xml.AppendLine("    <Path>$k</Path>")
+                [void]$xml.AppendLine("    <Variable>$($newItem.Name)</Variable>")
+                [void]$xml.AppendLine("    <OldSnippet><![CDATA[$oldSafe]]></OldSnippet>")
+                [void]$xml.AppendLine("    <NewSnippet><![CDATA[$newSafe]]></NewSnippet>")
+                [void]$xml.AppendLine("  </Change>")
+
+                $txt.Add(('new change "{0}"' -f $newItem.Snippet))
+            }
+        }
+    }
+
+    if ($changeCount -eq 0) {
+        $ts = (Get-Date).ToString('HH:mm:ss.fff')
+        [void]$xml.AppendLine("  <Change time=""$ts"" type=""None""><Path>/</Path><Variable/><OldSnippet/><NewSnippet/><Message>No differences found</Message></Change>")
+        $txt.Add("No differences found")
+    }
+
+    [void]$xml.AppendLine("</Differences>")
+
+    Set-Content -LiteralPath $XmlPath -Value $xml.ToString() -Encoding UTF8
+    Set-Content -LiteralPath $TxtPath -Value $txt -Encoding UTF8
+
+    if (-not (Test-Path -LiteralPath $XmlPath)) { Write-Warning "Could not find $XmlPath after writing." }
+    if (-not (Test-Path -LiteralPath $TxtPath)) { Write-Warning "Could not find $TxtPath after writing." }
+}
+
+function Do-Diff {
+    param(
+        [string]$OldPath,
+        [string]$NewPath,
+        [string]$XmlPath,
+        [string]$TxtPath
+    )
+
+    $oldDoc = Load-XmlDoc -Path $OldPath
+    $newDoc = Load-XmlDoc -Path $NewPath
+
+    $oldMap = Build-LeafMap -doc $oldDoc
+    $newMap = Build-LeafMap -doc $newDoc
+
+    Write-Differences -OldMap $oldMap -NewMap $newMap -XmlPath $XmlPath -TxtPath $TxtPath
+
+    # Open difference.txt robustly (no popup)
+    if (Test-Path -LiteralPath $TxtPath) {
+        try {
+            Invoke-Item -LiteralPath $TxtPath
+        } catch {
+            try {
+                Start-Process -FilePath "notepad.exe" -ArgumentList @("$TxtPath") -WindowStyle Normal | Out-Null
+            } catch {
+                Write-Warning "Failed to open '$TxtPath'. Please open it manually."
+            }
+        }
+    } else {
+        Write-Warning "Expected '$TxtPath' was not created. Please re-run the script."
+    }
+}
+
+# Run diff if we have an old copy; otherwise write stub and open it
+if ($Renamed -and (Test-Path -LiteralPath $OldFile)) {
+    Do-Diff -OldPath $OldFile -NewPath $NewFile -XmlPath $DiffXml -TxtPath $DiffTxt
+}
+else {
+    $generatedAt = (Get-Date).ToString('yyyy-MM-dd HH:mm:ss.fff')
+    $ts = (Get-Date).ToString('HH:mm:ss.fff')
+@"
+<?xml version="1.0" encoding="utf-8"?>
+<Differences generatedAt="$generatedAt">
+  <Change time="$ts" type="Info">
+    <Path>/</Path>
+    <Variable/>
+    <OldSnippet/>
+    <NewSnippet/>
+    <Message><![CDATA[No previous file existed (test.xml) to compare against.]]></Message>
+  </Change>
+</Differences>
+"@ | Set-Content -LiteralPath $DiffXml -Encoding UTF8
+
+    "No previous file existed (test.xml) to compare against." | Set-Content -LiteralPath $DiffTxt -Encoding UTF8
+
+    if (Test-Path -LiteralPath $DiffTxt) {
+        try {
+            Invoke-Item -LiteralPath $DiffTxt
+        } catch {
+            try {
+                Start-Process -FilePath "notepad.exe" -ArgumentList @("$DiffTxt") -WindowStyle Normal | Out-Null
+            } catch {
+                Write-Warning "Failed to open '$DiffTxt'. Please open it manually."
+            }
+        }
+    }
+}
+
+Write-Host "Exported WLAN profile '$ProfileName' to: $NewFile"
+if (Test-Path -LiteralPath $OldFile) { Write-Host "Previous version saved as: $OldFile" }
+Write-Host "Differences written to: $DiffXml and $DiffTxt"
       </code></pre>
-      <details open><summary>Explanation (line-by-line)</summary>
-        <ol>
-          <li><code>&lt;SSIDConfig&gt;</code> — SSID broadcast and name.</li>
-          <li><code>&lt;MSM&gt;&lt;security&gt;</code> — EAP container.</li>
-          <li><code>&lt;OneX&gt;</code> — 802.1X settings + PEAP method block.</li>
-          <li>Inner method (e.g., MSCHAPv2) configuration.</li>
-        </ol>
-      </details>
-      <figure>
-        <img class="doc-image"
-             src="https://via.placeholder.com/1200x550.png?text=Screenshot+for+Sample+A"
-             alt="Placeholder screenshot for Sample A (PEAP)">
-        <figcaption>Replace with the UI screenshot matching this XML.</figcaption>
-      </figure>
-
-      <div class="spacer"></div>
-
-      <!-- Sample B -->
-      <h3 id="sample-b">Sample B — EAP‑TLS (Client Certificate)</h3>
-      <pre><code class="language-xml">
-<!-- Paste the EAP-TLS profile XML here -->
-<!-- Include certificate selection, EKU filters, and server validation -->
-      </code></pre>
-      <details><summary>Explanation (line-by-line)</summary>
-        <ol>
-          <li>Certificate store and simple selection.</li>
-          <li>Trusted Root CA &amp; server name checks.</li>
-          <li>EKU filtering for client authentication.</li>
-          <li>Fast reconnect / identity privacy toggles.</li>
-        </ol>
-      </details>
-      <figure>
-        <img class="doc-image"
-             src="https://via.placeholder.com/1200x550.png?text=Screenshot+for+Sample+B"
-             alt="Placeholder screenshot for Sample B (EAP-TLS)">
-        <figcaption>Attach the certificate selection / OneX properties screenshot.</figcaption>
-      </figure>
-
-      <div class="spacer"></div>
-
-      <!-- Sample C -->
-      <h3 id="sample-c">Sample C — EAP‑TTLS (TLS inner method)</h3>
-      <pre><code class="language-xml">
-<!-- Paste the EAP-TTLS XML here -->
-<!-- Include Phase2Authentication with inner EAP type -->
-      </code></pre>
-      <details><summary>Explanation (line-by-line)</summary>
-        <ol>
-          <li>Outer EAP‑TTLS configuration.</li>
-          <li>Server validation (root CA and names).</li>
-          <li>Phase 2 inner EAP (e.g., EAP‑TLS).</li>
-          <li>Anonymous identity and privacy settings.</li>
-        </ol>
-      </details>
-      <figure>
-        <img class="doc-image"
-             src="https://via.placeholder.com/1200x550.png?text=Screenshot+for+Sample+C"
-             alt="Placeholder screenshot for Sample C (EAP-TTLS)">
-        <figcaption>Map to the dialog that matches these nodes.</figcaption>
-      </figure>
-
-      <div class="spacer"></div>
-
-      <!-- Sample D -->
-      <h3 id="sample-d">Sample D — Hidden SSID + AutoSwitch</h3>
-      <pre><code class="language-xml">
-<!-- Paste the non-broadcast SSID profile XML here -->
-<!-- Include nonBroadcast=true and autoSwitch toggles -->
-      </code></pre>
-      <details><summary>Explanation (line-by-line)</summary>
-        <ol>
-          <li><code>&lt;nonBroadcast&gt;</code> controls probe behavior.</li>
-          <li><code>&lt;autoSwitch&gt;</code> helps roam across preferred networks.</li>
-          <li>Connection mode and priority considerations.</li>
-        </ol>
-      </details>
-      <figure>
-        <img class="doc-image"
-             src="https://via.placeholder.com/1200x550.png?text=Screenshot+for+Sample+D"
-             alt="Placeholder screenshot for Sample D (hidden SSID)">
-        <figcaption>Show the UI where hidden SSID is reflected.</figcaption>
-      </figure>
-
-      <div class="spacer"></div>
-
-      <!-- Sample E -->
-      <h3 id="sample-e">Sample E — WPA3‑Enterprise transition</h3>
-      <pre><code class="language-xml">
-<!-- Paste the WPA3-Enterprise profile here -->
-<!-- Note: validate OS/driver support before deploying -->
-      </code></pre>
-      <details><summary>Explanation (line-by-line)</summary>
-        <ol>
-          <li>Authentication value for WPA3‑Enterprise.</li>
-          <li>Encryption and cipher suite expectations.</li>
-          <li>Server certificate enforcement.</li>
-        </ol>
-      </details>
-      <figure>
-        <img class="doc-image"
-             src="https://via.placeholder.com/1200x550.png?text=Screenshot+for+Sample+E"
-             alt="Placeholder screenshot for Sample E (WPA3-Enterprise)">
-        <figcaption>Confirm driver/OS support screens here.</figcaption>
-      </figure>
-
-      <div class="spacer"></div>
-
-      <!-- Sample F -->
-      <h3 id="sample-f">Sample F — PEAP with strict server name pinning</h3>
-      <pre><code class="language-xml">
-<!-- Paste PEAP profile where ServerNames is explicitly set -->
-<!-- Include DisableUserPromptForServerValidation=true -->
-      </code></pre>
-      <details><summary>Explanation (line-by-line)</summary>
-        <ol>
-          <li>TrustedRootCAHash or CA list usage.</li>
-          <li><code>&lt;ServerNames&gt;</code> pinning strategy.</li>
-          <li>Prompt suppression and user experience.</li>
-        </ol>
-      </details>
-      <figure>
-        <img class="doc-image"
-             src="https://via.placeholder.com/1200x550.png?text=Screenshot+for+Sample+F"
-             alt="Placeholder screenshot for Sample F (PEAP with server pinning)">
-        <figcaption>Show Protected EAP dialog with server list and CA selection.</figcaption>
-      </figure>
-
-      <div class="spacer"></div>
-
-      <!-- Sample G -->
-      <h3 id="sample-g">Sample G — Proxy EAPHost in Phase 2 (TTLS → TLS)</h3>
-      <pre><code class="language-xml">
-<!-- Paste TTLS outer with inner EAP-TLS via nested EapHostConfig -->
-      </code></pre>
-      <details><summary>Explanation (line-by-line)</summary>
-        <ol>
-          <li>Outer method (TTLS V1) name and namespace.</li>
-          <li>Phase2Authentication with nested EapHostConfig.</li>
-          <li>Inner TLS certificate options.</li>
-        </ol>
-      </details>
-      <figure>
-        <img class="doc-image"
-             src="https://via.placeholder.com/1200x550.png?text=Screenshot+for+Sample+G"
-             alt="Placeholder screenshot for Sample G (TTLS→TLS)">
-        <figcaption>Attach server validation and client cert selection views.</figcaption>
-      </figure>
-
-      <div class="spacer"></div>
-
-      <!-- Sample H -->
-      <h3 id="sample-h">Sample H — Advanced TLS extensions &amp; EKU filtering</h3>
-      <pre><code class="language-xml">
-<!-- Paste EAP-TLS with TLSExtensions and EKU filters (e.g., ClientAuth EKU) -->
-      </code></pre>
-      <details><summary>Explanation (line-by-line)</summary>
-        <ol>
-          <li>TLSExtensions and FilteringInfo blocks.</li>
-          <li>CAHashList / IssuerHash scoping.</li>
-          <li>ClientAuth EKU and AnyPurpose lists.</li>
-        </ol>
-      </details>
-      <figure>
-        <img class="doc-image"
-             src="https://via.placeholder.com/1200x550.png?text=Screenshot+for+Sample+H"
-             alt="Placeholder screenshot for Sample H (TLS extensions)">
-        <figcaption>Map to certificate selection &amp; EKU UI screenshots.</figcaption>
-      </figure>
-
-      <!-- Final Notes / Next Steps -->
-      <section class="summary-box">
-        <h3>Next Steps</h3>
-        <ul>
-          <li>Replace any remaining placeholders (images/code) with your real content under <code>/assets/images/</code>.</li>
-          <li>Validate XML in a lab and test import via <code>netsh wlan add profile</code>.</li>
-          <li>Keep Microsoft’s samples handy:
-            <a href="https://learn.microsoft.com/en-us/windows/win32/nativewifi/wireless-profile-samples" target="_blank" rel="noopener">Wireless profile samples</a>.
-          </li>
-        </ul>
+       
       </section>
-
-    </main>
+ </main>
   </div>
-
-  <!-- ===== Footer ===== -->
   <footer class="site-footer">
     <div class="container">
-      <p>© 2026 Sys Admin Talks · Windows Server Talks</p>
+      <p>© 2026 Sys Admin Talks</p>
     </div>
   </footer>
 </body>
-</html>
+</html>    
+      
