@@ -353,7 +353,59 @@ Once a user logs in, the system switches to user authentication.<br><br>
       <pre><code id="s17" class="language-xml">
 &lt;cacheUserData&gt;false&lt;/cacheUserData&gt;
       </code></pre>
-      <p class="step-desc">Forces authentication every time without storing credentials.</p>
+      <p class="step-desc">
+<strong>Fast Reconnect (EnableFastReconnect)</strong><br><br>
+
+Fast Reconnect is an optimization feature in PEAP that allows a client to quickly re-establish a previous authenticated session without performing the full authentication process again.<br><br>
+
+<strong>When Fast Reconnect is Enabled (true)</strong><br>
+When enabled, the system attempts to resume the previous authenticated session using a cached security context.<br><br>
+
+<strong>What is skipped:</strong>
+<ul>
+<li>Full EAP negotiation phase</li>
+<li>Repeated identity exchange with the authentication server</li>
+<li>Complete inner authentication process (e.g. MSCHAPv2 credential validation)</li>
+</ul>
+
+<strong>How it works:</strong>
+<ul>
+<li>The client uses the previously established session keys and context</li>
+<li>If the authentication server accepts the session resume, connectivity is restored quickly</li>
+<li>Commonly triggered during roaming between access points or brief network interruptions</li>
+</ul>
+
+<strong>Benefits:</strong>
+<ul>
+<li>Faster reconnection and reduced latency</li>
+<li>Improved user experience during Wi-Fi roaming</li>
+<li>Reduced load on authentication servers (NPS/RADIUS)</li>
+</ul>
+
+<strong>When Fast Reconnect is Disabled (false)</strong><br>
+When disabled, the system always performs a full authentication cycle every time a connection is established or re-established.<br><br>
+
+<strong>Authentication covers:</strong>
+<ul>
+<li>Full outer PEAP tunnel setup</li>
+<li>Server certificate validation</li>
+<li>Complete inner authentication (user/computer credentials)</li>
+<li>Fresh encryption key generation</li>
+</ul>
+
+<strong>Impact:</strong>
+<ul>
+<li>Slower reconnection time</li>
+<li>Higher load on authentication infrastructure</li>
+<li>More secure in environments requiring strict re-validation on every connection</li>
+</ul>
+
+<strong>Summary</strong>
+<ul>
+<li><strong>Enabled:</strong> Skips full authentication and resumes previous session for speed</li>
+<li><strong>Disabled:</strong> Forces full authentication every time for stricter validation</li>
+</ul>
+</p>
       <div class="spacer"></div>
 
       <h3 id="sec-18" class="step-title">18. Manual Certificate Selection Enabled</h3>
