@@ -352,61 +352,7 @@ Once a user logs in, the system switches to user authentication.<br><br>
       <pre><code id="s17" class="language-xml">
 &lt;cacheUserData&gt;false&lt;/cacheUserData&gt;
       </code></pre>
-      <p class="step-desc">
-<strong>Fast Reconnect (EnableFastReconnect)</strong><br><br>
-
-Fast Reconnect is an optimization feature in PEAP that allows a client to quickly re-establish a previous authenticated session without performing the full authentication process again.<br><br>
-
-<strong>When Fast Reconnect is Enabled (true)</strong><br>
-When enabled, the system attempts to resume the previous authenticated session using a cached security context.<br><br>
-
-<strong>What is skipped:</strong>
-<ul>
-<li>Full EAP negotiation phase</li>
-<li>Repeated identity exchange with the authentication server</li>
-<li>Complete inner authentication process (e.g. MSCHAPv2 credential validation)</li>
-</ul>
-
-<strong>How it works:</strong>
-<ul>
-<li>The client uses the previously established session keys and context</li>
-<li>If the authentication server accepts the session resume, connectivity is restored quickly</li>
-<li>Commonly triggered during roaming between access points or brief network interruptions</li>
-</ul>
-
-<strong>Benefits:</strong>
-<ul>
-<li>Faster reconnection and reduced latency</li>
-<li>Improved user experience during Wi-Fi roaming</li>
-<li>Reduced load on authentication servers (NPS/RADIUS)</li>
-</ul>
-
-<strong>When Fast Reconnect is Disabled (false)</strong><br>
-When disabled, the system always performs a full authentication cycle every time a connection is established or re-established.<br><br>
-
-<strong>Authentication covers:</strong>
-<ul>
-<li>Full outer PEAP tunnel setup</li>
-<li>Server certificate validation</li>
-<li>Complete inner authentication (user/computer credentials)</li>
-<li>Fresh encryption key generation</li>
-</ul>
-
-<strong>Impact:</strong>
-<ul>
-<li>Slower reconnection time</li>
-<li>Higher load on authentication infrastructure</li>
-<li>More secure in environments requiring strict re-validation on every connection</li>
-</ul>
-
-<strong>Summary</strong>
-<ul>
-<li><strong>Enabled:</strong> Skips full authentication and resumes previous session for speed</li>
-<li><strong>Disabled:</strong> Forces full authentication every time for stricter validation</li>
-</ul>
-</p>
-      <div class="spacer"></div>
-
+    
       <h3 id="sec-18" class="step-title">18. Manual Certificate Selection Enabled</h3>
       <figure>
         <img class="doc-image" src="https://sysadmintalks.github.io/WindowsServerTalks/assets/images/wirelessimage18.png" alt="18. Manual Certificate Selection UI">
@@ -547,7 +493,48 @@ When disabled, the system always performs a full authentication cycle every time
 &lt;PMKCacheTTL&gt;720&lt;/PMKCacheTTL&gt;
 &lt;preAuthMode&gt;disabled&lt;/preAuthMode&gt;
       </code></pre>
-      <p class="step-desc">Improves roaming by caching security keys.</p>
+      <p class="step-desc">
+<strong>Authentication Flow – User or Computer Authentication</strong><br><br>
+
+When “User or Computer authentication” is configured, Windows follows a conditional, state‑based authentication sequence rather than running both identities simultaneously.<br><br>
+
+<strong>Order of Evaluation (What is checked first)</strong><br><br>
+
+<strong>Computer Authentication (Checked first – during system startup)</strong><br>
+When the machine boots and no user is logged in, the system attempts machine (computer account) authentication.<br><br>
+
+<strong>Uses:</strong>
+<ul>
+<li>Computer certificate (EAP-TLS) OR</li>
+<li>Machine credentials (PEAP-MSCHAPv2 depending on configuration)</li>
+</ul>
+
+<strong>Purpose:</strong>
+<ul>
+<li>Enables network access before login</li>
+<li>Allows GPOs, scripts, and domain communication</li>
+</ul>
+
+<strong>User Authentication (Triggered after user logon)</strong><br>
+Once a user logs in, the system switches to user authentication.<br><br>
+
+<strong>Uses:</strong>
+<ul>
+<li>User credentials or user certificate</li>
+</ul>
+
+<strong>Purpose:</strong>
+<ul>
+<li>Applies user-based policies</li>
+<li>Enables user-level network access tracking</li>
+</ul>
+
+<strong>Fallback Behaviour</strong>
+<ul>
+<li>If user authentication fails, the system may fall back to computer authentication (depending on EAP settings and server policy)</li>
+<li>If the user logs off, the system reverts back to computer authentication</li>
+</ul>
+</p>"
       <div class="spacer"></div>
 
       <h3 id="sec-29" class="step-title">29. Machine Authentication Mode</h3>
@@ -621,7 +608,61 @@ When disabled, the system always performs a full authentication cycle every time
       <pre><code id="s34" class="language-xml">
 &lt;FastReconnect&gt;false&lt;/FastReconnect&gt;
       </code></pre>
-      <p class="step-desc">Forces full authentication instead of session resume.</p>
+        <p class="step-desc">
+<strong>Fast Reconnect (EnableFastReconnect)</strong><br><br>
+
+Fast Reconnect is an optimization feature in PEAP that allows a client to quickly re-establish a previous authenticated session without performing the full authentication process again.<br><br>
+
+<strong>When Fast Reconnect is Enabled (true)</strong><br>
+When enabled, the system attempts to resume the previous authenticated session using a cached security context.<br><br>
+
+<strong>What is skipped:</strong>
+<ul>
+<li>Full EAP negotiation phase</li>
+<li>Repeated identity exchange with the authentication server</li>
+<li>Complete inner authentication process (e.g. MSCHAPv2 credential validation)</li>
+</ul>
+
+<strong>How it works:</strong>
+<ul>
+<li>The client uses the previously established session keys and context</li>
+<li>If the authentication server accepts the session resume, connectivity is restored quickly</li>
+<li>Commonly triggered during roaming between access points or brief network interruptions</li>
+</ul>
+
+<strong>Benefits:</strong>
+<ul>
+<li>Faster reconnection and reduced latency</li>
+<li>Improved user experience during Wi-Fi roaming</li>
+<li>Reduced load on authentication servers (NPS/RADIUS)</li>
+</ul>
+
+<strong>When Fast Reconnect is Disabled (false)</strong><br>
+When disabled, the system always performs a full authentication cycle every time a connection is established or re-established.<br><br>
+
+<strong>Authentication covers:</strong>
+<ul>
+<li>Full outer PEAP tunnel setup</li>
+<li>Server certificate validation</li>
+<li>Complete inner authentication (user/computer credentials)</li>
+<li>Fresh encryption key generation</li>
+</ul>
+
+<strong>Impact:</strong>
+<ul>
+<li>Slower reconnection time</li>
+<li>Higher load on authentication infrastructure</li>
+<li>More secure in environments requiring strict re-validation on every connection</li>
+</ul>
+
+<strong>Summary</strong>
+<ul>
+<li><strong>Enabled:</strong> Skips full authentication and resumes previous session for speed</li>
+<li><strong>Disabled:</strong> Forces full authentication every time for stricter validation</li>
+</ul>
+</p>
+      <div class="spacer"></div>
+
       <div class="spacer"></div>
 
       <h3 id="sec-35" class="step-title">35. Alternate Trusted Root CA</h3>
