@@ -139,7 +139,48 @@
 &lt;cacheUserData&gt;true&lt;/cacheUserData&gt;
 &lt;authMode&gt;userOrComputer&lt;/authMode&gt;
       </code></pre>
-      <p class="step-desc">Defines EAP authentication and identity type.</p>
+     <p class="step-desc">
+<strong>Authentication Flow – User or Computer Authentication</strong><br><br>
+
+When “User or Computer authentication” is configured, Windows follows a conditional, state‑based authentication sequence rather than running both identities simultaneously.<br><br>
+
+<strong>Order of Evaluation (What is checked first)</strong><br><br>
+
+<strong>Computer Authentication (Checked first – during system startup)</strong><br>
+When the machine boots and no user is logged in, the system attempts machine (computer account) authentication.<br><br>
+
+<strong>Uses:</strong>
+<ul>
+<li>Computer certificate (EAP-TLS) OR</li>
+<li>Machine credentials (PEAP-MSCHAPv2 depending on configuration)</li>
+</ul>
+
+<strong>Purpose:</strong>
+<ul>
+<li>Enables network access before login</li>
+<li>Allows GPOs, scripts, and domain communication</li>
+</ul>
+
+<strong>User Authentication (Triggered after user logon)</strong><br>
+Once a user logs in, the system switches to user authentication.<br><br>
+
+<strong>Uses:</strong>
+<ul>
+<li>User credentials or user certificate</li>
+</ul>
+
+<strong>Purpose:</strong>
+<ul>
+<li>Applies user-based policies</li>
+<li>Enables user-level network access tracking</li>
+</ul>
+
+<strong>Fallback Behaviour</strong>
+<ul>
+<li>If user authentication fails, the system may fall back to computer authentication (depending on EAP settings and server policy)</li>
+<li>If the user logs off, the system reverts back to computer authentication</li>
+</ul>
+</p>
       <div class="spacer"></div>
 
       <h3 id="sec-3" class="step-title">3. Authentication Mode Mapping</h3>
